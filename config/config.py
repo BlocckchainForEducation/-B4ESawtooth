@@ -37,7 +37,7 @@ class MongoDBConfig:
     PASSWORD = ""
     DATABASE = "B4E_Ministry_Backend"
     UNIVERSITY_PROFILE = "UniversityProfile"
-    VOTE_REQUEST = "VoteRequet"
+    VOTE_REQUEST = "VoteRequest"
     USER_COLLECTION = 'b4e_users'
     ENVIRONMENT_COLLECTION = 'b4e_environments'
     CLASS_COLLECTION = 'b4e_classes'
