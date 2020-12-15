@@ -34,10 +34,6 @@ services:
       - 4004
       - 5050
       - 8800
-    ports:
-      - '4004:4004'
-      - '8800:8800'
-      - '5050:5050'
     volumes:
       - poet-shared:/poet-shared
     command: "bash -c \"\
@@ -90,10 +86,6 @@ services:
       - 4004
       - 5050
       - 8800
-    ports:
-      - '4005:4004'
-      - '8801:8800'
-      - '5051:5050'
     volumes:
       - poet-shared:/poet-shared
     command: |
@@ -124,10 +116,6 @@ services:
       - 4004
       - 5050
       - 8800
-    ports:
-      - '4006:4004'
-      - '8802:8800'
-      - '5052:5050'
     volumes:
       - poet-shared:/poet-shared
     command: |
@@ -158,10 +146,6 @@ services:
       - 4004
       - 5050
       - 8800
-    ports:
-      - '4007:4004'
-      - '8803:8800'
-      - '5053:5050'
     volumes:
       - poet-shared:/poet-shared
     command: |
@@ -192,10 +176,6 @@ services:
       - 4004
       - 5050
       - 8800
-    ports:
-      - '4008:4004'
-      - '8804:8800'
-      - '5054:5050'
     volumes:
       - poet-shared:/poet-shared
     command: |
@@ -219,14 +199,11 @@ services:
         /project/sawtooth-core/consensus/poet/core"
     stop_signal: SIGKILL
 
-  # -------------=== rest api ===-------------
   rest-api-0:
     image: hyperledger/sawtooth-rest-api:chime
     container_name: sawtooth-rest-api-default-0
     expose:
       - 8008
-    ports:
-      - '8008:8008'
     command: |
       bash -c "
         sawtooth-rest-api \
@@ -240,8 +217,6 @@ services:
     container_name: sawtooth-rest-api-default-1
     expose:
       - 8008
-    ports:
-      - '8009:8008'
     command: |
       bash -c "
         sawtooth-rest-api \
@@ -255,8 +230,6 @@ services:
     container_name: sawtooth-rest-api-default-2
     expose:
       - 8008
-    ports:
-      - '8010:8008'
     command: |
       bash -c "
         sawtooth-rest-api \
@@ -270,8 +243,6 @@ services:
     container_name: sawtooth-rest-api-default-3
     expose:
       - 8008
-    ports:
-      - '8011:8008'
     command: |
       bash -c "
         sawtooth-rest-api \
@@ -285,8 +256,6 @@ services:
     container_name: sawtooth-rest-api-default-4
     expose:
       - 8008
-    ports:
-      - '8012:8008'
     command: |
       bash -c "
         sawtooth-rest-api \
@@ -295,6 +264,85 @@ services:
       "
     stop_signal: SIGKILL
 
+  intkey-tp-0:
+    image: hyperledger/sawtooth-intkey-tp-python:chime
+    container_name: sawtooth-intkey-tp-python-default-0
+    expose:
+      - 4004
+    command: intkey-tp-python -C tcp://validator-0:4004
+    stop_signal: SIGKILL
+
+  intkey-tp-1:
+    image: hyperledger/sawtooth-intkey-tp-python:chime
+    container_name: sawtooth-intkey-tp-python-default-1
+    expose:
+      - 4004
+    command: intkey-tp-python -C tcp://validator-1:4004
+    stop_signal: SIGKILL
+
+  intkey-tp-2:
+    image: hyperledger/sawtooth-intkey-tp-python:chime
+    container_name: sawtooth-intkey-tp-python-default-2
+    expose:
+      - 4004
+    command: intkey-tp-python -C tcp://validator-2:4004
+    stop_signal: SIGKILL
+
+  intkey-tp-3:
+    image: hyperledger/sawtooth-intkey-tp-python:chime
+    container_name: sawtooth-intkey-tp-python-default-3
+    expose:
+      - 4004
+    command: intkey-tp-python -C tcp://validator-3:4004
+    stop_signal: SIGKILL
+
+  intkey-tp-4:
+    image: hyperledger/sawtooth-intkey-tp-python:chime
+    container_name: sawtooth-intkey-tp-python-default-4
+    expose:
+      - 4004
+    command: intkey-tp-python -C tcp://validator-4:4004
+    stop_signal: SIGKILL
+
+  xo-tp-0:
+    image: hyperledger/sawtooth-xo-tp-python:chime
+    container_name: sawtooth-xo-tp-python-default-0
+    expose:
+      - 4004
+    command: xo-tp-python -vv -C tcp://validator-0:4004
+    stop_signal: SIGKILL
+
+  xo-tp-1:
+    image: hyperledger/sawtooth-xo-tp-python:chime
+    container_name: sawtooth-xo-tp-python-default-1
+    expose:
+      - 4004
+    command: xo-tp-python -vv -C tcp://validator-1:4004
+    stop_signal: SIGKILL
+
+  xo-tp-2:
+    image: hyperledger/sawtooth-xo-tp-python:chime
+    container_name: sawtooth-xo-tp-python-default-2
+    expose:
+      - 4004
+    command: xo-tp-python -vv -C tcp://validator-2:4004
+    stop_signal: SIGKILL
+
+  xo-tp-3:
+    image: hyperledger/sawtooth-xo-tp-python:chime
+    container_name: sawtooth-xo-tp-python-default-3
+    expose:
+      - 4004
+    command: xo-tp-python -vv -C tcp://validator-3:4004
+    stop_signal: SIGKILL
+
+  xo-tp-4:
+    image: hyperledger/sawtooth-xo-tp-python:chime
+    container_name: sawtooth-xo-tp-python-default-4
+    expose:
+      - 4004
+    command: xo-tp-python -vv -C tcp://validator-4:4004
+    stop_signal: SIGKILL
 
   settings-tp-0:
     image: hyperledger/sawtooth-settings-tp:chime

@@ -16,14 +16,15 @@ version: '3.6'
 
 volumes:
   pbft-shared:
+  mongodb_data_ministry:
 
 services:
-  b4e-shell:
+  b4e-shell-ministry:
     build:
       context: .
       dockerfile: ../shell/Dockerfile
     image: sawtooth-b4e-shell
-    container_name: b4e-shell
+    container_name: b4e-shell-ministry
     volumes:
       - .:/project/sawtooth-b4e
 
@@ -43,12 +44,12 @@ services:
     volumes:
       - '.:/project/sawtooth-b4e'
     depends_on:
-      - b4e-shell
+      - b4e-shell-ministry
     command: |
       bash -c "
         sleep 1
         ls
-        b4e-tp-0 -v -C tcp://validator-0:4004
+        b4e-tp -v -C tcp://validator-0:4004
         echo b4e-tp-0 connect
       "
 
@@ -61,11 +62,11 @@ services:
     volumes:
       - '.:/project/sawtooth-b4e'
     depends_on:
-      - b4e-shell
+      - b4e-shell-ministry
     command: |
       bash -c "
         sleep 1
-        b4e-tp-1 -v -C tcp://validator-1:4004
+        b4e-tp -v -C tcp://validator-1:4004
         echo b4e-tp-1 connect
       "
   b4e-tp-2:
@@ -77,7 +78,7 @@ services:
     volumes:
       - '.:/project/sawtooth-b4e'
     depends_on:
-      - b4e-shell
+      - b4e-shell-ministry
     command: |
       bash -c "
         sleep 1
@@ -94,11 +95,11 @@ services:
     volumes:
       - '.:/project/sawtooth-b4e'
     depends_on:
-      - b4e-shell
+      - b4e-shell-ministry
     command: |
       bash -c "
         sleep 1
-        b4e-tp-3 -v -C tcp://validator-3:4004
+        b4e-tp -v -C tcp://validator-3:4004
         echo b4e-tp-3 connect
       "
 
@@ -111,55 +112,15 @@ services:
     volumes:
       - '.:/project/sawtooth-b4e'
     depends_on:
-      - b4e-shell
+      - b4e-shell-ministry
     command: |
       bash -c "
         sleep 1
-        b4e-tp-4 -v -C tcp://validator-4:4004
+        b4e-tp -v -C tcp://validator-4:4004
         echo b4e-tp-4 connect
       "
 
-  # -------------=== intkey tp ===-------------
 
-  intkey-tp-0:
-    image: hyperledger/sawtooth-intkey-tp-python:chime
-    container_name: sawtooth-intkey-tp-python-default-0
-    expose:
-      - 4004
-    command: intkey-tp-python -C tcp://validator-0:4004
-    stop_signal: SIGKILL
-
-  intkey-tp-1:
-    image: hyperledger/sawtooth-intkey-tp-python:chime
-    container_name: sawtooth-intkey-tp-python-default-1
-    expose:
-      - 4004
-    command: intkey-tp-python -C tcp://validator-1:4004
-    stop_signal: SIGKILL
-
-  intkey-tp-2:
-    image: hyperledger/sawtooth-intkey-tp-python:chime
-    container_name: sawtooth-intkey-tp-python-default-2
-    expose:
-      - 4004
-    command: intkey-tp-python -C tcp://validator-2:4004
-    stop_signal: SIGKILL
-
-  intkey-tp-3:
-    image: hyperledger/sawtooth-intkey-tp-python:chime
-    container_name: sawtooth-intkey-tp-python-default-3
-    expose:
-      - 4004
-    command: intkey-tp-python -C tcp://validator-3:4004
-    stop_signal: SIGKILL
-
-  intkey-tp-4:
-    image: hyperledger/sawtooth-intkey-tp-python:chime
-    container_name: sawtooth-intkey-tp-python-default-4
-    expose:
-      - 4004
-    command: intkey-tp-python -C tcp://validator-4:4004
-    stop_signal: SIGKILL
 
   # -------------=== rest api ===-------------
 
@@ -183,8 +144,6 @@ services:
     container_name: sawtooth-rest-api-default-1
     expose:
       - 8008
-    ports:
-      - '8009:8008'
     command: |
       bash -c "
         sawtooth-rest-api \
@@ -198,8 +157,6 @@ services:
     container_name: sawtooth-rest-api-default-2
     expose:
       - 8008
-    ports:
-      - '8010:8008'
     command: |
       bash -c "
         sawtooth-rest-api \
@@ -213,8 +170,6 @@ services:
     container_name: sawtooth-rest-api-default-3
     expose:
       - 8008
-    ports:
-      - '8011:8008'
     command: |
       bash -c "
         sawtooth-rest-api \
@@ -228,8 +183,6 @@ services:
     container_name: sawtooth-rest-api-default-4
     expose:
       - 8008
-    ports:
-      - '8012:8008'
     command: |
       bash -c "
         sawtooth-rest-api \
@@ -282,9 +235,9 @@ services:
 
   # -------------=== shell ===-------------
 
-  shell:
+  shell-ministry:
     image: hyperledger/sawtooth-shell:chime
-    container_name: sawtooth-shell-default
+    container_name: sawtooth-shell-default-ministry
     volumes:
       - pbft-shared:/pbft-shared
     command: |
@@ -306,7 +259,6 @@ services:
     ports:
       - '4004:4004'
       - '8800:8800'
-      - '5050:5050'
     volumes:
       - pbft-shared:/pbft-shared
     command: |
@@ -346,7 +298,7 @@ services:
           sawtooth keygen my_key
         fi &&
         sawtooth-validator -vv \
-          --endpoint tcp://192.168.11.23:8800 \
+          --endpoint tcp://192.168.1.7:8800 \
           --bind component:tcp://eth0:4004 \
           --bind consensus:tcp://eth0:5050 \
           --bind network:tcp://eth0:8800 \
@@ -365,7 +317,6 @@ services:
     ports:
       - '4005:4004'
       - '8801:8800'
-      - '5051:5050'
     volumes:
       - pbft-shared:/pbft-shared
     command: |
@@ -384,14 +335,14 @@ services:
         fi &&
         sawtooth keygen my_key &&
         sawtooth-validator -vv \
-          --endpoint tcp://192.168.11.23:8801 \
+          --endpoint tcp://192.168.1.7:8801 \
           --bind component:tcp://eth0:4004 \
           --bind consensus:tcp://eth0:5050 \
           --bind network:tcp://eth0:8800 \
           --scheduler parallel \
           --peering static \
           --maximum-peer-connectivity 10000 \
-          --peers tcp://192.168.11.23:8800
+          --peers tcp://192.168.1.7:8800
       "
 
   validator-2:
@@ -406,7 +357,6 @@ services:
     ports:
       - '4006:4004'
       - '8802:8800'
-      - '5052:5050'
     command: |
       bash -c "
         if [ -e /pbft-shared/validators/validator-2.priv ]; then
@@ -421,15 +371,15 @@ services:
         fi &&
         sawtooth keygen my_key &&
         sawtooth-validator -vv \
-          --endpoint tcp://192.168.11.23:8802 \
+          --endpoint tcp://192.168.1.7:8802 \
           --bind component:tcp://eth0:4004 \
           --bind consensus:tcp://eth0:5050 \
           --bind network:tcp://eth0:8800 \
           --scheduler parallel \
           --peering static \
           --maximum-peer-connectivity 10000 \
-          --peers tcp://192.168.11.23:8800 \
-          --peers tcp://192.168.11.23:8801
+          --peers tcp://192.168.1.7:8800 \
+          --peers tcp://192.168.1.7:8801
       "
 
   validator-3:
@@ -442,7 +392,6 @@ services:
     ports:
       - '4007:4004'
       - '8803:8800'
-      - '5053:5050'
     volumes:
       - pbft-shared:/pbft-shared
     command: |
@@ -459,16 +408,16 @@ services:
         fi &&
         sawtooth keygen my_key &&
         sawtooth-validator -vv \
-          --endpoint tcp://192.168.11.23:8803 \
+          --endpoint tcp://192.168.1.7:8803 \
           --bind component:tcp://eth0:4004 \
           --bind consensus:tcp://eth0:5050 \
           --bind network:tcp://eth0:8800 \
           --scheduler parallel \
           --peering static \
           --maximum-peer-connectivity 10000 \
-          --peers tcp://192.168.11.23:8800 \
-          --peers tcp://192.168.11.23:8801 \
-          --peers tcp://192.168.11.23:8802
+          --peers tcp://192.168.1.7:8800 \
+          --peers tcp://192.168.1.7:8801 \
+          --peers tcp://192.168.1.7:8802
       "
 
   validator-4:
@@ -497,17 +446,17 @@ services:
         fi &&
         sawtooth keygen my_key &&
         sawtooth-validator -vv \
-          --endpoint tcp://192.168.11.23:8804 \
+          --endpoint tcp://192.168.1.7:8804 \
           --bind component:tcp://eth0:4004 \
           --bind consensus:tcp://eth0:5050 \
           --bind network:tcp://eth0:8800 \
           --scheduler parallel \
           --peering static \
           --maximum-peer-connectivity 10000 \
-          --peers tcp://192.168.11.23:8800 \
-          --peers tcp://192.168.11.23:8801 \
-          --peers tcp://192.168.11.23:8802 \
-          --peers tcp://192.168.11.23:8803
+          --peers tcp://192.168.1.7:8800 \
+          --peers tcp://192.168.1.7:8801 \
+          --peers tcp://192.168.1.7:8802 \
+          --peers tcp://192.168.1.7:8803
       "
 
   # -------------=== pbft engines ===-------------
@@ -541,3 +490,57 @@ services:
     container_name: sawtooth-pbft-engine-default-4
     command: pbft-engine -vv --connect tcp://validator-4:5050
     stop_signal: SIGKILL
+
+  b4e-rest-api-ministry:
+    build:
+      context: .
+      dockerfile: ./rest_api/Dockerfile
+    image: sawtooth-b4e-rest-api
+    container_name: b4e-rest-api-ministry
+    volumes:
+      - .:/project/sawtooth-b4e
+    expose:
+      - 8000
+    ports:
+      - '8005:8000'
+    depends_on:
+      - b4e-shell-ministry
+      - rest-api-0
+    command: |
+      bash -c "
+        b4e-rest-api \
+          -B b4e-rest-api-ministry:8000 \
+          -C 192.168.1.7:4004 \
+          -R rest-api-0:8008 \
+          --db-host mongo-ministry \
+          -vv
+      "
+  b4e-subscriber-ministry:
+    build:
+      context: .
+      dockerfile: subscriber_b4e/Dockerfile
+    image: sawtooth-b4e-subscriber
+    container_name: b4e-subscriber_b4e-ministry
+    volumes:
+      - '.:/project/sawtooth-b4e'
+    depends_on:
+      - b4e-shell-ministry
+      - mongo-ministry
+    command: |
+      bash -c "
+        b4e-subscriber subscribe \
+        --db-host mongo-ministry \
+        -C tcp://validator-0:4004 \
+        -vv
+      "
+  mongo-ministry:
+    image: mongo
+    container_name: mongo-ministry
+    restart: always
+    expose:
+      - 27017
+    ports:
+      - '27018:27017'
+
+    volumes:
+      - mongodb_data_ministry:/data/db
