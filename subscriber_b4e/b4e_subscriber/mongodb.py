@@ -15,7 +15,8 @@
 
 import logging
 from pymongo import MongoClient
-
+import datetime
+import time
 from config.config import MongoDBConfig
 
 LOGGER = logging.getLogger(__name__)
@@ -28,13 +29,9 @@ class Database(object):
     def __init__(self):
         self.mongo = None
         self.b4e_db = None
-        self.b4e_actor_collection = None
-        self.b4e_record_collection = None
-        self.b4e_voting_collection = None
-        self.b4e_vote_collection = None
-        self.b4e_environment_collection = None
-        self.b4e_class_collection = None
         self.b4e_block_collection = None
+        self.b4e_university_profile_collection = None
+        self.b4e_vote_request_collection = None
 
     def connect(self, host=MongoDBConfig.HOST, port=MongoDBConfig.PORT, user_name=MongoDBConfig.USER_NAME,
                 password=MongoDBConfig.PASSWORD):
@@ -47,13 +44,9 @@ class Database(object):
 
     def create_collections(self):
         self.b4e_db = self.mongo[MongoDBConfig.DATABASE]
-        self.b4e_actor_collection = self.b4e_db[MongoDBConfig.ACTOR_COLLECTION]
-        self.b4e_record_collection = self.b4e_db[MongoDBConfig.RECORD_COLLECTION]
-        self.b4e_voting_collection = self.b4e_db[MongoDBConfig.VOTING_COLLECTION]
-        self.b4e_vote_collection = self.b4e_db[MongoDBConfig.VOTE_COLLECTION]
-        self.b4e_environment_collection = self.b4e_db[MongoDBConfig.ENVIRONMENT_COLLECTION]
-        self.b4e_class_collection = self.b4e_db[MongoDBConfig.CLASS_COLLECTION]
         self.b4e_block_collection = self.b4e_db[MongoDBConfig.BLOCK_COLLECTION]
+        self.b4e_university_profile_collection = self.b4e_db[MongoDBConfig.UNIVERSITY_PROFILE]
+        self.b4e_vote_request_collection = self.b4e_db[MongoDBConfig.VOTE_REQUEST]
 
     def disconnect(self):
         self.mongo.close()
@@ -70,12 +63,9 @@ class Database(object):
         delete = {"block_num": {"$gte": block_num}}
 
         try:
-            self.b4e_record_collection.delete_many(delete)
-            self.b4e_actor_collection.delete_many(delete)
-            self.b4e_record_collection.delete_many(delete)
-            self.b4e_voting_collection.delete_many(delete)
-            self.b4e_environment_collection.delete_many(delete)
             self.b4e_block_collection.delete_many(delete)
+            self.b4e_university_profile_collection.delte_many(delete)
+            self.b4e_vote_request_collection.delte_many(delete)
 
         except Exception as e:
             print(e)
@@ -115,72 +105,82 @@ class Database(object):
 
     def insert_actor(self, actor_dict):
         try:
-            key = {'actor_public_key': actor_dict['actor_public_key']}
-            data = {"$set": actor_dict}
-            actor_dict['info'][-1]['block_num'] = actor_dict['block_num']
-            old_actor = self.b4e_actor_collection.find_one(key)
-            if old_actor:
-                for i in range(len(old_actor['info'])):
-                    actor_dict['info'][i] = old_actor['info'][i]
-                actor_dict['end_block_num'] = actor_dict['block_num']
-                actor_dict['block_num'] = old_actor.get('block_num')
+            key = {'pubkey': actor_dict['actor_public_key']}
+            if actor_dict["role"] != "INSTITUTION":
+                return
 
-            res = self.b4e_actor_collection.update_one(key, data, upsert=True)
+            university_profile = eval(actor_dict['info'][0]['data'])
+            university_profile['pubkey'] = actor_dict['actor_public_key']
+            if actor_dict["status"] == "WAITING":
+                state = "voting"
+            elif actor_dict["status"] == "ACTIVE":
+                state = "accepted"
+            elif actor_dict["status"] == "REJECT":
+                state = "declined"
+
+            university_profile['state'] = state
+            university_profile['block_num'] = actor_dict['block_num']
+            university_profile['end_block_num'] = actor_dict['end_block_num']
+            old_actor = self.b4e_university_profile_collection.find_one(key)
+            if old_actor:
+                university_profile['end_block_num'] = actor_dict['block_num']
+                university_profile['block_num'] = old_actor.get('block_num')
+            data = {"$set": university_profile}
+            res = self.b4e_university_profile_collection.update_one(key, data, upsert=True)
             return res
         except Exception as e:
+            LOGGER.error("errrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr")
+            LOGGER.error(e)
             print(e)
             return None
 
     def insert_record(self, record_dict):
         try:
-            key = {'record_id': record_dict['record_id']}
-            data = {"$set": record_dict}
-            record_dict['record_data'][-1]['block_num'] = record_dict['block_num']
-            old_record = self.b4e_record_collection.find_one(key)
-            if old_record:
-                for i in range(len(old_record['record_data'])):
-                    record_dict['record_data'][i] = old_record['record_data'][i]
-                record_dict['end_block_num'] = record_dict['block_num']
-                record_dict['block_num'] = old_record.get('block_num')
-            res = self.b4e_record_collection.update_one(key, data, upsert=True)
-            return res
+            return
         except Exception as e:
             print(e)
             return None
 
     def insert_voting(self, voting_dict):
         try:
+            key = {'pubkey': voting_dict['elector_public_key']}
 
-            key = {'elector_public_key': voting_dict['elector_public_key']}
             try:
+
                 voting_dict['vote'][-1]['block_num'] = voting_dict['block_num']
                 voting_dict['vote'][-1]['elector_public_key'] = voting_dict['elector_public_key']
+                LOGGER.warning("update voting")
                 self.insert_vote(voting_dict['vote'][-1])
-                old_voting = self.b4e_voting_collection.find_one(key)
-                if old_voting:
-                    for i in range(len(old_voting)):
-                        voting_dict['vote'][i] = old_voting['vote'][i]
-                    voting_dict['end_block_num'] = voting_dict['block_num']
-                    voting_dict['block_num'] = old_voting.get('block_num')
             except Exception as e:
                 LOGGER.info("Create Voting")
+                vote_request = eval(voting_dict["data"])
+                vote_request['state'] = 'new'
+                vote_request['block_num'] = voting_dict['block_num']
+                data = {"$set": vote_request}
+                res = self.b4e_vote_request_collection.update_one(key, data, upsert=True)
+                return res
 
-            data = {"$set": voting_dict}
-            res = self.b4e_voting_collection.update_one(key, data, upsert=True)
-            return res
         except Exception as e:
             print(e)
             return None
 
     def insert_vote(self, vote_dict):
         try:
-            key = {'issuer_public_key': vote_dict['issuer_public_key'],
-                   'elector_public_key': vote_dict['elector_public_key']}
-            data = {"$set": vote_dict}
-            old_vote = self.b4e_vote_collection.find_one(key)
-            if old_vote:
-                return
-            res = self.b4e_vote_collection.update_one(key, data, upsert=True)
+            if vote_dict["accepted"]:
+                decision = "accept"
+            else:
+                decision = "decline"
+
+            key = {'pubkey': vote_dict['elector_public_key']}
+            vote = {
+                "publicKey": vote_dict['issuer_public_key'],
+                "decision": decision,
+                "time": timestamp_to_datetime(vote_dict['timestamp']),
+                "blockNum": vote_dict['block_num']
+            }
+
+            data = {"$push": {'votes': vote}}
+            res = self.b4e_university_profile_collection.update_one(key, data, upsert=True)
             return res
         except Exception as e:
             print(e)
@@ -188,34 +188,23 @@ class Database(object):
 
     def insert_environment(self, environment_dict):
         try:
-            key = {}
-            data = {"$set": environment_dict}
-            old_environment = self.b4e_record_collection.find_one(key)
-            if old_environment:
-                environment_dict['end_block_num'] = environment_dict['block_num']
-                environment_dict['block_num'] = old_environment.get('block_num')
-            res = self.b4e_environment_collection.update_one(key, data, upsert=True)
-            return res
+            return
         except Exception as e:
             print(e)
             return None
 
     def insert_class(self, class_dict):
         try:
-
-            key = {
-                'teacher_public_key': class_dict['teacher_public_key'],
-                'class_id': class_dict['class_id']
-            }
-
-            data = {"$set": class_dict}
-            old_class = self.b4e_class_collection.find_one(key)
-            if old_class:
-                class_dict['end_block_num'] = class_dict['block_num']
-                class_dict['block_num'] = old_class.get('block_num')
-            res = self.b4e_class_collection.update_one(key, dict(data), upsert=True)
-            return res
+            return
         except Exception as e:
             print(e)
             LOGGER.warning(e)
             return None
+
+
+def timestamp_to_datetime(timestamp):
+    return datetime.datetime.fromtimestamp(timestamp)
+
+
+def to_time_stamp(date_time):
+    return datetime.datetime.timestamp(date_time)

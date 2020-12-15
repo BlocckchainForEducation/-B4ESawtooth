@@ -35,7 +35,9 @@ class MongoDBConfig:
     PORT = 27017
     USER_NAME = ""
     PASSWORD = ""
-    DATABASE = "b4e"
+    DATABASE = "B4E_Ministry_Backend"
+    UNIVERSITY_PROFILE = "UniversityProfile"
+    VOTE_REQUEST = "VoteRequet"
     USER_COLLECTION = 'b4e_users'
     ENVIRONMENT_COLLECTION = 'b4e_environments'
     CLASS_COLLECTION = 'b4e_classes'
