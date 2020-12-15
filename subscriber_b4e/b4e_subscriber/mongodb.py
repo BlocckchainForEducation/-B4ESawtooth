@@ -158,8 +158,11 @@ class Database(object):
                 vote_request['block_num'] = voting_dict['block_num']
                 data = {"$set": vote_request}
                 res = self.b4e_vote_request_collection.update_one(key, data, upsert=True)
-                return res
 
+            close_timestamp = voting_dict['close_vote_timestamp']
+            if close_timestamp > 0:
+                data = {"$set": {"voteCloseDate": timestamp_to_datetime(close_timestamp)}}
+                self.b4e_university_profile_collection.update_one(key, data, upsert=True)
         except Exception as e:
             print(e)
             return None
