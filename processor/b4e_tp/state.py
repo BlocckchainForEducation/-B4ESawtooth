@@ -134,12 +134,11 @@ class B4EState(object):
                     actor.status = actor_pb2.ACTIVE
 
         data = container.SerializeToString()
-        data = container.SerializeToString()
         updated_state = {}
         updated_state[address] = data
         self._context.set_state(updated_state, timeout=self._timeout)
 
-    def set_reject_actor(self, transaction_id, public_key):
+    def set_reject_actor(self, public_key):
 
         address = addresser.get_actor_address(public_key)
         container = actor_pb2.ActorContainer()
@@ -150,7 +149,6 @@ class B4EState(object):
             for actor in container.entries:
                 if actor.actor_public_key == public_key:
                     actor.status = actor_pb2.REJECT
-                    actor.transaction_id = transaction_id
 
         data = container.SerializeToString()
         updated_state = {}
