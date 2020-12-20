@@ -34,7 +34,8 @@ RUN pip3 install \
     itsdangerous \
     pycrypto \
     requests \
-    psycopg2-binary
+    psycopg2-binary \
+    pymongo
 
 
 WORKDIR /project/sawtooth-b4e

@@ -6,7 +6,7 @@ import requests
 
 from protobuf.b4e_protobuf import payload_pb2
 
-from config.config import Sawtooth_URL
+from config.config import Sawtooth_Config
 from addressing.b4e_addressing import addresser
 from addressing.b4e_addressing.addresser import AddressSpace
 from protobuf.b4e_protobuf.actor_pb2 import ActorContainer
@@ -37,7 +37,7 @@ def enum_value_to_name(val):
 
 
 def get_data_from_transaction(transaction_id):
-    url = Sawtooth_URL.REST_API + "/transactions/" + str(transaction_id)
+    url = Sawtooth_Config.REST_API + "/transactions/" + str(transaction_id)
     response = requests.get(url)
     if response.status_code == 200:
         try:
@@ -54,7 +54,7 @@ def get_data_from_transaction(transaction_id):
 
 
 def get_record_transaction(transaction_id):
-    url = Sawtooth_URL.REST_API + "/transactions/" + str(transaction_id)
+    url = Sawtooth_Config.REST_API + "/transactions/" + str(transaction_id)
 
     response = requests.get(url)
     if response.status_code == 200:
@@ -92,7 +92,7 @@ def get_record_transaction(transaction_id):
 
 
 def get_payload_from_block(block_id, address):
-    url = Sawtooth_URL.REST_API + "/blocks/" + str(block_id)
+    url = Sawtooth_Config.REST_API + "/blocks/" + str(block_id)
     response = requests.get(url)
     if response.status_code == 200:
         try:
@@ -126,7 +126,7 @@ def get_data_payload(payload_string):
 
 
 def get_state(sawtooth_address):
-    url = Sawtooth_URL.REST_API + "/state/" + str(sawtooth_address)
+    url = Sawtooth_Config.REST_API + "/state/" + str(sawtooth_address)
     response = requests.get(url)
     if response.status_code == 200:
         try:
@@ -193,7 +193,7 @@ def _convert_proto_to_dict(proto):
 
 
 def get_student_data(student_public_key):
-    url = Sawtooth_URL.REST_API + "/state"
+    url = Sawtooth_Config.REST_API + "/state"
     response = requests.get(url)
     if response.status_code == 200:
         try:

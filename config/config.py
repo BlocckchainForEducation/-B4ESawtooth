@@ -6,9 +6,10 @@ class Config:
     PORT = 8082
 
 
-class Sawtooth_URL:
+class Sawtooth_Config:
     REST_API = 'http://localhost:8008'
     VALIDATOR_TCP = 'tcp://localhost:4004'
+    MAX_BATCH_SIZE = 200
 
 
 class ElasticSearchConfig:
@@ -105,3 +106,10 @@ class LandingPage:
 class Ipfs:
     HOST = "https://ipfs.infura.io"
     PORT = 5001
+
+
+class Test:
+    MINISTRY_PRIVATE_KEY = "6cebf871e936d15b6540dc714dcff176839f73359d30ae49ae8ec1d44bd276db"
+    CIPHER = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+    DATABASE = "test_db"
+    TEST_COLLECTION = "test_collection"

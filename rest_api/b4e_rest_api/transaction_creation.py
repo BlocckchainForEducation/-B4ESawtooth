@@ -22,6 +22,7 @@ from addressing.b4e_addressing import addresser
 
 from protobuf.b4e_protobuf import payload_pb2
 
+from config.config import Sawtooth_Config
 import logging
 import datetime
 import time
@@ -125,7 +126,7 @@ def make_create_teachers(transaction_signer,
                          timestamp):
     institution_address = addresser.get_actor_address(transaction_signer.get_public_key().as_hex())
 
-    list_profiles = slice_per(profiles, 1000)
+    list_profiles = slice_per(profiles, Sawtooth_Config.MAX_BATCH_SIZE)
     list_batches = []
     for profiles in list_profiles:
         list_inputs = []
@@ -198,7 +199,7 @@ def make_create_edu_officers(transaction_signer,
                              timestamp):
     institution_address = addresser.get_actor_address(transaction_signer.get_public_key().as_hex())
 
-    list_profiles = slice_per(profiles, 1000)
+    list_profiles = slice_per(profiles, Sawtooth_Config.MAX_BATCH_SIZE)
     list_batches = []
     for profiles in list_profiles:
         list_inputs = []
@@ -312,7 +313,7 @@ def make_create_classes(transaction_signer,
     institution_public_key = transaction_signer.get_public_key().as_hex()
     institution_address = addresser.get_actor_address(institution_public_key)
 
-    list_classes = slice_per(classes, 1000)
+    list_classes = slice_per(classes, Sawtooth_Config.MAX_BATCH_SIZE)
     list_batches = []
     for classes in list_classes:
         list_inputs = []
@@ -410,7 +411,7 @@ def make_create_subjects(transaction_signer,
     issuer_address = addresser.get_actor_address(issuer_public_key)
     class_address = addresser.get_class_address(class_id, institution_public_key)
 
-    list_subjects = slice_per(list_subjects, 1000)
+    list_subjects = slice_per(list_subjects, Sawtooth_Config.MAX_BATCH_SIZE)
     list_batches = []
     for subjects in list_subjects:
         list_inputs = []
@@ -463,8 +464,10 @@ def make_create_certs(transaction_signer,
     manager_address = addresser.get_actor_address(institution_public_key)
     issuer_address = addresser.get_actor_address(issuer_public_key)
 
-    list_certs = slice_per(certs, 1000)
+    list_certs = slice_per(certs, Sawtooth_Config.MAX_BATCH_SIZE)
+    # list_certs = [certs]
     list_batches = []
+    # LOGGER.warning("slice to  ---------------- " + str(len(list_certs)))
     for certs in list_certs:
         list_inputs = []
         list_outputs = []
@@ -503,7 +506,6 @@ def make_create_certs(transaction_signer,
             transaction_signer=transaction_signer,
             batch_signer=batch_signer)
         list_batches.append(batch)
-
     return list_batches
 
 

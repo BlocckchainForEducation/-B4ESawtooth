@@ -27,8 +27,14 @@ from rest_api.b4e_rest_api import transaction_creation
 
 import logging
 import asyncio
+import time
+import datetime
+import uuid
+from config.config import Test, MongoDBConfig
 
 LOGGER = logging.getLogger(__name__)
+
+from pymongo import MongoClient
 
 
 class Messenger(object):
@@ -44,6 +50,29 @@ class Messenger(object):
 
     def close_validator_connection(self):
         self._connection.close()
+
+    def open_db_collection(self):
+        try:
+            host = MongoDBConfig.HOST
+            port = MongoDBConfig.PORT
+            user_name = MongoDBConfig.USER_NAME
+            password = MongoDBConfig.PASSWORD
+
+            LOGGER.warning(
+                "connect to monggo db host: " + host + "-port: " + port)
+            if (user_name != "" and password != ""):
+                url = f"mongodb://{user_name}:{password}@{host}:{port}"
+                self.mongo = MongoClient(url)
+            else:
+                self.mongo = MongoClient(host=host, port=int(port))
+
+            self.b4e_db = self.mongo[Test.DATABASE]
+            self.test_collection = self.b4e_db[Test.TEST_COLLECTION]
+        except Exception as e:
+            LOGGER.warning(e)
+
+    def close_db_collection(self):
+        self.mongo.close()
 
     def get_new_key_pair(self):
         private_key = self._context.new_random_private_key()
@@ -363,6 +392,65 @@ class Messenger(object):
         await self._send_and_wait_for_commit(batch)
         transaction_id = batch.transactions[0].header_signature
         return transaction_id
+
+    async def send_test_time_create_transaction(self, num_transactions):
+        ministry_private_key = Test.MINISTRY_PRIVATE_KEY
+
+        # create institution
+        institution_public_key, institution_private_key = self.get_new_key_pair()
+        institution_profile = {'uid': str(uuid.uuid1())}
+        await self.send_create_institution(private_key=institution_private_key, profile=institution_profile,
+                                           timestamp=self.get_time())
+
+        # accpept institution
+
+        await self.send_create_vote(private_key=ministry_private_key, elector_public_key=institution_public_key,
+                                    accepted=True, timestamp=self.get_time())
+
+        # make signer
+        transaction_signer = self._crypto_factory.new_signer(
+            secp256k1.Secp256k1PrivateKey.from_hex(institution_private_key))
+        batch_signer = transaction_signer
+        certs = []
+
+        # create certs
+        for i in range(num_transactions):
+            globalregisno = str(uuid.uuid1())
+            student_public_key, student_private_key = self.get_new_key_pair()
+            certs.append({
+                "globalregisno": globalregisno,
+                "studentPublicKey": student_public_key,
+                "cipher": Test.CIPHER
+            })
+
+        list_batches = transaction_creation.make_create_certs(transaction_signer=transaction_signer,
+                                                              batch_signer=batch_signer,
+                                                              certs=certs,
+                                                              timestamp=self.get_time())
+        timestamp = self.get_time()
+        start = time.time()
+        for batch in list_batches:
+            await self._send_and_wait_for_commit(batch)
+
+        end = time.time()
+
+        commit_time = end - start
+
+        test_result = {
+            "timestamp": timestamp,
+            "num_transactions": num_transactions,
+            "commit_time": commit_time
+        }
+        try:
+            self.test_collection.insert_one(test_result)
+        except Exception as e:
+            LOGGER.warning("db err")
+            LOGGER.warning(e)
+        return commit_time
+
+    def get_time(self):
+        dts = datetime.datetime.utcnow()
+        return round(time.mktime(dts.timetuple()) + dts.microsecond / 1e6)
 
     async def _send_and_wait_for_commit(self, batch):
 

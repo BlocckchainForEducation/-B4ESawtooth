@@ -28,7 +28,7 @@ from rest_api.b4e_rest_api.route_handler import RouteHandler
 from rest_api.b4e_rest_api.database import Database
 from rest_api.b4e_rest_api.messaging import Messenger
 
-from config.config import Sawtooth_URL
+from config.config import Sawtooth_Config, MongoDBConfig
 
 LOGGER = logging.getLogger(__name__)
 
@@ -64,15 +64,15 @@ def parse_args(args):
     parser.add_argument(
         '--db-port',
         help='The port of the database',
-        default='5432')
+        default='27017')
     parser.add_argument(
         '--db-user',
         help='The authorized user of the database',
-        default='sawtooth')
+        default='')
     parser.add_argument(
         '--db-password',
         help="The authorized user's password for database access",
-        default='sawtooth')
+        default='')
     parser.add_argument(
         '-v', '--verbose',
         action='count',
@@ -93,6 +93,7 @@ def start_rest_api(host, port, messenger, database):
     app['secret_key'] = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890'
 
     messenger.open_validator_connection()
+    messenger.open_db_collection()
 
     handler = RouteHandler(loop, messenger, database)
 
@@ -117,6 +118,8 @@ def start_rest_api(host, port, messenger, database):
     app.router.add_get('/record/{transaction_id}', handler.fetch_record_transaction)
     app.router.add_get('/state/{data_address}', handler.fetch_data_state)
     app.router.add_get('/student_data/{student_public_key}', handler.fetch_data_student)
+
+    app.router.add_post('/test_time_submit_transaction', handler.test_time_create_transaction)
 
     LOGGER.info('Starting Simple Supply REST API on %s:%s', host, port)
     web.run_app(
@@ -144,9 +147,14 @@ def main():
         if "http://" not in restapi:
             restapi = "http://" + restapi
 
-        Sawtooth_URL.REST_API = restapi
+        Sawtooth_Config.REST_API = restapi
 
         messenger = Messenger(validator_url)
+
+        MongoDBConfig.USER_NAME = opts.db_user
+        MongoDBConfig.PASSWORD = opts.db_password
+        MongoDBConfig.HOST = opts.db_host
+        MongoDBConfig.PORT = opts.db_port
 
         database = Database(
             opts.db_host,
