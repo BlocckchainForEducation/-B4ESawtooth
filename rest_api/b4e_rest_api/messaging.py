@@ -32,6 +32,8 @@ import datetime
 import uuid
 from config.config import Test, MongoDBConfig
 
+import nest_asyncio
+
 LOGGER = logging.getLogger(__name__)
 
 from pymongo import MongoClient
@@ -132,11 +134,7 @@ class Messenger(object):
                                                                  profiles,
                                                                  timestamp)
 
-        list_transaction_id = []
-        for batch in list_batches:
-            await self._send_and_wait_for_commit(batch)
-            for transaction in batch.transactions:
-                list_transaction_id.append(transaction.header_signature)
+        list_transaction_id = self.submit_multi_batches(list_batches)
         return list_transaction_id
 
     async def send_create_edu_officer(self, private_key,
@@ -167,11 +165,7 @@ class Messenger(object):
                                                                      batch_signer,
                                                                      profiles,
                                                                      timestamp)
-        list_transaction_id = []
-        for batch in list_batches:
-            await self._send_and_wait_for_commit(batch)
-            for transaction in batch.transactions:
-                list_transaction_id.append(transaction.header_signature)
+        list_transaction_id = self.submit_multi_batches(list_batches)
         return list_transaction_id
 
     async def send_create_vote(self, private_key,
@@ -226,11 +220,7 @@ class Messenger(object):
                                                                 batch_signer,
                                                                 classes,
                                                                 timestamp)
-        list_transaction_id = []
-        for batch in list_batches:
-            await self._send_and_wait_for_commit(batch)
-            for transaction in batch.transactions:
-                list_transaction_id.append(transaction.header_signature)
+        list_transaction_id = self.submit_multi_batches(list_batches)
         return list_transaction_id
 
     async def send_create_record(self, private_key,
@@ -273,11 +263,7 @@ class Messenger(object):
                                                                  class_id,
                                                                  list_subjects,
                                                                  timestamp)
-        list_transaction_id = []
-        for batch in list_batches:
-            await self._send_and_wait_for_commit(batch)
-            for transaction in batch.transactions:
-                list_transaction_id.append(transaction.header_signature)
+        list_transaction_id = self.submit_multi_batches(list_batches)
         return list_transaction_id
 
     async def send_create_certs(self, private_key,
@@ -292,11 +278,8 @@ class Messenger(object):
                                                               batch_signer,
                                                               certs,
                                                               timestamp)
-        list_transaction_id = []
-        for batch in list_batches:
-            await self._send_and_wait_for_commit(batch)
-            for transaction in batch.transactions:
-                list_transaction_id.append(transaction.header_signature)
+
+        list_transaction_id = self.submit_multi_batches(list_batches)
         return list_transaction_id
 
     async def send_create_subject(self, private_key,
@@ -427,14 +410,20 @@ class Messenger(object):
                                                               batch_signer=batch_signer,
                                                               certs=certs,
                                                               timestamp=self.get_time())
+        nest_asyncio.apply()
+        loop = asyncio.get_event_loop()
+        futures = []
         timestamp = self.get_time()
-        start = time.time()
+        commit_time = 0
         for batch in list_batches:
-            await self._send_and_wait_for_commit(batch)
-
-        end = time.time()
-
-        commit_time = end - start
+            futures.append(self._send_and_wait_for_commit(batch))
+        try:
+            start = time.time()
+            loop.run_until_complete(asyncio.wait(futures))
+            end = time.time()
+            commit_time = end - start
+        except Exception as e:
+            LOGGER.warning(e)
 
         test_result = {
             "timestamp": timestamp,
@@ -451,6 +440,23 @@ class Messenger(object):
     def get_time(self):
         dts = datetime.datetime.utcnow()
         return round(time.mktime(dts.timetuple()) + dts.microsecond / 1e6)
+
+    def submit_multi_batches(self, list_batches):
+        nest_asyncio.apply()
+        loop = asyncio.get_event_loop()
+        futures = []
+        list_transaction_id = []
+        for batch in list_batches:
+            futures.append(self._send_and_wait_for_commit(batch))
+            for transaction in batch.transactions:
+                list_transaction_id.append(transaction.header_signature)
+        try:
+            loop.run_until_complete(asyncio.wait(futures))
+            end = time.time()
+        except Exception as e:
+            LOGGER.warning(e)
+
+        return list_transaction_id
 
     async def _send_and_wait_for_commit(self, batch):
 

@@ -35,7 +35,9 @@ RUN pip3 install \
     pycrypto \
     requests \
     psycopg2-binary \
-    pymongo
+    pymongo \
+    nest_asyncio
+
 
 
 WORKDIR /project/sawtooth-b4e
