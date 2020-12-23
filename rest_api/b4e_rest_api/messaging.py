@@ -382,7 +382,13 @@ class Messenger(object):
         Sawtooth_Config.MAX_BATCH_SIZE = max_batch_size
         # create institution
         institution_public_key, institution_private_key = self.get_new_key_pair()
-        institution_profile = {'uid': str(uuid.uuid1())}
+        institution_profile = {'uid': str(uuid.uuid1()),
+                               "universityName": str(uuid.uuid1()),
+                               "nameInEnglish": str(uuid.uuid1()),
+                               "address": str(uuid.uuid1()),
+                               "phone": "01234567",
+                               "email": str(uuid.uuid1()) + "@edu.vn",
+                               'pubkey': institution_public_key}
         await self.send_create_institution(private_key=institution_private_key, profile=institution_profile,
                                            timestamp=self.get_time())
 
