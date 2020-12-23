@@ -459,11 +459,8 @@ class Messenger(object):
             futures.append(self._send_and_wait_for_commit(batch))
             for transaction in batch.transactions:
                 list_transaction_id.append(transaction.header_signature)
-        try:
-            loop.run_until_complete(asyncio.wait(futures))
-            end = time.time()
-        except Exception as e:
-            LOGGER.warning(e)
+
+        loop.run_until_complete(asyncio.wait(futures))
 
         return list_transaction_id
 
