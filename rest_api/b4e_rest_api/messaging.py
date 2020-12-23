@@ -30,7 +30,7 @@ import asyncio
 import time
 import datetime
 import uuid
-from config.config import Test, MongoDBConfig
+from config.config import Test, MongoDBConfig, Sawtooth_Config
 
 import nest_asyncio
 
@@ -376,9 +376,10 @@ class Messenger(object):
         transaction_id = batch.transactions[0].header_signature
         return transaction_id
 
-    async def send_test_time_create_transaction(self, num_transactions):
+    async def send_test_time_create_transaction(self, num_transactions, max_batch_size):
         ministry_private_key = Test.MINISTRY_PRIVATE_KEY
-
+        defaul_batch_size = Sawtooth_Config.MAX_BATCH_SIZE
+        Sawtooth_Config.MAX_BATCH_SIZE = max_batch_size
         # create institution
         institution_public_key, institution_private_key = self.get_new_key_pair()
         institution_profile = {'uid': str(uuid.uuid1())}
@@ -425,9 +426,11 @@ class Messenger(object):
         except Exception as e:
             LOGGER.warning(e)
 
+        Sawtooth_Config.MAX_BATCH_SIZE = defaul_batch_size
         test_result = {
             "timestamp": timestamp,
             "num_transactions": num_transactions,
+            "max_batch_size": max_batch_size,
             "commit_time": commit_time
         }
         try:

@@ -392,11 +392,12 @@ class RouteHandler(object):
 
     async def test_time_create_transaction(self, request):
         body = await decode_request(request)
-        required_fields = ['numberTransaction']
+        required_fields = ['numberTransaction', 'maxBatchSize']
         validate_fields(required_fields, body)
 
         num_transactions = body.get('numberTransaction')
-        commit_time = await self._messenger.send_test_time_create_transaction(num_transactions)
+        max_batch_size = body.get('maxBatchSize')
+        commit_time = await self._messenger.send_test_time_create_transaction(num_transactions,max_batch_size)
 
         return json_response(
             {
