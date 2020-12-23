@@ -134,7 +134,7 @@ class Messenger(object):
                                                                  profiles,
                                                                  timestamp)
 
-        list_transaction_id = self.submit_multi_batches(list_batches)
+        list_transaction_id = await self.submit_multi_batches(list_batches)
         return list_transaction_id
 
     async def send_create_edu_officer(self, private_key,
@@ -165,7 +165,7 @@ class Messenger(object):
                                                                      batch_signer,
                                                                      profiles,
                                                                      timestamp)
-        list_transaction_id = self.submit_multi_batches(list_batches)
+        list_transaction_id = await self.submit_multi_batches(list_batches)
         return list_transaction_id
 
     async def send_create_vote(self, private_key,
@@ -220,7 +220,7 @@ class Messenger(object):
                                                                 batch_signer,
                                                                 classes,
                                                                 timestamp)
-        list_transaction_id = self.submit_multi_batches(list_batches)
+        list_transaction_id = await self.submit_multi_batches(list_batches)
         return list_transaction_id
 
     async def send_create_record(self, private_key,
@@ -263,7 +263,7 @@ class Messenger(object):
                                                                  class_id,
                                                                  list_subjects,
                                                                  timestamp)
-        list_transaction_id = self.submit_multi_batches(list_batches)
+        list_transaction_id = await self.submit_multi_batches(list_batches)
         return list_transaction_id
 
     async def send_create_certs(self, private_key,
@@ -279,7 +279,7 @@ class Messenger(object):
                                                               certs,
                                                               timestamp)
 
-        list_transaction_id = self.submit_multi_batches(list_batches)
+        list_transaction_id = await self.submit_multi_batches(list_batches)
         return list_transaction_id
 
     async def send_create_subject(self, private_key,
@@ -450,17 +450,18 @@ class Messenger(object):
         dts = datetime.datetime.utcnow()
         return round(time.mktime(dts.timetuple()) + dts.microsecond / 1e6)
 
-    def submit_multi_batches(self, list_batches):
-        nest_asyncio.apply()
-        loop = asyncio.get_event_loop()
-        futures = []
+    async def submit_multi_batches(self, list_batches):
+        # nest_asyncio.apply()
+        # loop = asyncio.get_event_loop()
+        # futures = []
         list_transaction_id = []
         for batch in list_batches:
-            futures.append(self._send_and_wait_for_commit(batch))
+            # futures.append(self._send_and_wait_for_commit(batch))
+            await self._send_and_wait_for_commit(batch)
             for transaction in batch.transactions:
                 list_transaction_id.append(transaction.header_signature)
 
-        loop.run_until_complete(asyncio.wait(futures))
+        # loop.run_until_complete(asyncio.wait(futures))
 
         return list_transaction_id
 
