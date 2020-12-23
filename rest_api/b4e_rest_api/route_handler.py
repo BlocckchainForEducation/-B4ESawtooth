@@ -403,6 +403,7 @@ class RouteHandler(object):
             {
                 'ok': True,
                 'numberTransaction': num_transactions,
+                "max_batch_size": max_batch_size,
                 'commitTime': commit_time
             })
 
