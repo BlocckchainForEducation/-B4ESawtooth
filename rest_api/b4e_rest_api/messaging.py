@@ -431,6 +431,7 @@ class Messenger(object):
             commit_time = end - start
         except Exception as e:
             LOGGER.warning(e)
+            commit_time = 0
 
         Sawtooth_Config.MAX_BATCH_SIZE = defaul_batch_size
         test_result = {
