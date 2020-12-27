@@ -20,6 +20,7 @@ volumes:
 
 services:
   b4e-shell-ministry:
+    restart: always
     build:
       context: .
       dockerfile: ./shell/Dockerfile
@@ -36,6 +37,7 @@ services:
 
     # -------------=== b4e tp   ===-------------
   b4e-tp-0:
+    restart: always
     build:
       context: .
       dockerfile: ./processor/Dockerfile
@@ -54,6 +56,7 @@ services:
       "
 
   b4e-tp-1:
+    restart: always
     build:
       context: .
       dockerfile: ./processor/Dockerfile
@@ -70,6 +73,7 @@ services:
         echo b4e-tp-1 connect
       "
   b4e-tp-2:
+    restart: always
     build:
       context: .
       dockerfile: ./processor/Dockerfile
@@ -87,6 +91,7 @@ services:
       "
 
   b4e-tp-3:
+    restart: always
     build:
       context: .
       dockerfile: ./processor/Dockerfile
@@ -104,6 +109,7 @@ services:
       "
 
   b4e-tp-4:
+    restart: always
     build:
       context: .
       dockerfile: ./processor/Dockerfile
@@ -125,6 +131,7 @@ services:
   # -------------=== rest api ===-------------
 
   rest-api-0:
+    restart: always
     image: hyperledger/sawtooth-rest-api:chime
     container_name: sawtooth-rest-api-default-0
     expose:
@@ -140,8 +147,11 @@ services:
     stop_signal: SIGKILL
 
   rest-api-1:
+    restart: always
     image: hyperledger/sawtooth-rest-api:chime
     container_name: sawtooth-rest-api-default-1
+    ports:
+      - '8009:8008'
     expose:
       - 8008
     command: |
@@ -153,6 +163,7 @@ services:
     stop_signal: SIGKILL
 
   rest-api-2:
+    restart: always
     image: hyperledger/sawtooth-rest-api:chime
     container_name: sawtooth-rest-api-default-2
     expose:
@@ -166,6 +177,7 @@ services:
     stop_signal: SIGKILL
 
   rest-api-3:
+    restart: always
     image: hyperledger/sawtooth-rest-api:chime
     container_name: sawtooth-rest-api-default-3
     expose:
@@ -179,6 +191,7 @@ services:
     stop_signal: SIGKILL
 
   rest-api-4:
+    restart: always
     image: hyperledger/sawtooth-rest-api:chime
     container_name: sawtooth-rest-api-default-4
     expose:
@@ -194,6 +207,7 @@ services:
   # -------------=== settings tp ===-------------
 
   settings-tp-0:
+    restart: always
     image: hyperledger/sawtooth-settings-tp:chime
     container_name: sawtooth-settings-tp-default-0
     expose:
@@ -202,6 +216,7 @@ services:
     stop_signal: SIGKILL
 
   settings-tp-1:
+    restart: always
     image: hyperledger/sawtooth-settings-tp:chime
     container_name: sawtooth-settings-tp-default-1
     expose:
@@ -210,6 +225,7 @@ services:
     stop_signal: SIGKILL
 
   settings-tp-2:
+    restart: always
     image: hyperledger/sawtooth-settings-tp:chime
     container_name: sawtooth-settings-tp-default-2
     expose:
@@ -218,6 +234,7 @@ services:
     stop_signal: SIGKILL
 
   settings-tp-3:
+    restart: always
     image: hyperledger/sawtooth-settings-tp:chime
     container_name: sawtooth-settings-tp-default-3
     expose:
@@ -226,6 +243,7 @@ services:
     stop_signal: SIGKILL
 
   settings-tp-4:
+    restart: always
     image: hyperledger/sawtooth-settings-tp:chime
     container_name: sawtooth-settings-tp-default-4
     expose:
@@ -236,6 +254,7 @@ services:
   # -------------=== shell ===-------------
 
   shell-ministry:
+    restart: always
     image: hyperledger/sawtooth-shell:chime
     container_name: sawtooth-shell-default-ministry
     volumes:
@@ -250,6 +269,7 @@ services:
   # -------------=== validators ===-------------
 
   validator-0:
+    restart: always
     image: hyperledger/sawtooth-validator:chime
     container_name: sawtooth-validator-default-0
     expose:
@@ -308,6 +328,7 @@ services:
       "
 
   validator-1:
+    restart: always
     image: hyperledger/sawtooth-validator:chime
     container_name: sawtooth-validator-default-1
     expose:
@@ -346,6 +367,7 @@ services:
       "
 
   validator-2:
+    restart: always
     image: hyperledger/sawtooth-validator:chime
     container_name: sawtooth-validator-default-2
     expose:
@@ -383,6 +405,7 @@ services:
       "
 
   validator-3:
+    restart: always
     image: hyperledger/sawtooth-validator:chime
     container_name: sawtooth-validator-default-3
     expose:
@@ -421,6 +444,7 @@ services:
       "
 
   validator-4:
+    restart: always
     image: hyperledger/sawtooth-validator:chime
     container_name: sawtooth-validator-default-4
     expose:
@@ -462,36 +486,42 @@ services:
   # -------------=== pbft engines ===-------------
 
   pbft-0:
+    restart: always
     image: hyperledger/sawtooth-pbft-engine:chime
     container_name: sawtooth-pbft-engine-default-0
     command: pbft-engine -vv --connect tcp://validator-0:5050
     stop_signal: SIGKILL
 
   pbft-1:
+    restart: always
     image: hyperledger/sawtooth-pbft-engine:chime
     container_name: sawtooth-pbft-engine-default-1
     command: pbft-engine -vv --connect tcp://validator-1:5050
     stop_signal: SIGKILL
 
   pbft-2:
+    restart: always
     image: hyperledger/sawtooth-pbft-engine:chime
     container_name: sawtooth-pbft-engine-default-2
     command: pbft-engine -vv --connect tcp://validator-2:5050
     stop_signal: SIGKILL
 
   pbft-3:
+    restart: always
     image: hyperledger/sawtooth-pbft-engine:chime
     container_name: sawtooth-pbft-engine-default-3
     command: pbft-engine -vv --connect tcp://validator-3:5050
     stop_signal: SIGKILL
 
   pbft-4:
+    restart: always
     image: hyperledger/sawtooth-pbft-engine:chime
     container_name: sawtooth-pbft-engine-default-4
     command: pbft-engine -vv --connect tcp://validator-4:5050
     stop_signal: SIGKILL
 
   b4e-rest-api-ministry:
+    restart: always
     build:
       context: .
       dockerfile: ./rest_api/Dockerfile
@@ -516,6 +546,7 @@ services:
           -vv
       "
   b4e-subscriber-ministry:
+    restart: always
     build:
       context: .
       dockerfile: subscriber_b4e/Dockerfile
