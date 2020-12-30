@@ -413,7 +413,7 @@ class Messenger(object):
         try:
             start = time.time()
             # loop.run_until_complete(asyncio.wait(futures))
-            await self._send_and_wait_for_commit_multi_batches(list_batches)
+            loop.run_until_complete(asyncio.wait([self._send_and_wait_for_commit_multi_batches(list_batches)]))
             end = time.time()
             commit_time = end - start
         except Exception as e:
