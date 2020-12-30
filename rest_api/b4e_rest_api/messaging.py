@@ -36,16 +36,6 @@ import nest_asyncio
 
 LOGGER = logging.getLogger(__name__)
 
-import sys
-
-# the setrecursionlimit function is
-# used to modify the default recursion
-# limit set by python. Using this,
-# we can increase the recursion limit
-# to satisfy our needs
-
-sys.setrecursionlimit(10 ** 6)
-
 from pymongo import MongoClient
 
 
@@ -391,22 +381,8 @@ class Messenger(object):
         defaul_batch_size = Sawtooth_Config.MAX_BATCH_SIZE
         Sawtooth_Config.MAX_BATCH_SIZE = max_batch_size
         # create institution
-        institution_public_key, institution_private_key = self.get_new_key_pair()
-        institution_profile = {'uid': str(uuid.uuid1()),
-                               "universityName": str(uuid.uuid1()),
-                               "nameInEnglish": str(uuid.uuid1()),
-                               "address": str(uuid.uuid1()),
-                               "phone": "01234567",
-                               "email": str(uuid.uuid1()) + "@edu.vn",
-                               'pubkey': institution_public_key}
-        await self.send_create_institution(private_key=institution_private_key, profile=institution_profile,
-                                           timestamp=self.get_time())
 
-        # accpept institution
-
-        await self.send_create_vote(private_key=ministry_private_key, elector_public_key=institution_public_key,
-                                    accepted=True, timestamp=self.get_time())
-
+        institution_private_key = Test.INSTITUTION_PRIVATE_KEY
         # make signer
         transaction_signer = self._crypto_factory.new_signer(
             secp256k1.Secp256k1PrivateKey.from_hex(institution_private_key))
@@ -436,10 +412,12 @@ class Messenger(object):
             futures.append(self._send_and_wait_for_commit(batch))
         try:
             start = time.time()
-            loop.run_until_complete(asyncio.wait(futures))
+            # loop.run_until_complete(asyncio.wait(futures))
+            await self._send_and_wait_for_commit_multi_batches(list_batches)
             end = time.time()
             commit_time = end - start
         except Exception as e:
+            LOGGER.warning("err")
             LOGGER.warning(e)
             commit_time = 0
 
@@ -465,10 +443,12 @@ class Messenger(object):
         # nest_asyncio.apply()
         # loop = asyncio.get_event_loop()
         # futures = []
+        await self._send_and_wait_for_commit_multi_batches(list_batches)
+
         list_transaction_id = []
         for batch in list_batches:
             # futures.append(self._send_and_wait_for_commit(batch))
-            await self._send_and_wait_for_commit(batch)
+            # await self._send_and_wait_for_commit(batch)
             for transaction in batch.transactions:
                 list_transaction_id.append(transaction.header_signature)
 
@@ -477,9 +457,7 @@ class Messenger(object):
         return list_transaction_id
 
     async def _send_and_wait_for_commit(self, batch):
-
         # Send transaction to validator
-
         submit_request = client_batch_submit_pb2.ClientBatchSubmitRequest(
             batches=[batch])
         await self._connection.send(
@@ -506,4 +484,33 @@ class Messenger(object):
         elif status == client_batch_submit_pb2.ClientBatchStatus.UNKNOWN:
             raise ApiInternalError('Something went wrong. Try again later')
 
+    async def _send_and_wait_for_commit_multi_batches(self, batches):
+        # Send transaction to validator
+        submit_request = client_batch_submit_pb2.ClientBatchSubmitRequest(
+            batches=batches)
+        await self._connection.send(
+            validator_pb2.Message.CLIENT_BATCH_SUBMIT_REQUEST,
+            submit_request.SerializeToString())
 
+        # Send status request to validator
+        batch_ids = []
+        for batch in batches:
+            batch_ids.append(batch.header_signature)
+
+        status_request = client_batch_submit_pb2.ClientBatchStatusRequest(
+            batch_ids=batch_ids, wait=True)
+        validator_response = await self._connection.send(
+            validator_pb2.Message.CLIENT_BATCH_STATUS_REQUEST,
+            status_request.SerializeToString())
+
+        # Parse response
+        status_response = client_batch_submit_pb2.ClientBatchStatusResponse()
+        status_response.ParseFromString(validator_response.content)
+        status = status_response.batch_statuses[0].status
+        if status == client_batch_submit_pb2.ClientBatchStatus.INVALID:
+            error = status_response.batch_statuses[0].invalid_transactions[0]
+            raise ApiBadRequest(error.message)
+        elif status == client_batch_submit_pb2.ClientBatchStatus.PENDING:
+            raise ApiInternalError('Transaction submitted but timed out')
+        elif status == client_batch_submit_pb2.ClientBatchStatus.UNKNOWN:
+            raise ApiInternalError('Something went wrong. Try again later')

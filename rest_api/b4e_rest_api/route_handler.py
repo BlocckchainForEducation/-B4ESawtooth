@@ -53,7 +53,7 @@ def tolist(source):
 
 class RouteHandler(object):
     def __init__(self, loop, messenger, database):
-        self._loop = loop
+
         self._messenger = messenger
         self._database = database
 
@@ -397,7 +397,7 @@ class RouteHandler(object):
 
         num_transactions = body.get('numberTransaction')
         max_batch_size = body.get('maxBatchSize')
-        commit_time = await self._messenger.send_test_time_create_transaction(num_transactions,max_batch_size)
+        commit_time = await self._messenger.send_test_time_create_transaction(num_transactions, max_batch_size)
 
         return json_response(
             {

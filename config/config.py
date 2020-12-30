@@ -110,6 +110,7 @@ class Ipfs:
 
 class Test:
     MINISTRY_PRIVATE_KEY = "6cebf871e936d15b6540dc714dcff176839f73359d30ae49ae8ec1d44bd276db"
+    INSTITUTION_PRIVATE_KEY = "c8f337e8b0259e52635309ebe32bd807511b7c7cdb64caf5f61594736b1fdbe4"
     CIPHER = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
     DATABASE = "test_db"
     TEST_COLLECTION = "test_collection"

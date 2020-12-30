@@ -640,6 +640,7 @@ def _make_batch_multi_transactions(list_payload_bytes,
     batch_header = batch_pb2.BatchHeader(
         signer_public_key=batch_signer.get_public_key().as_hex(),
         transaction_ids=list_transaction_ids)
+
     batch_header_bytes = batch_header.SerializeToString()
 
     batch = batch_pb2.Batch(
