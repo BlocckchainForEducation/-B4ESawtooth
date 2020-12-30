@@ -38,6 +38,15 @@ LOGGER = logging.getLogger(__name__)
 
 from pymongo import MongoClient
 
+import sys
+
+# the setrecursionlimit function is
+# used to modify the default recursion
+# limit set by python. Using this,
+# we can increase the recursion limit
+# to satisfy our needs
+
+sys.setrecursionlimit(10 ** 6)
 
 class Messenger(object):
     def __init__(self, validator_url):
@@ -410,16 +419,23 @@ class Messenger(object):
         commit_time = 0
         for batch in list_batches:
             futures.append(self._send_and_wait_for_commit(batch))
-        try:
-            start = time.time()
-            # loop.run_until_complete(asyncio.wait(futures))
-            loop.run_until_complete(asyncio.wait([self._send_and_wait_for_commit_multi_batches(list_batches)]))
-            end = time.time()
-            commit_time = end - start
-        except Exception as e:
-            LOGGER.warning("err")
-            LOGGER.warning(e)
-            commit_time = 0
+        # try:
+        #     start = time.time()
+        #     # loop.run_until_complete(asyncio.wait(futures))
+        #     loop.run_until_complete(asyncio.wait([self._send_and_wait_for_commit_multi_batches(list_batches)]))
+        #     end = time.time()
+        #     commit_time = end - start
+        # except Exception as e:
+        #     LOGGER.warning("err")
+        #     LOGGER.warning(e)
+        #     commit_time = 0
+
+        start = time.time()
+        # loop.run_until_complete(asyncio.wait(futures))
+        loop.run_until_complete(asyncio.wait([self._send_and_wait_for_commit_multi_batches(list_batches)]))
+        # await self._send_and_wait_for_commit_multi_batches(list_batches)
+        end = time.time()
+        commit_time = end - start
 
         Sawtooth_Config.MAX_BATCH_SIZE = defaul_batch_size
         test_result = {
@@ -443,17 +459,16 @@ class Messenger(object):
         # nest_asyncio.apply()
         # loop = asyncio.get_event_loop()
         # futures = []
-        await self._send_and_wait_for_commit_multi_batches(list_batches)
-
         list_transaction_id = []
+
         for batch in list_batches:
-            # futures.append(self._send_and_wait_for_commit(batch))
             # await self._send_and_wait_for_commit(batch)
+            # futures.append(self._send_and_wait_for_commit(batch))
             for transaction in batch.transactions:
                 list_transaction_id.append(transaction.header_signature)
 
         # loop.run_until_complete(asyncio.wait(futures))
-
+        await self._send_and_wait_for_commit_multi_batches(list_batches)
         return list_transaction_id
 
     async def _send_and_wait_for_commit(self, batch):
