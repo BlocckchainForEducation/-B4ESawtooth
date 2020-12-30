@@ -36,6 +36,16 @@ import nest_asyncio
 
 LOGGER = logging.getLogger(__name__)
 
+import sys
+
+# the setrecursionlimit function is
+# used to modify the default recursion
+# limit set by python. Using this,
+# we can increase the recursion limit
+# to satisfy our needs
+
+sys.setrecursionlimit(10 ** 6)
+
 from pymongo import MongoClient
 
 
@@ -469,6 +479,7 @@ class Messenger(object):
     async def _send_and_wait_for_commit(self, batch):
 
         # Send transaction to validator
+
         submit_request = client_batch_submit_pb2.ClientBatchSubmitRequest(
             batches=[batch])
         await self._connection.send(
@@ -494,3 +505,5 @@ class Messenger(object):
             raise ApiInternalError('Transaction submitted but timed out')
         elif status == client_batch_submit_pb2.ClientBatchStatus.UNKNOWN:
             raise ApiInternalError('Something went wrong. Try again later')
+
+
