@@ -298,7 +298,7 @@ services:
           sawtooth keygen my_key
         fi &&
         sawtooth-validator -vv \
-          --endpoint tcp://192.168.1.7:8800 \
+          --endpoint tcp://157.230.248.28:8800 \
           --bind component:tcp://eth0:4004 \
           --bind consensus:tcp://eth0:5050 \
           --bind network:tcp://eth0:8800 \
@@ -335,14 +335,14 @@ services:
         fi &&
         sawtooth keygen my_key &&
         sawtooth-validator -vv \
-          --endpoint tcp://192.168.1.7:8801 \
+          --endpoint tcp://157.230.248.28:8801 \
           --bind component:tcp://eth0:4004 \
           --bind consensus:tcp://eth0:5050 \
           --bind network:tcp://eth0:8800 \
           --scheduler parallel \
           --peering static \
           --maximum-peer-connectivity 10000 \
-          --peers tcp://192.168.1.7:8800
+          --peers tcp://157.230.248.28:8800
       "
 
   validator-2:
@@ -371,15 +371,15 @@ services:
         fi &&
         sawtooth keygen my_key &&
         sawtooth-validator -vv \
-          --endpoint tcp://192.168.1.7:8802 \
+          --endpoint tcp://157.230.248.28:8802 \
           --bind component:tcp://eth0:4004 \
           --bind consensus:tcp://eth0:5050 \
           --bind network:tcp://eth0:8800 \
           --scheduler parallel \
           --peering static \
           --maximum-peer-connectivity 10000 \
-          --peers tcp://192.168.1.7:8800 \
-          --peers tcp://192.168.1.7:8801
+          --peers tcp://157.230.248.28:8800 \
+          --peers tcp://157.230.248.28:8801
       "
 
   validator-3:
@@ -408,16 +408,16 @@ services:
         fi &&
         sawtooth keygen my_key &&
         sawtooth-validator -vv \
-          --endpoint tcp://192.168.1.7:8803 \
+          --endpoint tcp://157.230.248.28:8803 \
           --bind component:tcp://eth0:4004 \
           --bind consensus:tcp://eth0:5050 \
           --bind network:tcp://eth0:8800 \
           --scheduler parallel \
           --peering static \
           --maximum-peer-connectivity 10000 \
-          --peers tcp://192.168.1.7:8800 \
-          --peers tcp://192.168.1.7:8801 \
-          --peers tcp://192.168.1.7:8802
+          --peers tcp://157.230.248.28:8800 \
+          --peers tcp://157.230.248.28:8801 \
+          --peers tcp://157.230.248.28:8802
       "
 
   validator-4:
@@ -446,17 +446,17 @@ services:
         fi &&
         sawtooth keygen my_key &&
         sawtooth-validator -vv \
-          --endpoint tcp://192.168.1.7:8804 \
+          --endpoint tcp://157.230.248.28:8804 \
           --bind component:tcp://eth0:4004 \
           --bind consensus:tcp://eth0:5050 \
           --bind network:tcp://eth0:8800 \
           --scheduler parallel \
           --peering static \
           --maximum-peer-connectivity 10000 \
-          --peers tcp://192.168.1.7:8800 \
-          --peers tcp://192.168.1.7:8801 \
-          --peers tcp://192.168.1.7:8802 \
-          --peers tcp://192.168.1.7:8803
+          --peers tcp://157.230.248.28:8800 \
+          --peers tcp://157.230.248.28:8801 \
+          --peers tcp://157.230.248.28:8802 \
+          --peers tcp://157.230.248.28:8803
       "
 
   # -------------=== pbft engines ===-------------
@@ -510,7 +510,7 @@ services:
       bash -c "
         b4e-rest-api \
           -B b4e-rest-api-ministry:8000 \
-          -C 192.168.1.7:4004 \
+          -C 157.230.248.28:4004 \
           -R rest-api-0:8008 \
           --db-host mongo-ministry \
           -vv
