@@ -412,13 +412,13 @@ class Messenger(object):
                                                               batch_signer=batch_signer,
                                                               certs=certs,
                                                               timestamp=self.get_time())
-        nest_asyncio.apply()
-        loop = asyncio.get_event_loop()
-        futures = []
+        # nest_asyncio.apply()
+        # loop = asyncio.get_event_loop()
+        # futures = []
         timestamp = self.get_time()
-        commit_time = 0
-        for batch in list_batches:
-            futures.append(self._send_and_wait_for_commit(batch))
+        # commit_time = 0
+        # for batch in list_batches:
+        #     futures.append(self._send_and_wait_for_commit(batch))
         # try:
         #     start = time.time()
         #     # loop.run_until_complete(asyncio.wait(futures))
