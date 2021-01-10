@@ -17,6 +17,7 @@ import argparse
 import asyncio
 import logging
 import sys
+import nest_asyncio
 
 from zmq.asyncio import ZMQEventLoop
 
@@ -83,6 +84,7 @@ def parse_args(args):
 
 
 def start_rest_api(host, port, messenger, database):
+    nest_asyncio.apply()
     loop = asyncio.get_event_loop()
     asyncio.ensure_future(database.connect())
 

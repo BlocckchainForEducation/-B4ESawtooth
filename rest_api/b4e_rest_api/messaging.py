@@ -487,6 +487,8 @@ class Messenger(object):
         # Parse response
         status_response = client_batch_submit_pb2.ClientBatchStatusResponse()
         status_response.ParseFromString(validator_response.content)
+        LOGGER.warning("----------------------------------------------------------")
+        LOGGER.warning(status_response)
         status = status_response.batch_statuses[0].status
         if status == client_batch_submit_pb2.ClientBatchStatus.INVALID:
             error = status_response.batch_statuses[0].invalid_transactions[0]
@@ -498,11 +500,18 @@ class Messenger(object):
 
     async def _send_and_wait_for_commit_multi_batches(self, batches):
         # Send transaction to validator
+        LOGGER.warning("_send_and_wait_for_commit_multi_batches")
         submit_request = client_batch_submit_pb2.ClientBatchSubmitRequest(
             batches=batches)
-        await self._connection.send(
+
+        response_submit = await self._connection.send(
             validator_pb2.Message.CLIENT_BATCH_SUBMIT_REQUEST,
             submit_request.SerializeToString())
+
+        LOGGER.warning("response_submit----------------------------------------------------------")
+        LOGGER.warning(response_submit)
+        # LOGGER.warning("submit_request", submit_request)
+        # LOGGER.warning(batches)
 
         # Send status request to validator
         batch_ids = []
@@ -518,6 +527,9 @@ class Messenger(object):
         # Parse response
         status_response = client_batch_submit_pb2.ClientBatchStatusResponse()
         status_response.ParseFromString(validator_response.content)
+
+        LOGGER.warning("status_response----------------------------------------------------------")
+        LOGGER.warning(status_response)
         status = status_response.batch_statuses[0].status
         if status == client_batch_submit_pb2.ClientBatchStatus.INVALID:
             error = status_response.batch_statuses[0].invalid_transactions[0]
