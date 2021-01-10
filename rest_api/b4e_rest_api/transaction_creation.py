@@ -400,6 +400,44 @@ def make_create_record(transaction_signer,
         batch_signer=batch_signer)
 
 
+def make_create_subject(transaction_signer,
+                        batch_signer,
+                        owner_public_key,
+                        manager_public_key,
+                        record_id,
+                        record_data,
+                        timestamp):
+    issuer_public_key = transaction_signer.get_public_key().as_hex()
+    manager_address = addresser.get_actor_address(manager_public_key)
+    issuer_address = addresser.get_actor_address(issuer_public_key)
+    record_address = addresser.get_record_address(record_id, owner_public_key, manager_public_key)
+    class_address = addresser.get_class_address(record_id, manager_public_key)
+
+    inputs = [manager_address, issuer_address, record_address, class_address]
+
+    outputs = [record_address]
+
+    action = payload_pb2.CreateSubjectAction(owner_public_key=owner_public_key,
+                                             manager_public_key=manager_public_key,
+                                             issuer_public_key=issuer_public_key,
+                                             record_id=record_id,
+                                             record_data=record_data)
+
+    payload = payload_pb2.B4EPayload(
+        action=payload_pb2.B4EPayload.CREATE_SUBJECT,
+        create_record=action,
+        timestamp=timestamp)
+
+    payload_bytes = payload.SerializeToString()
+
+    return _make_batch(
+        payload_bytes=payload_bytes,
+        inputs=inputs,
+        outputs=outputs,
+        transaction_signer=transaction_signer,
+        batch_signer=batch_signer)
+
+
 def make_create_subjects(transaction_signer,
                          batch_signer,
                          institution_public_key,
@@ -424,17 +462,14 @@ def make_create_subjects(transaction_signer,
 
             outputs = [subject_address]
 
-            record_type = payload_pb2.SUBJECT
-
-            action = payload_pb2.CreateRecordAction(owner_public_key=subject.get('studentPublicKey'),
-                                                    manager_public_key=institution_public_key,
-                                                    issuer_public_key=issuer_public_key,
-                                                    record_id=class_id,
-                                                    record_type=record_type,
-                                                    record_data=subject.get('cipher'))
+            action = payload_pb2.CreateSubjectAction(owner_public_key=subject.get('studentPublicKey'),
+                                                     manager_public_key=institution_public_key,
+                                                     issuer_public_key=issuer_public_key,
+                                                     record_id=class_id,
+                                                     record_data=subject.get('cipher'))
 
             payload = payload_pb2.B4EPayload(
-                action=payload_pb2.B4EPayload.CREATE_RECORD,
+                action=payload_pb2.B4EPayload.CREATE_SUBJECT,
                 create_record=action,
                 timestamp=timestamp)
 
@@ -453,6 +488,44 @@ def make_create_subjects(transaction_signer,
         list_batches.append(batch)
 
     return list_batches
+
+
+def make_create_cert(transaction_signer,
+                     batch_signer,
+                     owner_public_key,
+                     manager_public_key,
+                     record_id,
+                     record_data,
+                     timestamp):
+    issuer_public_key = transaction_signer.get_public_key().as_hex()
+    manager_address = addresser.get_actor_address(manager_public_key)
+    issuer_address = addresser.get_actor_address(issuer_public_key)
+    record_address = addresser.get_record_address(record_id, owner_public_key, manager_public_key)
+    class_address = addresser.get_class_address(record_id, manager_public_key)
+
+    inputs = [manager_address, issuer_address, record_address, class_address]
+
+    outputs = [record_address]
+
+    action = payload_pb2.CreateCertAction(owner_public_key=owner_public_key,
+                                          manager_public_key=manager_public_key,
+                                          issuer_public_key=issuer_public_key,
+                                          record_id=record_id,
+                                          record_data=record_data)
+
+    payload = payload_pb2.B4EPayload(
+        action=payload_pb2.B4EPayload.CREATE_CERT,
+        create_record=action,
+        timestamp=timestamp)
+
+    payload_bytes = payload.SerializeToString()
+
+    return _make_batch(
+        payload_bytes=payload_bytes,
+        inputs=inputs,
+        outputs=outputs,
+        transaction_signer=transaction_signer,
+        batch_signer=batch_signer)
 
 
 def make_create_certs(transaction_signer,

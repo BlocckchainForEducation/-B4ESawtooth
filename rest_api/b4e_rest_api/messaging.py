@@ -48,6 +48,7 @@ import sys
 
 sys.setrecursionlimit(10 ** 6)
 
+
 class Messenger(object):
     def __init__(self, validator_url):
         self._connection = Connection(validator_url)
@@ -295,7 +296,6 @@ class Messenger(object):
                                   owner_public_key,
                                   manager_public_key,
                                   record_id,
-                                  record_type,
                                   record_data,
                                   timestamp):
 
@@ -303,14 +303,13 @@ class Messenger(object):
             secp256k1.Secp256k1PrivateKey.from_hex(private_key))
         batch_signer = transaction_signer
 
-        batch = transaction_creation.make_create_record(transaction_signer,
-                                                        batch_signer,
-                                                        owner_public_key,
-                                                        manager_public_key,
-                                                        record_id,
-                                                        record_type,
-                                                        record_data,
-                                                        timestamp)
+        batch = transaction_creation.make_create_subject(transaction_signer,
+                                                         batch_signer,
+                                                         owner_public_key,
+                                                         manager_public_key,
+                                                         record_id,
+                                                         record_data,
+                                                         timestamp)
         await self._send_and_wait_for_commit(batch)
         transaction_id = batch.transactions[0].header_signature
         return transaction_id
@@ -318,7 +317,6 @@ class Messenger(object):
     async def send_create_cert(self, private_key,
                                owner_public_key,
                                record_id,
-                               record_type,
                                record_data,
                                timestamp):
 
@@ -327,14 +325,13 @@ class Messenger(object):
         batch_signer = transaction_signer
         manager_public_key = transaction_signer.get_public_key().as_hex()
 
-        batch = transaction_creation.make_create_record(transaction_signer,
-                                                        batch_signer,
-                                                        owner_public_key,
-                                                        manager_public_key,
-                                                        record_id,
-                                                        record_type,
-                                                        record_data,
-                                                        timestamp)
+        batch = transaction_creation.make_create_cert(transaction_signer,
+                                                      batch_signer,
+                                                      owner_public_key,
+                                                      manager_public_key,
+                                                      record_id,
+                                                      record_data,
+                                                      timestamp)
         await self._send_and_wait_for_commit(batch)
         transaction_id = batch.transactions[0].header_signature
         return transaction_id
