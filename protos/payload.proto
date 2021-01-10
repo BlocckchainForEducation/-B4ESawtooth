@@ -4,16 +4,17 @@ syntax = "proto3";
 message B4EPayload{
 
   enum Action {
-    CREATE_MINISTRY = 0;
-    CREATE_INSTITUTION = 1;
-    CREATE_TEACHER = 2;
-    CREATE_EDU_OFFICER = 3;
-    CREATE_VOTE = 4;
-    CREATE_CLASS = 5;
+    CREATE_INSTITUTION = 0;
+    CREATE_TEACHER = 1;
+    CREATE_EDU_OFFICER = 2;
+    CREATE_VOTE = 3;
+    CREATE_CLASS = 4;
     CREATE_RECORD = 6;
-    UPDATE_RECORD = 7;
-    UPDATE_ACTOR_INFO = 8;
-    SET_B4E_ENVIRONMENT = 9;
+    CREATE_CERT = 7;
+    CREATE_SUBJECT = 8;
+    UPDATE_RECORD = 9;
+    UPDATE_ACTOR_INFO = 10;
+    SET_B4E_ENVIRONMENT = 11;
   }
 
   Action action = 1;
@@ -24,11 +25,13 @@ message B4EPayload{
   CreateVoteAction create_vote = 5;
   CreateClassAction create_class = 6;
   CreateRecordAction create_record = 7;
-  UpdateRecordAction update_record = 8;
-  UpdateActorInfoAction update_actor_info = 9;
-  SetB4EEnvironmentAction set_b4e_environment = 10;
+  CreateCertAction create_cert = 8;
+  CreateSubjectAction create_subject = 9;
+  UpdateRecordAction update_record = 10;
+  UpdateActorInfoAction update_actor_info = 11;
+  SetB4EEnvironmentAction set_b4e_environment = 12;
 
-  uint64 timestamp = 11;
+  uint64 timestamp = 13;
 }
 
 
@@ -77,7 +80,20 @@ message CreateRecordAction {
   RecordType record_type = 5;
   string record_data = 6;
 }
-
+message CreateCertAction {
+  string owner_public_key = 1;
+  string manager_public_key = 2;
+  string issuer_public_key = 3;
+  string record_id = 4;
+  string record_data = 6;
+}
+message CreateSubjectAction {
+  string owner_public_key = 1;
+  string manager_public_key = 2;
+  string issuer_public_key = 3;
+  string record_id = 4;
+  string record_data = 6;
+}
 message UpdateRecordAction {
   string owner_public_key = 1;
   string manager_public_key = 2;

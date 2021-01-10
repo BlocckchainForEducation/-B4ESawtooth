@@ -199,6 +199,23 @@ def _get_record_type(i):
     return switcher.get(i)
 
 
+def _create_record_with_type(state, transaction_id, payload, record_type):
+    record_data = record_pb2.Record.RecordData(record_data=payload.data.record_data,
+                                               active=True,
+                                               timestamp=payload.timestamp,
+                                               transaction_id=transaction_id)
+    record = record_pb2.Record(owner_public_key=payload.data.owner_public_key,
+                               manager_public_key=payload.data.manager_public_key,
+                               issuer_public_key=payload.data.issuer_public_key,
+                               record_id=payload.data.record_id,
+                               record_type=record_type,
+                               record_data=[record_data],
+                               timestamp=payload.timestamp,
+                               transaction_id=transaction_id)
+
+    state.set_record(payload.data.record_id, record)
+
+
 def create_record(state, public_key, transaction_id, payload):
     actor = state.get_actor(public_key)
     _check_is_valid_actor(actor)
@@ -221,21 +238,45 @@ def create_record(state, public_key, transaction_id, payload):
             raise InvalidTransaction("Invalid issuer for this class")
 
     record_type = _get_record_type(payload.data.record_type)
+    _create_record_with_type(state, transaction_id, payload, record_type)
 
-    record_data = record_pb2.Record.RecordData(record_data=payload.data.record_data,
-                                               active=True,
-                                               timestamp=payload.timestamp,
-                                               transaction_id=transaction_id)
-    record = record_pb2.Record(owner_public_key=payload.data.owner_public_key,
-                               manager_public_key=payload.data.manager_public_key,
-                               issuer_public_key=payload.data.issuer_public_key,
-                               record_id=payload.data.record_id,
-                               record_type=record_type,
-                               record_data=[record_data],
-                               timestamp=payload.timestamp,
-                               transaction_id=transaction_id)
 
-    state.set_record(payload.data.record_id, record)
+def create_cert(state, public_key, transaction_id, payload):
+    actor = state.get_actor(public_key)
+    _check_is_valid_actor(actor)
+    record_id = payload.data.record_id
+    owner_public_key = payload.data.owner_public_key
+    manager_public_key = payload.data.manager_public_key
+
+    if state.get_record(record_id, owner_public_key, manager_public_key):
+        raise InvalidTransaction("Record has been existed")
+
+    if actor.role != actor_pb2.Actor.INSTITUTION:
+        raise InvalidTransaction("Just Institution can't create certificate")
+
+    record_type = record_pb2.Record.CERTIFICATE
+    _create_record_with_type(state, transaction_id, payload, record_type)
+
+
+def create_subject(state, public_key, transaction_id, payload):
+    actor = state.get_actor(public_key)
+    _check_is_valid_actor(actor)
+    record_id = payload.data.record_id
+    owner_public_key = payload.data.owner_public_key
+    manager_public_key = payload.data.manager_public_key
+
+    if state.get_record(record_id, owner_public_key, manager_public_key):
+        raise InvalidTransaction("Record has been existed")
+
+    class_ = state.get_class(payload.data.record_id, manager_public_key)
+    if not class_:
+        raise InvalidTransaction("Class doesn't exist!")
+
+    if public_key != class_.teacher_public_key and public_key != class_.edu_officer_public_key:
+        raise InvalidTransaction("Invalid issuer for this class")
+
+    record_type = record_pb2.Record.CERTIFICATE
+    _create_record_with_type(state, transaction_id, payload, record_type)
 
 
 def update_record(state, public_key, transaction_id, payload):

@@ -84,6 +84,18 @@ class B4EHandler(TransactionHandler):
                 public_key=header.signer_public_key,
                 transaction_id=transaction.signature,
                 payload=payload)
+        elif payload.action == payload_pb2.B4EPayload.CREATE_CERT:
+            handler_action.create_cert(
+                state=state,
+                public_key=header.signer_public_key,
+                transaction_id=transaction.signature,
+                payload=payload)
+        elif payload.action == payload_pb2.B4EPayload.CREATE_SUBJECT:
+            handler_action.create_subject(
+                state=state,
+                public_key=header.signer_public_key,
+                transaction_id=transaction.signature,
+                payload=payload)
         elif payload.action == payload_pb2.B4EPayload.UPDATE_RECORD:
             handler_action.update_record(
                 state=state,

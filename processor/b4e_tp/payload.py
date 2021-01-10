@@ -54,6 +54,14 @@ class B4EPayload(object):
                 self._transaction.action == \
                 payload_pb2.B4EPayload.CREATE_RECORD:
             return self._transaction.create_record
+        if self._transaction.HasField('create_cert') and \
+                self._transaction.action == \
+                payload_pb2.B4EPayload.CREATE_CERT:
+            return self._transaction.create_cert
+        if self._transaction.HasField('create_subject') and \
+                self._transaction.action == \
+                payload_pb2.B4EPayload.CREATE_SUBJECT:
+            return self._transaction.create_subject
         if self._transaction.HasField('update_record') and \
                 self._transaction.action == \
                 payload_pb2.B4EPayload.UPDATE_RECORD:
