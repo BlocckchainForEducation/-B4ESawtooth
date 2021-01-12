@@ -425,7 +425,7 @@ def make_create_subject(transaction_signer,
 
     payload = payload_pb2.B4EPayload(
         action=payload_pb2.B4EPayload.CREATE_SUBJECT,
-        create_record=action,
+        create_subject=action,
         timestamp=timestamp)
 
     payload_bytes = payload.SerializeToString()
@@ -470,7 +470,7 @@ def make_create_subjects(transaction_signer,
 
             payload = payload_pb2.B4EPayload(
                 action=payload_pb2.B4EPayload.CREATE_SUBJECT,
-                create_record=action,
+                create_subject=action,
                 timestamp=timestamp)
 
             payload_bytes = payload.SerializeToString()
@@ -515,7 +515,7 @@ def make_create_cert(transaction_signer,
 
     payload = payload_pb2.B4EPayload(
         action=payload_pb2.B4EPayload.CREATE_CERT,
-        create_record=action,
+        create_cert=action,
         timestamp=timestamp)
 
     payload_bytes = payload.SerializeToString()
@@ -552,18 +552,16 @@ def make_create_certs(transaction_signer,
             inputs = [manager_address, issuer_address, cert_address]
 
             outputs = [cert_address]
-            record_type = payload_pb2.CERTIFICATE
 
-            action = payload_pb2.CreateRecordAction(owner_public_key=cert.get('studentPublicKey'),
-                                                    manager_public_key=institution_public_key,
-                                                    issuer_public_key=issuer_public_key,
-                                                    record_id=cert_id,
-                                                    record_type=record_type,
-                                                    record_data=cert.get('cipher'))
+            action = payload_pb2.CreateCertAction(owner_public_key=cert.get('studentPublicKey'),
+                                                  manager_public_key=institution_public_key,
+                                                  issuer_public_key=issuer_public_key,
+                                                  record_id=cert_id,
+                                                  record_data=cert.get('cipher'))
 
             payload = payload_pb2.B4EPayload(
-                action=payload_pb2.B4EPayload.CREATE_RECORD,
-                create_record=action,
+                action=payload_pb2.B4EPayload.CREATE_CERT,
+                create_cert=action,
                 timestamp=timestamp)
 
             payload_bytes = payload.SerializeToString()

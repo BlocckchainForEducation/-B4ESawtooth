@@ -265,7 +265,6 @@ class RouteHandler(object):
                                                                    owner_public_key=body.get('studentPublicKey'),
                                                                    manager_public_key=body.get('universityPublicKey'),
                                                                    record_id=body.get('classId'),
-                                                                   record_type='SUBJECT',
                                                                    record_data=body.get('cipher'),
                                                                    timestamp=get_time())
 
@@ -314,7 +313,6 @@ class RouteHandler(object):
         transaction_id = await self._messenger.send_create_cert(private_key=body.get('privateKeyHex'),
                                                                 owner_public_key=body.get('studentPublicKey'),
                                                                 record_id=body.get('globalregisno'),
-                                                                record_type='CERTIFICATE',
                                                                 record_data=body.get('cipher'),
                                                                 timestamp=get_time())
 
