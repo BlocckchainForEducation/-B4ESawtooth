@@ -77,6 +77,18 @@ def get_record_transaction(transaction_id):
                     'cipher': data['updateRecord']['recordData'],
                     'timestamp': data['timestamp']
                 }
+            elif data.get('createCert'):
+                res = {
+                    'ok': True,
+                    'cipher': data['createCert']['recordData'],
+                    'timestamp': data['timestamp']
+                }
+            elif data.get('createSubject'):
+                res = {
+                    'ok': True,
+                    'cipher': data['createSubject']['recordData'],
+                    'timestamp': data['timestamp']
+                }
             else:
                 res = {
                     'ok': False,
