@@ -409,8 +409,8 @@ class Messenger(object):
                                                               batch_signer=batch_signer,
                                                               certs=certs,
                                                               timestamp=self.get_time())
-        # nest_asyncio.apply()
-        # loop = asyncio.get_event_loop()
+        nest_asyncio.apply()
+        loop = asyncio.get_event_loop()
         # futures = []
         timestamp = self.get_time()
         # commit_time = 0
@@ -429,8 +429,10 @@ class Messenger(object):
 
         start = time.time()
         # loop.run_until_complete(asyncio.wait(futures))
-        # loop.run_until_complete(asyncio.wait([self._send_and_wait_for_commit_multi_batches(list_batches)]))
-        await self._send_and_wait_for_commit_multi_batches(list_batches)
+        loop.run_until_complete(asyncio.wait([self._send_and_wait_for_commit_multi_batches(list_batches)], timeout=None,
+                                             return_when=asyncio.ALL_COMPLETED))
+
+        # await self._send_and_wait_for_commit_multi_batches(list_batches)
         end = time.time()
         commit_time = end - start
 
@@ -487,8 +489,6 @@ class Messenger(object):
         # Parse response
         status_response = client_batch_submit_pb2.ClientBatchStatusResponse()
         status_response.ParseFromString(validator_response.content)
-        LOGGER.warning("----------------------------------------------------------")
-        LOGGER.warning(status_response)
         status = status_response.batch_statuses[0].status
         if status == client_batch_submit_pb2.ClientBatchStatus.INVALID:
             error = status_response.batch_statuses[0].invalid_transactions[0]
@@ -500,41 +500,39 @@ class Messenger(object):
 
     async def _send_and_wait_for_commit_multi_batches(self, batches):
         # Send transaction to validator
-        LOGGER.warning("_send_and_wait_for_commit_multi_batches")
-        submit_request = client_batch_submit_pb2.ClientBatchSubmitRequest(
-            batches=batches)
+        while (True):
+            submit_request = client_batch_submit_pb2.ClientBatchSubmitRequest(
+                batches=batches)
 
-        response_submit = await self._connection.send(
-            validator_pb2.Message.CLIENT_BATCH_SUBMIT_REQUEST,
-            submit_request.SerializeToString())
+            response_submit = await self._connection.send(
+                validator_pb2.Message.CLIENT_BATCH_SUBMIT_REQUEST,
+                submit_request.SerializeToString())
 
-        LOGGER.warning("response_submit----------------------------------------------------------")
-        LOGGER.warning(response_submit)
-        # LOGGER.warning("submit_request", submit_request)
-        # LOGGER.warning(batches)
 
-        # Send status request to validator
-        batch_ids = []
-        for batch in batches:
-            batch_ids.append(batch.header_signature)
+            # Send status request to validator
+            batch_ids = []
+            for batch in batches:
+                batch_ids.append(batch.header_signature)
 
-        status_request = client_batch_submit_pb2.ClientBatchStatusRequest(
-            batch_ids=batch_ids, wait=True)
-        validator_response = await self._connection.send(
-            validator_pb2.Message.CLIENT_BATCH_STATUS_REQUEST,
-            status_request.SerializeToString())
+            status_request = client_batch_submit_pb2.ClientBatchStatusRequest(
+                batch_ids=batch_ids, wait=True)
+            validator_response = await self._connection.send(
+                validator_pb2.Message.CLIENT_BATCH_STATUS_REQUEST,
+                status_request.SerializeToString())
 
-        # Parse response
-        status_response = client_batch_submit_pb2.ClientBatchStatusResponse()
-        status_response.ParseFromString(validator_response.content)
+            # Parse response
+            status_response = client_batch_submit_pb2.ClientBatchStatusResponse()
+            status_response.ParseFromString(validator_response.content)
 
-        LOGGER.warning("status_response----------------------------------------------------------")
-        LOGGER.warning(status_response)
-        status = status_response.batch_statuses[0].status
-        if status == client_batch_submit_pb2.ClientBatchStatus.INVALID:
-            error = status_response.batch_statuses[0].invalid_transactions[0]
-            raise ApiBadRequest(error.message)
-        elif status == client_batch_submit_pb2.ClientBatchStatus.PENDING:
-            raise ApiInternalError('Transaction submitted but timed out')
-        elif status == client_batch_submit_pb2.ClientBatchStatus.UNKNOWN:
-            raise ApiInternalError('Something went wrong. Try again later')
+            status = status_response.batch_statuses[0].status
+            if status == client_batch_submit_pb2.ClientBatchStatus.INVALID:
+                error = status_response.batch_statuses[0].invalid_transactions[0]
+                raise ApiBadRequest(error.message)
+                break
+            elif status == client_batch_submit_pb2.ClientBatchStatus.PENDING:
+                raise ApiInternalError('Transaction submitted but timed out')
+                break
+            elif status == client_batch_submit_pb2.ClientBatchStatus.UNKNOWN:
+                raise ApiInternalError('Something went wrong. Try again later')
+            elif status == client_batch_submit_pb2.ClientBatchStatus.COMMITTED:
+                break
