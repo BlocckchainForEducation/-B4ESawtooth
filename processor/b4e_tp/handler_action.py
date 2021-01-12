@@ -275,7 +275,7 @@ def create_subject(state, public_key, transaction_id, payload):
     if public_key != class_.teacher_public_key and public_key != class_.edu_officer_public_key:
         raise InvalidTransaction("Invalid issuer for this class")
 
-    record_type = record_pb2.Record.CERTIFICATE
+    record_type = record_pb2.Record.SUBJECT
     _create_record_with_type(state, transaction_id, payload, record_type)
 
 
