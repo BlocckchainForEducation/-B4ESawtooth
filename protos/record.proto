@@ -9,9 +9,10 @@ message Record {
   }
   message RecordData {
   string record_data = 1;
-  bool active = 2;
-  uint64 timestamp = 3;
-  string transaction_id = 4;
+  string record_hash =2;
+  bool active = 3;
+  uint64 timestamp = 4;
+  string transaction_id = 5;
 
 }
 

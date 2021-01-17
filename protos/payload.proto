@@ -79,6 +79,7 @@ message CreateRecordAction {
   string record_id = 4;
   RecordType record_type = 5;
   string record_data = 6;
+  string record_hash = 7;
 }
 message CreateCertAction {
   string owner_public_key = 1;
@@ -86,6 +87,7 @@ message CreateCertAction {
   string issuer_public_key = 3;
   string record_id = 4;
   string record_data = 6;
+  string record_hash = 7;
 }
 message CreateSubjectAction {
   string owner_public_key = 1;
@@ -93,13 +95,15 @@ message CreateSubjectAction {
   string issuer_public_key = 3;
   string record_id = 4;
   string record_data = 6;
+  string record_hash = 7;
 }
 message UpdateRecordAction {
   string owner_public_key = 1;
   string manager_public_key = 2;
   string record_id = 3;
   string record_data = 4;
-  bool active = 5;
+  string record_hash = 5;
+  bool active = 6;
 }
 
 message UpdateActorInfoAction {

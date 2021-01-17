@@ -258,7 +258,7 @@ class RouteHandler(object):
 
     async def create_subject(self, request):
         body = await decode_request(request)
-        required_fields = ['privateKeyHex', 'universityPublicKey', 'classId', 'studentPublicKey', 'cipher']
+        required_fields = ['privateKeyHex', 'universityPublicKey', 'classId', 'studentPublicKey', 'cipher', 'hashData']
         validate_fields(required_fields, body)
 
         transaction_id = await self._messenger.send_create_subject(private_key=body.get('privateKeyHex'),
@@ -266,6 +266,7 @@ class RouteHandler(object):
                                                                    manager_public_key=body.get('universityPublicKey'),
                                                                    record_id=body.get('classId'),
                                                                    record_data=body.get('cipher'),
+                                                                   record_hash=body.get('hashData'),
                                                                    timestamp=get_time())
 
         return json_response(
@@ -307,13 +308,14 @@ class RouteHandler(object):
 
     async def create_cert(self, request):
         body = await decode_request(request)
-        required_fields = ['privateKeyHex', 'globalregisno', 'studentPublicKey', 'cipher']
+        required_fields = ['privateKeyHex', 'globalregisno', 'studentPublicKey', 'cipher', 'hashData']
         validate_fields(required_fields, body)
 
         transaction_id = await self._messenger.send_create_cert(private_key=body.get('privateKeyHex'),
                                                                 owner_public_key=body.get('studentPublicKey'),
                                                                 record_id=body.get('globalregisno'),
                                                                 record_data=body.get('cipher'),
+                                                                record_hash=body.get('hashData'),
                                                                 timestamp=get_time())
 
         return json_response(
@@ -351,7 +353,7 @@ class RouteHandler(object):
 
     async def update_record(self, request):
         body = await decode_request(request)
-        required_fields = ['private_key', 'record_id', 'record_data', 'active', 'owner_public_key',
+        required_fields = ['private_key', 'record_id', 'record_data','record_hash', 'active', 'owner_public_key',
                            'manager_public_key']
         validate_fields(required_fields, body)
 
@@ -360,6 +362,7 @@ class RouteHandler(object):
                                                                   manager_public_key=body.get('manager_public_key'),
                                                                   record_id=body.get('record_id'),
                                                                   record_data=body.get('record_data'),
+                                                                  record_hash=body.get('record_hash'),
                                                                   active=body.get('active'),
                                                                   timestamp=get_time())
         return json_response(

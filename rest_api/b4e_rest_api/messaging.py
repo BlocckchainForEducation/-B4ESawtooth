@@ -297,6 +297,7 @@ class Messenger(object):
                                   manager_public_key,
                                   record_id,
                                   record_data,
+                                  record_hash,
                                   timestamp):
 
         transaction_signer = self._crypto_factory.new_signer(
@@ -309,6 +310,7 @@ class Messenger(object):
                                                          manager_public_key,
                                                          record_id,
                                                          record_data,
+                                                         record_hash,
                                                          timestamp)
         await self._send_and_wait_for_commit(batch)
         transaction_id = batch.transactions[0].header_signature
@@ -318,6 +320,7 @@ class Messenger(object):
                                owner_public_key,
                                record_id,
                                record_data,
+                               record_hash,
                                timestamp):
 
         transaction_signer = self._crypto_factory.new_signer(
@@ -331,6 +334,7 @@ class Messenger(object):
                                                       manager_public_key,
                                                       record_id,
                                                       record_data,
+                                                      record_hash,
                                                       timestamp)
         await self._send_and_wait_for_commit(batch)
         transaction_id = batch.transactions[0].header_signature
@@ -341,6 +345,7 @@ class Messenger(object):
                                  manager_public_key,
                                  record_id,
                                  record_data,
+                                 record_hash,
                                  active,
                                  timestamp):
 
@@ -354,6 +359,7 @@ class Messenger(object):
                                                         manager_public_key,
                                                         record_id,
                                                         record_data,
+                                                        record_hash,
                                                         active,
                                                         timestamp)
         await self._send_and_wait_for_commit(batch)
@@ -402,7 +408,8 @@ class Messenger(object):
             certs.append({
                 "globalregisno": globalregisno,
                 "studentPublicKey": student_public_key,
-                "cipher": Test.CIPHER
+                "cipher": Test.CIPHER,
+                "hashData": Test.HASH_DATA
             })
 
         list_batches = transaction_creation.make_create_certs(transaction_signer=transaction_signer,

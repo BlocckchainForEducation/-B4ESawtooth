@@ -276,11 +276,13 @@ class B4EState(object):
         updated_state[address] = data
         self._context.set_state(updated_state, timeout=self._timeout)
 
-    def update_record(self, record_id, owner_public_key, manager_public_key, record_data, active, timestamp,
+    def update_record(self, record_id, owner_public_key, manager_public_key, record_data, record_hash, active,
+                      timestamp,
                       transaction_id):
 
         new_data = record_pb2.Record.RecordData(
             record_data=record_data,
+            record_hash=record_hash,
             active=active,
             timestamp=timestamp,
             transaction_id=transaction_id

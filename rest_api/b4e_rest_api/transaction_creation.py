@@ -406,6 +406,7 @@ def make_create_subject(transaction_signer,
                         manager_public_key,
                         record_id,
                         record_data,
+                        record_hash,
                         timestamp):
     issuer_public_key = transaction_signer.get_public_key().as_hex()
     manager_address = addresser.get_actor_address(manager_public_key)
@@ -421,7 +422,8 @@ def make_create_subject(transaction_signer,
                                              manager_public_key=manager_public_key,
                                              issuer_public_key=issuer_public_key,
                                              record_id=record_id,
-                                             record_data=record_data)
+                                             record_data=record_data,
+                                             record_hash=record_hash)
 
     payload = payload_pb2.B4EPayload(
         action=payload_pb2.B4EPayload.CREATE_SUBJECT,
@@ -466,7 +468,8 @@ def make_create_subjects(transaction_signer,
                                                      manager_public_key=institution_public_key,
                                                      issuer_public_key=issuer_public_key,
                                                      record_id=class_id,
-                                                     record_data=subject.get('cipher'))
+                                                     record_data=subject.get('cipher'),
+                                                     record_hash=subject.get('hashData'))
 
             payload = payload_pb2.B4EPayload(
                 action=payload_pb2.B4EPayload.CREATE_SUBJECT,
@@ -496,6 +499,7 @@ def make_create_cert(transaction_signer,
                      manager_public_key,
                      record_id,
                      record_data,
+                     record_hash,
                      timestamp):
     issuer_public_key = transaction_signer.get_public_key().as_hex()
     manager_address = addresser.get_actor_address(manager_public_key)
@@ -511,7 +515,8 @@ def make_create_cert(transaction_signer,
                                           manager_public_key=manager_public_key,
                                           issuer_public_key=issuer_public_key,
                                           record_id=record_id,
-                                          record_data=record_data)
+                                          record_data=record_data,
+                                          record_hash=record_hash)
 
     payload = payload_pb2.B4EPayload(
         action=payload_pb2.B4EPayload.CREATE_CERT,
@@ -557,7 +562,8 @@ def make_create_certs(transaction_signer,
                                                   manager_public_key=institution_public_key,
                                                   issuer_public_key=issuer_public_key,
                                                   record_id=cert_id,
-                                                  record_data=cert.get('cipher'))
+                                                  record_data=cert.get('cipher'),
+                                                  record_hash=cert.get('hashData'))
 
             payload = payload_pb2.B4EPayload(
                 action=payload_pb2.B4EPayload.CREATE_CERT,
@@ -586,6 +592,7 @@ def make_update_record(transaction_signer,
                        manager_public_key,
                        record_id,
                        record_data,
+                       record_hash,
                        active,
                        timestamp):
     manager_address = addresser.get_actor_address(transaction_signer.get_public_key().as_hex())
@@ -597,6 +604,7 @@ def make_update_record(transaction_signer,
 
     action = payload_pb2.UpdateRecordAction(record_id=record_id,
                                             record_data=record_data,
+                                            record_hash= record_hash,
                                             owner_public_key=owner_public_key,
                                             manager_public_key=manager_public_key,
                                             active=active)

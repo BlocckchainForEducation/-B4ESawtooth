@@ -201,6 +201,7 @@ def _get_record_type(i):
 
 def _create_record_with_type(state, transaction_id, payload, record_type):
     record_data = record_pb2.Record.RecordData(record_data=payload.data.record_data,
+                                               record_hash=payload.data.record_hash,
                                                active=True,
                                                timestamp=payload.timestamp,
                                                transaction_id=transaction_id)
@@ -298,7 +299,8 @@ def update_record(state, public_key, transaction_id, payload):
     if public_key != record.manager_public_key or has_permission:
         raise InvalidTransaction("Invalid permission")
 
-    state.update_record(record_id, owner_public_key, manager_public_key, payload.data.record_data, payload.data.active,
+    state.update_record(record_id, owner_public_key, manager_public_key, payload.data.record_data,
+                        payload.data.record_hash, payload.data.active,
                         payload.timestamp, transaction_id)
 
 
