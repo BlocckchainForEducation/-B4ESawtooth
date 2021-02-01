@@ -103,22 +103,22 @@ services:
         echo b4e-tp-3 connect
       "
 
-  b4e-tp-4:
-    build:
-      context: .
-      dockerfile: ../processor/Dockerfile
-    image: sawtooth-b4e-tp
-    container_name: b4e-tp-4
-    volumes:
-      - '.:/project/sawtooth-b4e'
-    depends_on:
-      - b4e-shell-ministry
-    command: |
-      bash -c "
-        sleep 1
-        b4e-tp -v -C tcp://validator-4:4004
-        echo b4e-tp-4 connect
-      "
+#  b4e-tp-4:
+#    build:
+#      context: .
+#      dockerfile: ../processor/Dockerfile
+#    image: sawtooth-b4e-tp
+#    container_name: b4e-tp-4
+#    volumes:
+#      - '.:/project/sawtooth-b4e'
+#    depends_on:
+#      - b4e-shell-ministry
+#    command: |
+#      bash -c "
+#        sleep 1
+#        b4e-tp -v -C tcp://validator-4:4004
+#        echo b4e-tp-4 connect
+#      "
 
 
 
@@ -178,18 +178,18 @@ services:
       "
     stop_signal: SIGKILL
 
-  rest-api-4:
-    image: hyperledger/sawtooth-rest-api:chime
-    container_name: sawtooth-rest-api-default-4
-    expose:
-      - 8008
-    command: |
-      bash -c "
-        sawtooth-rest-api \
-          --connect tcp://validator-4:4004 \
-          --bind rest-api-4:8008
-      "
-    stop_signal: SIGKILL
+#  rest-api-4:
+#    image: hyperledger/sawtooth-rest-api:chime
+#    container_name: sawtooth-rest-api-default-4
+#    expose:
+#      - 8008
+#    command: |
+#      bash -c "
+#        sawtooth-rest-api \
+#          --connect tcp://validator-4:4004 \
+#          --bind rest-api-4:8008
+#      "
+#    stop_signal: SIGKILL
 
   # -------------=== settings tp ===-------------
 
@@ -225,13 +225,13 @@ services:
     command: settings-tp -C tcp://validator-3:4004
     stop_signal: SIGKILL
 
-  settings-tp-4:
-    image: hyperledger/sawtooth-settings-tp:chime
-    container_name: sawtooth-settings-tp-default-4
-    expose:
-      - 4004
-    command: settings-tp -C tcp://validator-4:4004
-    stop_signal: SIGKILL
+#  settings-tp-4:
+#    image: hyperledger/sawtooth-settings-tp:chime
+#    container_name: sawtooth-settings-tp-default-4
+#    expose:
+#      - 4004
+#    command: settings-tp -C tcp://validator-4:4004
+#    stop_signal: SIGKILL
 
   # -------------=== shell ===-------------
 
@@ -298,7 +298,7 @@ services:
           sawtooth keygen my_key
         fi &&
         sawtooth-validator -vv \
-          --endpoint tcp://157.230.248.28:8800 \
+          --endpoint tcp://139.59.125.235:8800 \
           --bind component:tcp://eth0:4004 \
           --bind consensus:tcp://eth0:5050 \
           --bind network:tcp://eth0:8800 \
@@ -335,14 +335,14 @@ services:
         fi &&
         sawtooth keygen my_key &&
         sawtooth-validator -vv \
-          --endpoint tcp://157.230.248.28:8801 \
+          --endpoint tcp://139.59.125.235:8801 \
           --bind component:tcp://eth0:4004 \
           --bind consensus:tcp://eth0:5050 \
           --bind network:tcp://eth0:8800 \
           --scheduler parallel \
           --peering static \
           --maximum-peer-connectivity 10000 \
-          --peers tcp://157.230.248.28:8800
+          --peers tcp://139.59.125.235:8800
       "
 
   validator-2:
@@ -371,15 +371,15 @@ services:
         fi &&
         sawtooth keygen my_key &&
         sawtooth-validator -vv \
-          --endpoint tcp://157.230.248.28:8802 \
+          --endpoint tcp://139.59.125.235:8802 \
           --bind component:tcp://eth0:4004 \
           --bind consensus:tcp://eth0:5050 \
           --bind network:tcp://eth0:8800 \
           --scheduler parallel \
           --peering static \
           --maximum-peer-connectivity 10000 \
-          --peers tcp://157.230.248.28:8800 \
-          --peers tcp://157.230.248.28:8801
+          --peers tcp://139.59.125.235:8800 \
+          --peers tcp://139.59.125.235:8801
       "
 
   validator-3:
@@ -408,56 +408,56 @@ services:
         fi &&
         sawtooth keygen my_key &&
         sawtooth-validator -vv \
-          --endpoint tcp://157.230.248.28:8803 \
+          --endpoint tcp://139.59.125.235:8803 \
           --bind component:tcp://eth0:4004 \
           --bind consensus:tcp://eth0:5050 \
           --bind network:tcp://eth0:8800 \
           --scheduler parallel \
           --peering static \
           --maximum-peer-connectivity 10000 \
-          --peers tcp://157.230.248.28:8800 \
-          --peers tcp://157.230.248.28:8801 \
-          --peers tcp://157.230.248.28:8802
+          --peers tcp://139.59.125.235:8800 \
+          --peers tcp://139.59.125.235:8801 \
+          --peers tcp://139.59.125.235:8802
       "
 
-  validator-4:
-    image: hyperledger/sawtooth-validator:chime
-    container_name: sawtooth-validator-default-4
-    expose:
-      - 4004
-      - 5050
-      - 8800
-    ports:
-      - '4008:4004'
-      - '8804:8800'
-    volumes:
-      - pbft-shared:/pbft-shared
-    command: |
-      bash -c "
-        if [ -e /pbft-shared/validators/validator-4.priv ]; then
-          cp /pbft-shared/validators/validator-4.pub   /etc/sawtooth/keys/validator.pub
-          cp /pbft-shared/validators/validator-4.priv   /etc/sawtooth/keys/validator.priv
-        fi &&
-        if [ ! -e /etc/sawtooth/keys/validator.priv ]; then
-          sawadm keygen
-          mkdir -p /pbft-shared/validators || true
-          cp /etc/sawtooth/keys/validator.pub   /pbft-shared/validators/validator-4.pub
-          cp /etc/sawtooth/keys/validator.priv   /pbft-shared/validators/validator-4.priv
-        fi &&
-        sawtooth keygen my_key &&
-        sawtooth-validator -vv \
-          --endpoint tcp://157.230.248.28:8804 \
-          --bind component:tcp://eth0:4004 \
-          --bind consensus:tcp://eth0:5050 \
-          --bind network:tcp://eth0:8800 \
-          --scheduler parallel \
-          --peering static \
-          --maximum-peer-connectivity 10000 \
-          --peers tcp://157.230.248.28:8800 \
-          --peers tcp://157.230.248.28:8801 \
-          --peers tcp://157.230.248.28:8802 \
-          --peers tcp://157.230.248.28:8803
-      "
+#  validator-4:
+#    image: hyperledger/sawtooth-validator:chime
+#    container_name: sawtooth-validator-default-4
+#    expose:
+#      - 4004
+#      - 5050
+#      - 8800
+#    ports:
+#      - '4008:4004'
+#      - '8804:8800'
+#    volumes:
+#      - pbft-shared:/pbft-shared
+#    command: |
+#      bash -c "
+#        if [ -e /pbft-shared/validators/validator-4.priv ]; then
+#          cp /pbft-shared/validators/validator-4.pub   /etc/sawtooth/keys/validator.pub
+#          cp /pbft-shared/validators/validator-4.priv   /etc/sawtooth/keys/validator.priv
+#        fi &&
+#        if [ ! -e /etc/sawtooth/keys/validator.priv ]; then
+#          sawadm keygen
+#          mkdir -p /pbft-shared/validators || true
+#          cp /etc/sawtooth/keys/validator.pub   /pbft-shared/validators/validator-4.pub
+#          cp /etc/sawtooth/keys/validator.priv   /pbft-shared/validators/validator-4.priv
+#        fi &&
+#        sawtooth keygen my_key &&
+#        sawtooth-validator -vv \
+#          --endpoint tcp://139.59.125.235:8804 \
+#          --bind component:tcp://eth0:4004 \
+#          --bind consensus:tcp://eth0:5050 \
+#          --bind network:tcp://eth0:8800 \
+#          --scheduler parallel \
+#          --peering static \
+#          --maximum-peer-connectivity 10000 \
+#          --peers tcp://139.59.125.235:8800 \
+#          --peers tcp://139.59.125.235:8801 \
+#          --peers tcp://139.59.125.235:8802 \
+#          --peers tcp://139.59.125.235:8803
+#      "
 
   # -------------=== pbft engines ===-------------
 
@@ -492,6 +492,7 @@ services:
     stop_signal: SIGKILL
 
   b4e-rest-api-ministry:
+    restart: always
     build:
       context: .
       dockerfile: ./rest_api/Dockerfile
@@ -510,12 +511,15 @@ services:
       bash -c "
         b4e-rest-api \
           -B b4e-rest-api-ministry:8000 \
-          -C 157.230.248.28:4004 \
+          -C validator-3:4004 \
           -R rest-api-0:8008 \
           --db-host mongo-ministry \
+          --db-user b4e \
+          --db-password b4e_bkc \
           -vv
       "
   b4e-subscriber-ministry:
+    restart: always
     build:
       context: .
       dockerfile: subscriber_b4e/Dockerfile
@@ -530,7 +534,9 @@ services:
       bash -c "
         b4e-subscriber subscribe \
         --db-host mongo-ministry \
-        -C tcp://validator-0:4004 \
+        --db-user b4e \
+        --db-password b4e_bkc \
+        -C tcp://validator-2:4004 \
         -vv
       "
   mongo-ministry:
@@ -541,6 +547,8 @@ services:
       - 27017
     ports:
       - '27018:27017'
-
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: b4e
+      MONGO_INITDB_ROOT_PASSWORD: b4e_bkc
     volumes:
-      - mongodb_data_ministry:/data/db
+      - mongodb_data_ministry:/data_ip_config/db
