@@ -353,7 +353,7 @@ class RouteHandler(object):
 
     async def update_record(self, request):
         body = await decode_request(request)
-        required_fields = ['private_key', 'record_id', 'record_data','record_hash', 'active', 'owner_public_key',
+        required_fields = ['private_key', 'record_id', 'record_data', 'record_hash', 'active', 'owner_public_key',
                            'manager_public_key']
         validate_fields(required_fields, body)
 
@@ -435,6 +435,10 @@ class RouteHandler(object):
         data = get_student_data(student_public_key)
 
         return json_response(data)
+
+    async def up_to_ipfs(self, request):
+        cid = ""
+        return json_response({"cid": cid})
 
 
 async def decode_request(request):

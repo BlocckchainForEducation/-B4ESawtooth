@@ -162,6 +162,8 @@ services:
           -C validator-0:4004 \
           -R rest-api-0:8008 \
           --db-host mongo-ministry \
+          --db-user b4e \
+          --db-password b4e_bkc \
           -vv
       dockdocker"
   b4e-subscriber-ministry:
@@ -179,6 +181,8 @@ services:
       bash -c "
         b4e-subscriber subscribe \
         --db-host mongo-ministry \
+        --db-user b4e \
+        --db-password b4e_bkc \
         -C tcp://validator-0:4004 \
         -vv
       "
@@ -190,6 +194,9 @@ services:
       - 27017
     ports:
       - '27018:27017'
-
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: b4e
+      MONGO_INITDB_ROOT_PASSWORD: b4e_bkc
     volumes:
-      - mongodb_data_ministry:/data/db
+      - mongodb_data_ministry:/data
+

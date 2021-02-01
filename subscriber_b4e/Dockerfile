@@ -28,6 +28,7 @@ RUN apt-get install -y --allow-unauthenticated -q python3-grpcio-tools \
     python3-sawtooth-sdk
 
 RUN pip3 install \
+    requests \
     pymongo
 
 WORKDIR /project/sawtooth-b4e

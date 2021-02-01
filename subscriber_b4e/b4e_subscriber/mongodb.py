@@ -129,7 +129,6 @@ class Database(object):
             res = self.b4e_university_profile_collection.update_one(key, data, upsert=True)
             return res
         except Exception as e:
-            LOGGER.error("errrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr")
             LOGGER.error(e)
             print(e)
             return None
