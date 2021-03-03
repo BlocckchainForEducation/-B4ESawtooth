@@ -30,7 +30,7 @@ import asyncio
 import time
 import datetime
 import uuid
-from config.config import Test, MongoDBConfig, Sawtooth_Config
+from config.config import Test, MongoDBConfig, SawtoothConfig
 
 import nest_asyncio
 
@@ -390,8 +390,8 @@ class Messenger(object):
 
     async def send_test_time_create_transaction(self, num_transactions, max_batch_size):
         ministry_private_key = Test.MINISTRY_PRIVATE_KEY
-        defaul_batch_size = Sawtooth_Config.MAX_BATCH_SIZE
-        Sawtooth_Config.MAX_BATCH_SIZE = max_batch_size
+        defaul_batch_size = SawtoothConfig.MAX_BATCH_SIZE
+        SawtoothConfig.MAX_BATCH_SIZE = max_batch_size
         # create institution
 
         institution_private_key = Test.INSTITUTION_PRIVATE_KEY
@@ -443,7 +443,7 @@ class Messenger(object):
         end = time.time()
         commit_time = end - start
 
-        Sawtooth_Config.MAX_BATCH_SIZE = defaul_batch_size
+        SawtoothConfig.MAX_BATCH_SIZE = defaul_batch_size
         test_result = {
             "timestamp": timestamp,
             "num_transactions": num_transactions,

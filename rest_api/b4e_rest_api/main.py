@@ -29,7 +29,7 @@ from rest_api.b4e_rest_api.route_handler import RouteHandler
 from rest_api.b4e_rest_api.database import Database
 from rest_api.b4e_rest_api.messaging import Messenger
 
-from config.config import Sawtooth_Config, MongoDBConfig
+from config.config import SawtoothConfig, MongoDBConfig
 
 LOGGER = logging.getLogger(__name__)
 
@@ -149,7 +149,7 @@ def main():
         if "http://" not in restapi:
             restapi = "http://" + restapi
 
-        Sawtooth_Config.REST_API = restapi
+        SawtoothConfig.REST_API = restapi
 
         messenger = Messenger(validator_url)
 

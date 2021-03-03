@@ -6,10 +6,10 @@ class Config:
     PORT = 8082
 
 
-class Sawtooth_Config:
+class SawtoothConfig:
     REST_API = 'http://localhost:8008'
     VALIDATOR_TCP = 'tcp://localhost:4004'
-    MAX_BATCH_SIZE = 100
+    MAX_BATCH_SIZE = 1000
 
 
 class ElasticSearchConfig:
@@ -27,7 +27,7 @@ class ElasticSearchConfig:
     RECORD_INDEX = "b4e_records"
     BLOCK_INDEX = "b4e_blocks"
     MANAGER_INDEX = 'b4e_managers'
-    LANDINGPAGE = 'b4e_landingpages'
+    LANDING_PAGE = 'b4e_landing_pages'
 
 
 class MongoDBConfig:
@@ -62,7 +62,7 @@ class Status:
     DELETE = 3
 
 
-class Key_default:
+class KeyDefault:
     TOKEN = "TOKEN_SHARE"
     PERMISSION = "token_permission_key"
 
@@ -97,8 +97,8 @@ class Permission:
 
 
 class LandingPage:
-    QRCODEPATH = './static/qrcode/'
-    BARCODEPATH = './static/barcode/'
+    QR_CODE_PATH = './static/qrcode/'
+    BAR_CODE_PATH = './static/barcode/'
     URL = '202.191.56.247:8000/landingpage'
     CLOSE_LIST = "close_list"
 

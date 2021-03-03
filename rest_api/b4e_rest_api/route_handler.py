@@ -32,7 +32,7 @@ from rest_api.b4e_rest_api.blockchain_get_data import get_state
 from rest_api.b4e_rest_api.blockchain_get_data import get_student_data
 from rest_api.b4e_rest_api.blockchain_get_data import get_record_transaction
 
-from config.config import Sawtooth_Config
+from config.config import SawtoothConfig
 
 LOGGER = logging.getLogger(__name__)
 
@@ -126,7 +126,7 @@ class RouteHandler(object):
         list_transaction_id = await self._messenger.send_create_teachers(private_key=body.get('privateKeyHex'),
                                                                          profiles=profiles,
                                                                          timestamp=get_time())
-        list_teachers = tolist(slice_per(profiles, Sawtooth_Config.MAX_BATCH_SIZE))
+        list_teachers = tolist(slice_per(profiles, SawtoothConfig.MAX_BATCH_SIZE))
         transactions = []
         for i in range(len(list_transaction_id)):
             transactions.append({
@@ -175,7 +175,7 @@ class RouteHandler(object):
                                                                              profiles=profiles,
                                                                              timestamp=get_time())
 
-        list_edu_officers = tolist(slice_per(profiles, Sawtooth_Config.MAX_BATCH_SIZE))
+        list_edu_officers = tolist(slice_per(profiles, SawtoothConfig.MAX_BATCH_SIZE))
         transactions = []
         for i in range(len(list_transaction_id)):
             transactions.append({
@@ -240,7 +240,7 @@ class RouteHandler(object):
                                                                         classes=body.get('classes'),
                                                                         timestamp=get_time())
 
-        list_classes = tolist(slice_per(body.get('classes'), Sawtooth_Config.MAX_BATCH_SIZE))
+        list_classes = tolist(slice_per(body.get('classes'), SawtoothConfig.MAX_BATCH_SIZE))
         transactions = []
         for i in range(len(list_transaction_id)):
             transactions.append({
@@ -288,7 +288,7 @@ class RouteHandler(object):
                                                                          list_subjects=body.get('points'),
                                                                          timestamp=get_time())
 
-        list_subjects = tolist(slice_per(body.get('points'), Sawtooth_Config.MAX_BATCH_SIZE))
+        list_subjects = tolist(slice_per(body.get('points'), SawtoothConfig.MAX_BATCH_SIZE))
         transactions = []
         class_id = body.get('classId')
         for i in range(len(list_transaction_id)):
@@ -334,7 +334,7 @@ class RouteHandler(object):
                                                                       certs=body.get('certificates'),
                                                                       timestamp=get_time())
 
-        list_certs = tolist(slice_per(body.get('certificates'), Sawtooth_Config.MAX_BATCH_SIZE))
+        list_certs = tolist(slice_per(body.get('certificates'), SawtoothConfig.MAX_BATCH_SIZE))
         transactions = []
         for i in range(len(list_transaction_id)):
             transactions.append({

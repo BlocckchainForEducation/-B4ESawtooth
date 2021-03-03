@@ -21,7 +21,7 @@ from subscriber_b4e.b4e_subscriber.mongodb import Database
 from subscriber_b4e.b4e_subscriber.subscriber import Subscriber
 from subscriber_b4e.b4e_subscriber.event_handling import get_events_handler
 
-from config.config import Sawtooth_Config, MongoDBConfig
+from config.config import SawtoothConfig, MongoDBConfig
 
 KNOWN_COUNT = 15
 LOGGER = logging.getLogger(__name__)
@@ -92,7 +92,7 @@ def do_subscribe():
         database = Database()
         database.connect(host=MongoDBConfig.HOST, port=MongoDBConfig.PORT, user_name=MongoDBConfig.USER_NAME,
                          password=MongoDBConfig.PASSWORD)
-        subscriber = Subscriber(Sawtooth_Config.VALIDATOR_TCP)
+        subscriber = Subscriber(SawtoothConfig.VALIDATOR_TCP)
         subscriber.add_handler(get_events_handler(database))
         known_blocks = database.fetch_last_known_blocks(KNOWN_COUNT)
         known_ids = [block['block_id'] for block in known_blocks]
@@ -138,7 +138,7 @@ def main():
     MongoDBConfig.PASSWORD = opts.db_password
     MongoDBConfig.HOST = opts.db_host
     MongoDBConfig.PORT = opts.db_port
-    Sawtooth_Config.VALIDATOR_TCP = opts.connect
+    SawtoothConfig.VALIDATOR_TCP = opts.connect
     LOGGER.info("database host:" + MongoDBConfig.HOST)
     do_subscribe()
 
