@@ -119,8 +119,10 @@ def vote(state, public_key, transaction_id, payload):
             close_vote_timestamp = payload.timestamp
             vote_result = voting_pb2.Voting.WIN
             state.add_one_b4e_environment(transaction_id=transaction_id)
-
-            state.set_active_actor(payload.data.elector_public_key)
+            if actor_vote.accepted:
+                state.set_active_actor(payload.data.elector_public_key)
+            else:
+                state.set_reject_actor(payload.data.elector_public_key)
         else:
             vote_result = voting_pb2.Voting.UNKNOWN
 
@@ -156,14 +158,18 @@ def vote(state, public_key, transaction_id, payload):
         vote_result = voting_pb2.Voting.WIN
         state.update_voting(payload.data.elector_public_key, vote_result,
                             actor_vote, timestamp=payload.timestamp)
-        state.set_active_actor(payload.data.elector_public_key)
+        if actor_vote.accepted:
+            state.set_active_actor(payload.data.elector_public_key)
+        else:
+            state.set_reject_actor(payload.data.elector_public_key)
         return
 
     if reject / total > VOTE_RATE:
         vote_result = voting_pb2.Voting.LOSE
         state.update_voting(payload.data.elector_public_key, vote_result,
                             actor_vote, timestamp=payload.timestamp)
-        state.set_reject_actor(payload.data.elector_public_key)
+        if actor_vote.accepted:
+            state.set_reject_actor(payload.data.elector_public_key)
         return
     #
     vote_result = voting_pb2.Voting.UNKNOWN
