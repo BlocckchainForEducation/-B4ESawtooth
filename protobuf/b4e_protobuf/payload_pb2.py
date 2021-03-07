@@ -20,7 +20,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='',
   syntax='proto3',
   serialized_options=None,
-  serialized_pb=_b('\n\rpayload.proto\"\xb3\x06\n\nB4EPayload\x12\"\n\x06\x61\x63tion\x18\x01 \x01(\x0e\x32\x12.B4EPayload.Action\x12\x34\n\x12\x63reate_institution\x18\x02 \x01(\x0b\x32\x18.CreateInstitutionAction\x12,\n\x0e\x63reate_teacher\x18\x03 \x01(\x0b\x32\x14.CreateTeacherAction\x12\x33\n\x12\x63reate_edu_officer\x18\x04 \x01(\x0b\x32\x17.CreateEduOfficerAction\x12&\n\x0b\x63reate_vote\x18\x05 \x01(\x0b\x32\x11.CreateVoteAction\x12(\n\x0c\x63reate_class\x18\x06 \x01(\x0b\x32\x12.CreateClassAction\x12*\n\rcreate_record\x18\x07 \x01(\x0b\x32\x13.CreateRecordAction\x12&\n\x0b\x63reate_cert\x18\x08 \x01(\x0b\x32\x11.CreateCertAction\x12,\n\x0e\x63reate_subject\x18\t \x01(\x0b\x32\x14.CreateSubjectAction\x12*\n\rupdate_record\x18\n \x01(\x0b\x32\x13.UpdateRecordAction\x12\x31\n\x11update_actor_info\x18\x0b \x01(\x0b\x32\x16.UpdateActorInfoAction\x12\x35\n\x13set_b4e_environment\x18\x0c \x01(\x0b\x32\x18.SetB4EEnvironmentAction\x12\x11\n\ttimestamp\x18\r \x01(\x04\"\xea\x01\n\x06\x41\x63tion\x12\x16\n\x12\x43REATE_INSTITUTION\x10\x00\x12\x12\n\x0e\x43REATE_TEACHER\x10\x01\x12\x16\n\x12\x43REATE_EDU_OFFICER\x10\x02\x12\x0f\n\x0b\x43REATE_VOTE\x10\x03\x12\x10\n\x0c\x43REATE_CLASS\x10\x04\x12\x11\n\rCREATE_RECORD\x10\x06\x12\x0f\n\x0b\x43REATE_CERT\x10\x07\x12\x12\n\x0e\x43REATE_SUBJECT\x10\x08\x12\x11\n\rUPDATE_RECORD\x10\t\x12\x15\n\x11UPDATE_ACTOR_INFO\x10\n\x12\x17\n\x13SET_B4E_ENVIRONMENT\x10\x0b\"\x14\n\x04Info\x12\x0c\n\x04\x64\x61ta\x18\x01 \x01(\t\":\n\x17\x43reateInstitutionAction\x12\n\n\x02id\x18\x01 \x01(\t\x12\x13\n\x04info\x18\x03 \x01(\x0b\x32\x05.Info\"R\n\x13\x43reateTeacherAction\x12\n\n\x02id\x18\x01 \x01(\t\x12\x1a\n\x12teacher_public_key\x18\x02 \x01(\t\x12\x13\n\x04info\x18\x04 \x01(\x0b\x32\x05.Info\"Y\n\x16\x43reateEduOfficerAction\x12\n\n\x02id\x18\x01 \x01(\t\x12\x1e\n\x16\x65\x64u_officer_public_key\x18\x02 \x01(\t\x12\x13\n\x04info\x18\x04 \x01(\x0b\x32\x05.Info\"[\n\x10\x43reateVoteAction\x12\x19\n\x11issuer_public_key\x18\x01 \x01(\t\x12\x1a\n\x12\x65lector_public_key\x18\x02 \x01(\t\x12\x10\n\x08\x61\x63\x63\x65pted\x18\x03 \x01(\x08\"t\n\x11\x43reateClassAction\x12\x10\n\x08\x63lass_id\x18\x01 \x01(\t\x12\x1a\n\x12teacher_public_key\x18\x02 \x01(\t\x12\x1e\n\x16\x65\x64u_officer_public_key\x18\x03 \x01(\t\x12\x11\n\ttimestamp\x18\x04 \x01(\x04\"\xc4\x01\n\x12\x43reateRecordAction\x12\x18\n\x10owner_public_key\x18\x01 \x01(\t\x12\x1a\n\x12manager_public_key\x18\x02 \x01(\t\x12\x19\n\x11issuer_public_key\x18\x03 \x01(\t\x12\x11\n\trecord_id\x18\x04 \x01(\t\x12 \n\x0brecord_type\x18\x05 \x01(\x0e\x32\x0b.RecordType\x12\x13\n\x0brecord_data\x18\x06 \x01(\t\x12\x13\n\x0brecord_hash\x18\x07 \x01(\t\"\xa0\x01\n\x10\x43reateCertAction\x12\x18\n\x10owner_public_key\x18\x01 \x01(\t\x12\x1a\n\x12manager_public_key\x18\x02 \x01(\t\x12\x19\n\x11issuer_public_key\x18\x03 \x01(\t\x12\x11\n\trecord_id\x18\x04 \x01(\t\x12\x13\n\x0brecord_data\x18\x06 \x01(\t\x12\x13\n\x0brecord_hash\x18\x07 \x01(\t\"\xa3\x01\n\x13\x43reateSubjectAction\x12\x18\n\x10owner_public_key\x18\x01 \x01(\t\x12\x1a\n\x12manager_public_key\x18\x02 \x01(\t\x12\x19\n\x11issuer_public_key\x18\x03 \x01(\t\x12\x11\n\trecord_id\x18\x04 \x01(\t\x12\x13\n\x0brecord_data\x18\x06 \x01(\t\x12\x13\n\x0brecord_hash\x18\x07 \x01(\t\"\x97\x01\n\x12UpdateRecordAction\x12\x18\n\x10owner_public_key\x18\x01 \x01(\t\x12\x1a\n\x12manager_public_key\x18\x02 \x01(\t\x12\x11\n\trecord_id\x18\x03 \x01(\t\x12\x13\n\x0brecord_data\x18\x04 \x01(\t\x12\x13\n\x0brecord_hash\x18\x05 \x01(\t\x12\x0e\n\x06\x61\x63tive\x18\x06 \x01(\x08\",\n\x15UpdateActorInfoAction\x12\x13\n\x04info\x18\x03 \x01(\x0b\x32\x05.Info\",\n\x17SetB4EEnvironmentAction\x12\x11\n\ttimestamp\x18\x01 \x01(\x04**\n\nRecordType\x12\x0b\n\x07SUBJECT\x10\x00\x12\x0f\n\x0b\x43\x45RTIFICATE\x10\x01\x62\x06proto3')
+  serialized_pb=_b('\n\rpayload.proto\"\x81\x07\n\nB4EPayload\x12\"\n\x06\x61\x63tion\x18\x01 \x01(\x0e\x32\x12.B4EPayload.Action\x12\x34\n\x12\x63reate_institution\x18\x02 \x01(\x0b\x32\x18.CreateInstitutionAction\x12,\n\x0e\x63reate_teacher\x18\x03 \x01(\x0b\x32\x14.CreateTeacherAction\x12\x33\n\x12\x63reate_edu_officer\x18\x04 \x01(\x0b\x32\x17.CreateEduOfficerAction\x12&\n\x0b\x63reate_vote\x18\x05 \x01(\x0b\x32\x11.CreateVoteAction\x12(\n\x0c\x63reate_class\x18\x06 \x01(\x0b\x32\x12.CreateClassAction\x12*\n\rcreate_record\x18\x07 \x01(\x0b\x32\x13.CreateRecordAction\x12&\n\x0b\x63reate_cert\x18\x08 \x01(\x0b\x32\x11.CreateCertAction\x12,\n\x0e\x63reate_subject\x18\t \x01(\x0b\x32\x14.CreateSubjectAction\x12*\n\rupdate_record\x18\n \x01(\x0b\x32\x13.UpdateRecordAction\x12\x31\n\x11update_actor_info\x18\x0b \x01(\x0b\x32\x16.UpdateActorInfoAction\x12\x35\n\x13set_b4e_environment\x18\x0c \x01(\x0b\x32\x18.SetB4EEnvironmentAction\x12\x34\n\x12reject_institution\x18\x0e \x01(\x0b\x32\x18.RejectInstitutionAction\x12\x11\n\ttimestamp\x18\r \x01(\x04\"\x82\x02\n\x06\x41\x63tion\x12\x16\n\x12\x43REATE_INSTITUTION\x10\x00\x12\x12\n\x0e\x43REATE_TEACHER\x10\x01\x12\x16\n\x12\x43REATE_EDU_OFFICER\x10\x02\x12\x0f\n\x0b\x43REATE_VOTE\x10\x03\x12\x10\n\x0c\x43REATE_CLASS\x10\x04\x12\x11\n\rCREATE_RECORD\x10\x06\x12\x0f\n\x0b\x43REATE_CERT\x10\x07\x12\x12\n\x0e\x43REATE_SUBJECT\x10\x08\x12\x11\n\rUPDATE_RECORD\x10\t\x12\x15\n\x11UPDATE_ACTOR_INFO\x10\n\x12\x17\n\x13SET_B4E_ENVIRONMENT\x10\x0b\x12\x16\n\x12REJECT_INSTITUTION\x10\x0c\"\x14\n\x04Info\x12\x0c\n\x04\x64\x61ta\x18\x01 \x01(\t\"9\n\x17RejectInstitutionAction\x12\x1e\n\x16institution_public_key\x18\x01 \x01(\t\":\n\x17\x43reateInstitutionAction\x12\n\n\x02id\x18\x01 \x01(\t\x12\x13\n\x04info\x18\x03 \x01(\x0b\x32\x05.Info\"R\n\x13\x43reateTeacherAction\x12\n\n\x02id\x18\x01 \x01(\t\x12\x1a\n\x12teacher_public_key\x18\x02 \x01(\t\x12\x13\n\x04info\x18\x04 \x01(\x0b\x32\x05.Info\"Y\n\x16\x43reateEduOfficerAction\x12\n\n\x02id\x18\x01 \x01(\t\x12\x1e\n\x16\x65\x64u_officer_public_key\x18\x02 \x01(\t\x12\x13\n\x04info\x18\x04 \x01(\x0b\x32\x05.Info\"[\n\x10\x43reateVoteAction\x12\x19\n\x11issuer_public_key\x18\x01 \x01(\t\x12\x1a\n\x12\x65lector_public_key\x18\x02 \x01(\t\x12\x10\n\x08\x61\x63\x63\x65pted\x18\x03 \x01(\x08\"t\n\x11\x43reateClassAction\x12\x10\n\x08\x63lass_id\x18\x01 \x01(\t\x12\x1a\n\x12teacher_public_key\x18\x02 \x01(\t\x12\x1e\n\x16\x65\x64u_officer_public_key\x18\x03 \x01(\t\x12\x11\n\ttimestamp\x18\x04 \x01(\x04\"\xc4\x01\n\x12\x43reateRecordAction\x12\x18\n\x10owner_public_key\x18\x01 \x01(\t\x12\x1a\n\x12manager_public_key\x18\x02 \x01(\t\x12\x19\n\x11issuer_public_key\x18\x03 \x01(\t\x12\x11\n\trecord_id\x18\x04 \x01(\t\x12 \n\x0brecord_type\x18\x05 \x01(\x0e\x32\x0b.RecordType\x12\x13\n\x0brecord_data\x18\x06 \x01(\t\x12\x13\n\x0brecord_hash\x18\x07 \x01(\t\"\xa0\x01\n\x10\x43reateCertAction\x12\x18\n\x10owner_public_key\x18\x01 \x01(\t\x12\x1a\n\x12manager_public_key\x18\x02 \x01(\t\x12\x19\n\x11issuer_public_key\x18\x03 \x01(\t\x12\x11\n\trecord_id\x18\x04 \x01(\t\x12\x13\n\x0brecord_data\x18\x06 \x01(\t\x12\x13\n\x0brecord_hash\x18\x07 \x01(\t\"\xa3\x01\n\x13\x43reateSubjectAction\x12\x18\n\x10owner_public_key\x18\x01 \x01(\t\x12\x1a\n\x12manager_public_key\x18\x02 \x01(\t\x12\x19\n\x11issuer_public_key\x18\x03 \x01(\t\x12\x11\n\trecord_id\x18\x04 \x01(\t\x12\x13\n\x0brecord_data\x18\x06 \x01(\t\x12\x13\n\x0brecord_hash\x18\x07 \x01(\t\"\x97\x01\n\x12UpdateRecordAction\x12\x18\n\x10owner_public_key\x18\x01 \x01(\t\x12\x1a\n\x12manager_public_key\x18\x02 \x01(\t\x12\x11\n\trecord_id\x18\x03 \x01(\t\x12\x13\n\x0brecord_data\x18\x04 \x01(\t\x12\x13\n\x0brecord_hash\x18\x05 \x01(\t\x12\x0e\n\x06\x61\x63tive\x18\x06 \x01(\x08\",\n\x15UpdateActorInfoAction\x12\x13\n\x04info\x18\x03 \x01(\x0b\x32\x05.Info\",\n\x17SetB4EEnvironmentAction\x12\x11\n\ttimestamp\x18\x01 \x01(\x04**\n\nRecordType\x12\x0b\n\x07SUBJECT\x10\x00\x12\x0f\n\x0b\x43\x45RTIFICATE\x10\x01\x62\x06proto3')
 )
 
 _RECORDTYPE = _descriptor.EnumDescriptor(
@@ -40,8 +40,8 @@ _RECORDTYPE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=2081,
-  serialized_end=2123,
+  serialized_start=2218,
+  serialized_end=2260,
 )
 _sym_db.RegisterEnumDescriptor(_RECORDTYPE)
 
@@ -100,11 +100,15 @@ _B4EPAYLOAD_ACTION = _descriptor.EnumDescriptor(
       name='SET_B4E_ENVIRONMENT', index=10, number=11,
       serialized_options=None,
       type=None),
+    _descriptor.EnumValueDescriptor(
+      name='REJECT_INSTITUTION', index=11, number=12,
+      serialized_options=None,
+      type=None),
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=603,
-  serialized_end=837,
+  serialized_start=657,
+  serialized_end=915,
 )
 _sym_db.RegisterEnumDescriptor(_B4EPAYLOAD_ACTION)
 
@@ -201,7 +205,14 @@ _B4EPAYLOAD = _descriptor.Descriptor(
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='timestamp', full_name='B4EPayload.timestamp', index=12,
+      name='reject_institution', full_name='B4EPayload.reject_institution', index=12,
+      number=14, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='timestamp', full_name='B4EPayload.timestamp', index=13,
       number=13, type=4, cpp_type=4, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
@@ -221,7 +232,7 @@ _B4EPAYLOAD = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=18,
-  serialized_end=837,
+  serialized_end=915,
 )
 
 
@@ -251,8 +262,39 @@ _INFO = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=839,
-  serialized_end=859,
+  serialized_start=917,
+  serialized_end=937,
+)
+
+
+_REJECTINSTITUTIONACTION = _descriptor.Descriptor(
+  name='RejectInstitutionAction',
+  full_name='RejectInstitutionAction',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='institution_public_key', full_name='RejectInstitutionAction.institution_public_key', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=939,
+  serialized_end=996,
 )
 
 
@@ -289,8 +331,8 @@ _CREATEINSTITUTIONACTION = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=861,
-  serialized_end=919,
+  serialized_start=998,
+  serialized_end=1056,
 )
 
 
@@ -334,8 +376,8 @@ _CREATETEACHERACTION = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=921,
-  serialized_end=1003,
+  serialized_start=1058,
+  serialized_end=1140,
 )
 
 
@@ -379,8 +421,8 @@ _CREATEEDUOFFICERACTION = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1005,
-  serialized_end=1094,
+  serialized_start=1142,
+  serialized_end=1231,
 )
 
 
@@ -424,8 +466,8 @@ _CREATEVOTEACTION = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1096,
-  serialized_end=1187,
+  serialized_start=1233,
+  serialized_end=1324,
 )
 
 
@@ -476,8 +518,8 @@ _CREATECLASSACTION = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1189,
-  serialized_end=1305,
+  serialized_start=1326,
+  serialized_end=1442,
 )
 
 
@@ -549,8 +591,8 @@ _CREATERECORDACTION = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1308,
-  serialized_end=1504,
+  serialized_start=1445,
+  serialized_end=1641,
 )
 
 
@@ -615,8 +657,8 @@ _CREATECERTACTION = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1507,
-  serialized_end=1667,
+  serialized_start=1644,
+  serialized_end=1804,
 )
 
 
@@ -681,8 +723,8 @@ _CREATESUBJECTACTION = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1670,
-  serialized_end=1833,
+  serialized_start=1807,
+  serialized_end=1970,
 )
 
 
@@ -747,8 +789,8 @@ _UPDATERECORDACTION = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1836,
-  serialized_end=1987,
+  serialized_start=1973,
+  serialized_end=2124,
 )
 
 
@@ -778,8 +820,8 @@ _UPDATEACTORINFOACTION = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1989,
-  serialized_end=2033,
+  serialized_start=2126,
+  serialized_end=2170,
 )
 
 
@@ -809,8 +851,8 @@ _SETB4EENVIRONMENTACTION = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2035,
-  serialized_end=2079,
+  serialized_start=2172,
+  serialized_end=2216,
 )
 
 _B4EPAYLOAD.fields_by_name['action'].enum_type = _B4EPAYLOAD_ACTION
@@ -825,6 +867,7 @@ _B4EPAYLOAD.fields_by_name['create_subject'].message_type = _CREATESUBJECTACTION
 _B4EPAYLOAD.fields_by_name['update_record'].message_type = _UPDATERECORDACTION
 _B4EPAYLOAD.fields_by_name['update_actor_info'].message_type = _UPDATEACTORINFOACTION
 _B4EPAYLOAD.fields_by_name['set_b4e_environment'].message_type = _SETB4EENVIRONMENTACTION
+_B4EPAYLOAD.fields_by_name['reject_institution'].message_type = _REJECTINSTITUTIONACTION
 _B4EPAYLOAD_ACTION.containing_type = _B4EPAYLOAD
 _CREATEINSTITUTIONACTION.fields_by_name['info'].message_type = _INFO
 _CREATETEACHERACTION.fields_by_name['info'].message_type = _INFO
@@ -833,6 +876,7 @@ _CREATERECORDACTION.fields_by_name['record_type'].enum_type = _RECORDTYPE
 _UPDATEACTORINFOACTION.fields_by_name['info'].message_type = _INFO
 DESCRIPTOR.message_types_by_name['B4EPayload'] = _B4EPAYLOAD
 DESCRIPTOR.message_types_by_name['Info'] = _INFO
+DESCRIPTOR.message_types_by_name['RejectInstitutionAction'] = _REJECTINSTITUTIONACTION
 DESCRIPTOR.message_types_by_name['CreateInstitutionAction'] = _CREATEINSTITUTIONACTION
 DESCRIPTOR.message_types_by_name['CreateTeacherAction'] = _CREATETEACHERACTION
 DESCRIPTOR.message_types_by_name['CreateEduOfficerAction'] = _CREATEEDUOFFICERACTION
@@ -860,6 +904,13 @@ Info = _reflection.GeneratedProtocolMessageType('Info', (_message.Message,), dic
   # @@protoc_insertion_point(class_scope:Info)
   ))
 _sym_db.RegisterMessage(Info)
+
+RejectInstitutionAction = _reflection.GeneratedProtocolMessageType('RejectInstitutionAction', (_message.Message,), dict(
+  DESCRIPTOR = _REJECTINSTITUTIONACTION,
+  __module__ = 'payload_pb2'
+  # @@protoc_insertion_point(class_scope:RejectInstitutionAction)
+  ))
+_sym_db.RegisterMessage(RejectInstitutionAction)
 
 CreateInstitutionAction = _reflection.GeneratedProtocolMessageType('CreateInstitutionAction', (_message.Message,), dict(
   DESCRIPTOR = _CREATEINSTITUTIONACTION,

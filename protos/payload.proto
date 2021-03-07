@@ -15,6 +15,7 @@ message B4EPayload{
     UPDATE_RECORD = 9;
     UPDATE_ACTOR_INFO = 10;
     SET_B4E_ENVIRONMENT = 11;
+    REJECT_INSTITUTION = 12;
   }
 
   Action action = 1;
@@ -30,6 +31,7 @@ message B4EPayload{
   UpdateRecordAction update_record = 10;
   UpdateActorInfoAction update_actor_info = 11;
   SetB4EEnvironmentAction set_b4e_environment = 12;
+  RejectInstitutionAction reject_institution = 14;
 
   uint64 timestamp = 13;
 }
@@ -44,7 +46,9 @@ enum RecordType{
   CERTIFICATE = 1;
 }
 
-
+message  RejectInstitutionAction{
+  string institution_public_key = 1;
+}
 message CreateInstitutionAction {
   string id = 1;
   Info info = 3;
