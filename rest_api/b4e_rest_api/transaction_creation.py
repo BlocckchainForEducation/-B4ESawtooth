@@ -604,7 +604,7 @@ def make_update_record(transaction_signer,
 
     action = payload_pb2.UpdateRecordAction(record_id=record_id,
                                             record_data=record_data,
-                                            record_hash= record_hash,
+                                            record_hash=record_hash,
                                             owner_public_key=owner_public_key,
                                             manager_public_key=manager_public_key,
                                             active=active)
@@ -642,6 +642,33 @@ def make_update_actor_info(transaction_signer,
 
     payload = payload_pb2.B4EPayload(
         action=payload_pb2.B4EPayload.UPDATE_ACTOR_INFO,
+        update_actor_info=action,
+        timestamp=timestamp)
+
+    payload_bytes = payload.SerializeToString()
+
+    return _make_batch(
+        payload_bytes=payload_bytes,
+        inputs=inputs,
+        outputs=outputs,
+        transaction_signer=transaction_signer,
+        batch_signer=batch_signer)
+
+
+def make_reject_institution(transaction_signer,
+                            batch_signer,
+                            institution_public_key,
+                            timestamp):
+    actor_address = addresser.get_actor_address(transaction_signer.get_public_key().as_hex())
+
+    inputs = [actor_address]
+
+    outputs = [actor_address]
+
+    action = payload_pb2.RejectInstitutionAction(institution_public_key=institution_public_key)
+
+    payload = payload_pb2.B4EPayload(
+        action=payload_pb2.B4EPayload.REJECT_INSTITUTION,
         update_actor_info=action,
         timestamp=timestamp)
 

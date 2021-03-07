@@ -114,6 +114,7 @@ def start_rest_api(host, port, messenger, database):
     app.router.add_post('/create_certs', handler.create_certs)
     app.router.add_post('/update_record', handler.update_record)
     app.router.add_post('/update_actor_info', handler.update_actor_info)
+    app.router.add_post('/reject_institution', handler.reject_institution)
 
     app.router.add_post('/get_new_key_pair', handler.get_new_key_pair)
     app.router.add_get('/transaction/{transaction_id}', handler.fetch_data_transaction)

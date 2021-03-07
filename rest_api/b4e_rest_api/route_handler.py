@@ -391,6 +391,23 @@ class RouteHandler(object):
                 'transactionId': transaction_id
             })
 
+    async def reject_institution(self, request):
+        body = await decode_request(request)
+        required_fields = ['private_key', 'institution_public_key']
+        validate_fields(required_fields, body)
+
+        transaction_id = await self._messenger.send_reject_institution(private_key=body.get('private_key'),
+                                                                       institution_public_key=body.get(
+                                                                           'institution_public_key'),
+                                                                       timestamp=get_time())
+
+        return json_response(
+            {
+                'ok': True,
+                'msg': 'Transfer record transaction submitted',
+                'transactionId': transaction_id
+            })
+
     async def test_time_create_transaction(self, request):
         body = await decode_request(request)
         required_fields = ['numberTransaction', 'maxBatchSize']

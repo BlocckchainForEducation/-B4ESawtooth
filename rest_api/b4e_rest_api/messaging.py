@@ -388,6 +388,22 @@ class Messenger(object):
         transaction_id = batch.transactions[0].header_signature
         return transaction_id
 
+    async def send_reject_institution(self, private_key,
+                                      institution_public_key,
+                                      timestamp):
+
+        transaction_signer = self._crypto_factory.new_signer(
+            secp256k1.Secp256k1PrivateKey.from_hex(private_key))
+        batch_signer = transaction_signer
+
+        batch = transaction_creation.make_reject_institution(transaction_signer,
+                                                             batch_signer,
+                                                             institution_public_key,
+                                                             timestamp)
+        await self._send_and_wait_for_commit(batch)
+        transaction_id = batch.transactions[0].header_signature
+        return transaction_id
+
     async def send_test_time_create_transaction(self, num_transactions, max_batch_size):
         ministry_private_key = Test.MINISTRY_PRIVATE_KEY
         defaul_batch_size = SawtoothConfig.MAX_BATCH_SIZE
