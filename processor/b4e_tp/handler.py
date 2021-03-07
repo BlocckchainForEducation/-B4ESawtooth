@@ -120,5 +120,11 @@ class B4EHandler(TransactionHandler):
                 public_key=header.signer_public_key,
                 transaction_id=transaction.signature,
                 payload=payload)
+        elif payload.action == payload_pb2.B4EPayload.REJECT_INSTITUTION:
+            handler_action.set_b4e_environment(
+                state=state,
+                public_key=header.signer_public_key,
+                transaction_id=transaction.signature,
+                payload=payload)
         else:
             raise InvalidTransaction('Unhandled action')
