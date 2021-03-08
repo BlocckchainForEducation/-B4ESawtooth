@@ -19,7 +19,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='',
   syntax='proto3',
   serialized_options=None,
-  serialized_pb=_b('\n\x10portforlio.proto\"\xba\x02\n\tPortfolio\x12\x18\n\x10owner_public_key\x18\x01 \x01(\t\x12\x1a\n\x12manager_public_key\x18\x02 \x01(\t\x12\n\n\x02id\x18\x03 \x01(\t\x12\'\n\tportfolio\x18\x04 \x03(\x0b\x32\x14.Portfolio.Portfolio\x12\x11\n\ttimestamp\x18\x05 \x01(\x04\x12\x16\n\x0etransaction_id\x18\x06 \x01(\t\x1au\n\tPortfolio\x12/\n\rportfolioType\x18\x01 \x01(\x0e\x32\x18.Portfolio.PortfolioType\x12\x0c\n\x04\x64\x61ta\x18\x02 \x01(\t\x12\x11\n\ttimestamp\x18\x03 \x01(\x04\x12\x16\n\x0etransaction_id\x18\x04 \x01(\t\" \n\rPortfolioType\x12\x0f\n\x0b\x45\x44U_PROGRAM\x10\x00\"1\n\x12PortfolioContainer\x12\x1b\n\x07\x65ntries\x18\x01 \x03(\x0b\x32\n.Portfoliob\x06proto3')
+  serialized_pb=_b('\n\x0fportfolio.proto\"\xba\x02\n\tPortfolio\x12\x18\n\x10owner_public_key\x18\x01 \x01(\t\x12\x1a\n\x12manager_public_key\x18\x02 \x01(\t\x12\n\n\x02id\x18\x03 \x01(\t\x12\'\n\tportfolio\x18\x04 \x03(\x0b\x32\x14.Portfolio.Portfolio\x12\x11\n\ttimestamp\x18\x05 \x01(\x04\x12\x16\n\x0etransaction_id\x18\x06 \x01(\t\x1au\n\tPortfolio\x12/\n\rportfolioType\x18\x01 \x01(\x0e\x32\x18.Portfolio.PortfolioType\x12\x0c\n\x04\x64\x61ta\x18\x02 \x01(\t\x12\x11\n\ttimestamp\x18\x03 \x01(\x04\x12\x16\n\x0etransaction_id\x18\x04 \x01(\t\" \n\rPortfolioType\x12\x0f\n\x0b\x45\x44U_PROGRAM\x10\x00\"1\n\x12PortfolioContainer\x12\x1b\n\x07\x65ntries\x18\x01 \x03(\x0b\x32\n.Portfoliob\x06proto3')
 )
 
 
@@ -37,8 +37,8 @@ _PORTFOLIO_PORTFOLIOTYPE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=303,
-  serialized_end=335,
+  serialized_start=302,
+  serialized_end=334,
 )
 _sym_db.RegisterEnumDescriptor(_PORTFOLIO_PORTFOLIOTYPE)
 
@@ -90,8 +90,8 @@ _PORTFOLIO_PORTFOLIO = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=184,
-  serialized_end=301,
+  serialized_start=183,
+  serialized_end=300,
 )
 
 _PORTFOLIO = _descriptor.Descriptor(
@@ -156,8 +156,8 @@ _PORTFOLIO = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=21,
-  serialized_end=335,
+  serialized_start=20,
+  serialized_end=334,
 )
 
 
@@ -187,8 +187,8 @@ _PORTFOLIOCONTAINER = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=337,
-  serialized_end=386,
+  serialized_start=336,
+  serialized_end=385,
 )
 
 _PORTFOLIO_PORTFOLIO.fields_by_name['portfolioType'].enum_type = _PORTFOLIO_PORTFOLIOTYPE
@@ -204,12 +204,12 @@ Portfolio = _reflection.GeneratedProtocolMessageType('Portfolio', (_message.Mess
 
   Portfolio = _reflection.GeneratedProtocolMessageType('Portfolio', (_message.Message,), dict(
     DESCRIPTOR = _PORTFOLIO_PORTFOLIO,
-    __module__ = 'portforlio_pb2'
+    __module__ = 'portfolio_pb2'
     # @@protoc_insertion_point(class_scope:Portfolio.Portfolio)
     ))
   ,
   DESCRIPTOR = _PORTFOLIO,
-  __module__ = 'portforlio_pb2'
+  __module__ = 'portfolio_pb2'
   # @@protoc_insertion_point(class_scope:Portfolio)
   ))
 _sym_db.RegisterMessage(Portfolio)
@@ -217,7 +217,7 @@ _sym_db.RegisterMessage(Portfolio.Portfolio)
 
 PortfolioContainer = _reflection.GeneratedProtocolMessageType('PortfolioContainer', (_message.Message,), dict(
   DESCRIPTOR = _PORTFOLIOCONTAINER,
-  __module__ = 'portforlio_pb2'
+  __module__ = 'portfolio_pb2'
   # @@protoc_insertion_point(class_scope:PortfolioContainer)
   ))
 _sym_db.RegisterMessage(PortfolioContainer)
