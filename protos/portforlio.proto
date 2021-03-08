@@ -12,7 +12,7 @@ message Portfolio {
     string transaction_id = 4;
   }
 
-  string actor_public_key = 1;
+  string owner_public_key = 1;
   string manager_public_key = 2;
   string id = 3;
   repeated Portfolio portfolio = 4;
