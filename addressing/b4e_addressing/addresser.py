@@ -69,6 +69,15 @@ def get_record_address(record_id, owner_public_key, manager_public_key):
            + hashlib.sha512(record_id.encode('utf-8')).hexdigest()[:36]
 
 
+def get_portfolio_address(id, owner_public_key, manager_public_key):
+    owner_prefix = hashlib.sha512(
+        owner_public_key.encode('utf-8')).hexdigest()[-10:]
+    manager_prefix = hashlib.sha512(
+        manager_public_key.encode('utf-8')).hexdigest()[-10:]
+    return NAMESPACE + RECORD_PREFIX + owner_prefix + manager_prefix \
+           + hashlib.sha512(id.encode('utf-8')).hexdigest()[:36]
+
+
 def get_address_type(address):
     if address[:len(NAMESPACE)] != NAMESPACE:
         return AddressSpace.OTHER_FAMILY

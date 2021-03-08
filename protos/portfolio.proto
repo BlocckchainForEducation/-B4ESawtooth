@@ -5,8 +5,8 @@ message Portfolio {
   enum PortfolioType{
     EDU_PROGRAM = 0;
   }
-  message Portfolio {
-    PortfolioType portfolioType = 1;
+  message PortfolioData {
+    PortfolioType portfolio_type = 1;
     string data = 2;
     uint64 timestamp = 3;
     string transaction_id = 4;
@@ -15,7 +15,7 @@ message Portfolio {
   string owner_public_key = 1;
   string manager_public_key = 2;
   string id = 3;
-  repeated Portfolio portfolio = 4;
+  repeated PortfolioData portfolio_data = 4;
   uint64 timestamp = 5;
   string transaction_id = 6;
 }

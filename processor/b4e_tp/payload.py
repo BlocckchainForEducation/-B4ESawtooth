@@ -42,10 +42,10 @@ class B4EPayload(object):
                 self._transaction.action == \
                 payload_pb2.B4EPayload.CREATE_TEACHER:
             return self._transaction.create_edu_officer
-        if self._transaction.HasField('create_portfolio') and \
+        if self._transaction.HasField('create_edu_program') and \
                 self._transaction.action == \
-                payload_pb2.B4EPayload.CREATE_PORTFOLIO:
-            return self._transaction.create_portfolio
+                payload_pb2.B4EPayload.CREATE_EDU_PROGRAM:
+            return self._transaction.create_edu_program
         if self._transaction.HasField('create_class') and \
                 self._transaction.action == \
                 payload_pb2.B4EPayload.CREATE_CLASS:

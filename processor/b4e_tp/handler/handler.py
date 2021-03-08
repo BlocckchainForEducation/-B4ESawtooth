@@ -73,8 +73,8 @@ class B4EHandler(TransactionHandler):
                 public_key=header.signer_public_key,
                 transaction_id=transaction.signature,
                 payload=payload)
-        elif payload.action == payload_pb2.B4EPayload.CREATE_PORTFOLIO:
-            portfolio_handler.create_portfolio(
+        elif payload.action == payload_pb2.B4EPayload.CREATE_EDU_PROGRAM:
+            portfolio_handler.create_edu_program(
                 state=state,
                 public_key=header.signer_public_key,
                 transaction_id=transaction.signature,

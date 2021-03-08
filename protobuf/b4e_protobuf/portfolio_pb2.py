@@ -19,7 +19,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='',
   syntax='proto3',
   serialized_options=None,
-  serialized_pb=_b('\n\x0fportfolio.proto\"\xba\x02\n\tPortfolio\x12\x18\n\x10owner_public_key\x18\x01 \x01(\t\x12\x1a\n\x12manager_public_key\x18\x02 \x01(\t\x12\n\n\x02id\x18\x03 \x01(\t\x12\'\n\tportfolio\x18\x04 \x03(\x0b\x32\x14.Portfolio.Portfolio\x12\x11\n\ttimestamp\x18\x05 \x01(\x04\x12\x16\n\x0etransaction_id\x18\x06 \x01(\t\x1au\n\tPortfolio\x12/\n\rportfolioType\x18\x01 \x01(\x0e\x32\x18.Portfolio.PortfolioType\x12\x0c\n\x04\x64\x61ta\x18\x02 \x01(\t\x12\x11\n\ttimestamp\x18\x03 \x01(\x04\x12\x16\n\x0etransaction_id\x18\x04 \x01(\t\" \n\rPortfolioType\x12\x0f\n\x0b\x45\x44U_PROGRAM\x10\x00\"1\n\x12PortfolioContainer\x12\x1b\n\x07\x65ntries\x18\x01 \x03(\x0b\x32\n.Portfoliob\x06proto3')
+  serialized_pb=_b('\n\x0fportfolio.proto\"\xc8\x02\n\tPortfolio\x12\x18\n\x10owner_public_key\x18\x01 \x01(\t\x12\x1a\n\x12manager_public_key\x18\x02 \x01(\t\x12\n\n\x02id\x18\x03 \x01(\t\x12\x30\n\x0eportfolio_data\x18\x04 \x03(\x0b\x32\x18.Portfolio.PortfolioData\x12\x11\n\ttimestamp\x18\x05 \x01(\x04\x12\x16\n\x0etransaction_id\x18\x06 \x01(\t\x1az\n\rPortfolioData\x12\x30\n\x0eportfolio_type\x18\x01 \x01(\x0e\x32\x18.Portfolio.PortfolioType\x12\x0c\n\x04\x64\x61ta\x18\x02 \x01(\t\x12\x11\n\ttimestamp\x18\x03 \x01(\x04\x12\x16\n\x0etransaction_id\x18\x04 \x01(\t\" \n\rPortfolioType\x12\x0f\n\x0b\x45\x44U_PROGRAM\x10\x00\"1\n\x12PortfolioContainer\x12\x1b\n\x07\x65ntries\x18\x01 \x03(\x0b\x32\n.Portfoliob\x06proto3')
 )
 
 
@@ -37,42 +37,42 @@ _PORTFOLIO_PORTFOLIOTYPE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=302,
-  serialized_end=334,
+  serialized_start=316,
+  serialized_end=348,
 )
 _sym_db.RegisterEnumDescriptor(_PORTFOLIO_PORTFOLIOTYPE)
 
 
-_PORTFOLIO_PORTFOLIO = _descriptor.Descriptor(
-  name='Portfolio',
-  full_name='Portfolio.Portfolio',
+_PORTFOLIO_PORTFOLIODATA = _descriptor.Descriptor(
+  name='PortfolioData',
+  full_name='Portfolio.PortfolioData',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='portfolioType', full_name='Portfolio.Portfolio.portfolioType', index=0,
+      name='portfolio_type', full_name='Portfolio.PortfolioData.portfolio_type', index=0,
       number=1, type=14, cpp_type=8, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='data', full_name='Portfolio.Portfolio.data', index=1,
+      name='data', full_name='Portfolio.PortfolioData.data', index=1,
       number=2, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='timestamp', full_name='Portfolio.Portfolio.timestamp', index=2,
+      name='timestamp', full_name='Portfolio.PortfolioData.timestamp', index=2,
       number=3, type=4, cpp_type=4, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='transaction_id', full_name='Portfolio.Portfolio.transaction_id', index=3,
+      name='transaction_id', full_name='Portfolio.PortfolioData.transaction_id', index=3,
       number=4, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
@@ -90,8 +90,8 @@ _PORTFOLIO_PORTFOLIO = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=183,
-  serialized_end=300,
+  serialized_start=192,
+  serialized_end=314,
 )
 
 _PORTFOLIO = _descriptor.Descriptor(
@@ -123,7 +123,7 @@ _PORTFOLIO = _descriptor.Descriptor(
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='portfolio', full_name='Portfolio.portfolio', index=3,
+      name='portfolio_data', full_name='Portfolio.portfolio_data', index=3,
       number=4, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
@@ -146,7 +146,7 @@ _PORTFOLIO = _descriptor.Descriptor(
   ],
   extensions=[
   ],
-  nested_types=[_PORTFOLIO_PORTFOLIO, ],
+  nested_types=[_PORTFOLIO_PORTFOLIODATA, ],
   enum_types=[
     _PORTFOLIO_PORTFOLIOTYPE,
   ],
@@ -157,7 +157,7 @@ _PORTFOLIO = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=20,
-  serialized_end=334,
+  serialized_end=348,
 )
 
 
@@ -187,13 +187,13 @@ _PORTFOLIOCONTAINER = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=336,
-  serialized_end=385,
+  serialized_start=350,
+  serialized_end=399,
 )
 
-_PORTFOLIO_PORTFOLIO.fields_by_name['portfolioType'].enum_type = _PORTFOLIO_PORTFOLIOTYPE
-_PORTFOLIO_PORTFOLIO.containing_type = _PORTFOLIO
-_PORTFOLIO.fields_by_name['portfolio'].message_type = _PORTFOLIO_PORTFOLIO
+_PORTFOLIO_PORTFOLIODATA.fields_by_name['portfolio_type'].enum_type = _PORTFOLIO_PORTFOLIOTYPE
+_PORTFOLIO_PORTFOLIODATA.containing_type = _PORTFOLIO
+_PORTFOLIO.fields_by_name['portfolio_data'].message_type = _PORTFOLIO_PORTFOLIODATA
 _PORTFOLIO_PORTFOLIOTYPE.containing_type = _PORTFOLIO
 _PORTFOLIOCONTAINER.fields_by_name['entries'].message_type = _PORTFOLIO
 DESCRIPTOR.message_types_by_name['Portfolio'] = _PORTFOLIO
@@ -202,10 +202,10 @@ _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
 Portfolio = _reflection.GeneratedProtocolMessageType('Portfolio', (_message.Message,), dict(
 
-  Portfolio = _reflection.GeneratedProtocolMessageType('Portfolio', (_message.Message,), dict(
-    DESCRIPTOR = _PORTFOLIO_PORTFOLIO,
+  PortfolioData = _reflection.GeneratedProtocolMessageType('PortfolioData', (_message.Message,), dict(
+    DESCRIPTOR = _PORTFOLIO_PORTFOLIODATA,
     __module__ = 'portfolio_pb2'
-    # @@protoc_insertion_point(class_scope:Portfolio.Portfolio)
+    # @@protoc_insertion_point(class_scope:Portfolio.PortfolioData)
     ))
   ,
   DESCRIPTOR = _PORTFOLIO,
@@ -213,7 +213,7 @@ Portfolio = _reflection.GeneratedProtocolMessageType('Portfolio', (_message.Mess
   # @@protoc_insertion_point(class_scope:Portfolio)
   ))
 _sym_db.RegisterMessage(Portfolio)
-_sym_db.RegisterMessage(Portfolio.Portfolio)
+_sym_db.RegisterMessage(Portfolio.PortfolioData)
 
 PortfolioContainer = _reflection.GeneratedProtocolMessageType('PortfolioContainer', (_message.Message,), dict(
   DESCRIPTOR = _PORTFOLIOCONTAINER,

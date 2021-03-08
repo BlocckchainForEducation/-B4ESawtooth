@@ -7,7 +7,7 @@ message B4EPayload{
     CREATE_ACTOR = 0;
     CREATE_INSTITUTION = 1;
     CREATE_TEACHER = 2;
-    CREATE_PORTFOLIO = 3;
+    CREATE_EDU_PROGRAM = 3;
     CREATE_CLASS = 4;
     CREATE_VOTING = 5;
     VOTE = 6;
@@ -31,7 +31,7 @@ message B4EPayload{
   CreateActorAction create_actor = 2;
   CreateActorAction create_institution = 3;
   CreateActorAction create_teacher = 4;
-  CreatePortfolioAction create_portfolio = 5;
+  CreatePortfolioAction create_edu_program = 5;
   CreateClassAction create_class = 6;
   CreateVotingAction create_voting = 7;
   VoteAction vote = 8;
@@ -71,7 +71,6 @@ message CreateClassAction{
   string subject_id = 2;
   int32 credit = 3;
   string teacher_public_key = 4;
-  string edu_officer_public_key = 5;
 }
 
 enum VoteType{
@@ -91,6 +90,7 @@ message VoteAction {
 enum RecordType{
   SUBJECT = 0;
   CERTIFICATE = 1;
+  OTHER = 2;
 }
 message CreateRecordAction {
   string owner_public_key = 1;

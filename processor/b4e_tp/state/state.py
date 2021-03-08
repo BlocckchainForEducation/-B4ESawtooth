@@ -36,7 +36,7 @@ class B4EState(object):
         self._timeout = timeout
 
     def get_b4e_environment(self):
-        b4e_environment_state.get(self)
+        return b4e_environment_state.get(self)
 
     def set_b4e_environment(self, transaction_id):
         b4e_environment_state.create(self, transaction_id)
@@ -45,7 +45,7 @@ class B4EState(object):
         b4e_environment_state.add_one(self, transaction_id)
 
     def get_actor(self, public_key):
-        actor_state.get_actor(self, public_key)
+        return actor_state.get_actor(self, public_key)
 
     def set_actor(self, actor, public_key):
         actor_state.set_actor(self, actor, public_key)
@@ -60,7 +60,7 @@ class B4EState(object):
         actor_state.update_actor_profile(self, actor_public_key, data, timestamp, transaction_id)
 
     def get_voting(self, public_key):
-        voting_state.get_voting(self, public_key)
+        return voting_state.get_voting(self, public_key)
 
     def set_voting(self, voting, public_key):
         voting_state.set_voting(self, voting, public_key)
@@ -69,13 +69,13 @@ class B4EState(object):
         voting_state.update_voting(self, public_key, vote_result, vote, timestamp)
 
     def get_class(self, class_id, institution_public_key):
-        class_state.get_class(self, class_id, institution_public_key)
+        return class_state.get_class(self, class_id, institution_public_key)
 
     def set_class(self, class_):
         class_state.set_class(self, class_)
 
     def get_record(self, record_id, owner_public_key, manager_public_key):
-        record_state.get_record(self, record_id, owner_public_key, manager_public_key)
+        return record_state.get_record(self, record_id, owner_public_key, manager_public_key)
 
     def set_record(self, record):
         record_state.set_record(self, record)
@@ -99,3 +99,12 @@ class B4EState(object):
         record_state.update_status(self, record_id, owner_public_key,
                                    manager_public_key, record_status,
                                    timestamp, transaction_id)
+
+    def get_portfolio(self, id, owner_public_key, manager_public_key):
+        return portfolio_state.get_portfolio(self, id, owner_public_key, manager_public_key)
+
+    def create_portfolio(self, portfolio):
+        portfolio_state.create_edu_program(self, portfolio)
+
+    def update_portfolio_data(self, id, owner_public_key, manager_public_key, data):
+        portfolio_state.update_data(self, id, owner_public_key, manager_public_key)
