@@ -17,12 +17,13 @@ import enum
 import hashlib
 
 FAMILY_NAME = 'b4e'
-FAMILY_VERSION = '3.0'
+FAMILY_VERSION = '1.2'
 NAMESPACE = hashlib.sha512(FAMILY_NAME.encode('utf-8')).hexdigest()[:6]
-ACTOR_PREFIX = '00'
-VOTING_PREFIX = '01'
-CLASS_PREFIX = '10'
-RECORD_PREFIX = '11'
+ACTOR_PREFIX = '000'
+VOTING_PREFIX = '001'
+PORTFOLIO_PREFIX = '010'
+CLASS_PREFIX = '011'
+RECORD_PREFIX = '100'
 
 ENVIRONMENT_ADDRESS = NAMESPACE + str(10 ** 64)[1:]
 
@@ -31,7 +32,8 @@ ENVIRONMENT_ADDRESS = NAMESPACE + str(10 ** 64)[1:]
 class AddressSpace(enum.IntEnum):
     ACTOR = 0
     VOTING = 1
-    CLASS = 2
+    PORTFOLIO = 2
+    CLASS = 3
     RECORD = 4
     ENVIRONMENT = 5
     OTHER_FAMILY = 100
@@ -43,25 +45,28 @@ def get_environment_address():
 
 def get_actor_address(public_key):
     return NAMESPACE + ACTOR_PREFIX + hashlib.sha512(
-        public_key.encode('utf-8')).hexdigest()[:62]
+        public_key.encode('utf-8')).hexdigest()[:61]
 
 
 def get_voting_address(public_key):
     return NAMESPACE + VOTING_PREFIX + hashlib.sha512(
-        public_key.encode('utf-8')).hexdigest()[:62]
+        public_key.encode('utf-8')).hexdigest()[:61]
 
 
 def get_class_address(class_id, institution_public_key):
-    institution_prefix = institution_public_key[-10:]
+    institution_prefix = hashlib.sha512(
+        institution_public_key.encode('utf-8')).hexdigest()[-10:]
     return NAMESPACE + CLASS_PREFIX + institution_prefix + hashlib.sha512(
-        class_id.encode('utf-8')).hexdigest()[:52]
+        class_id.encode('utf-8')).hexdigest()[:51]
 
 
 def get_record_address(record_id, owner_public_key, manager_public_key):
-    owner_prefix = owner_public_key[-10:]
-    manager_prefix = manager_public_key[-5:]
+    owner_prefix = hashlib.sha512(
+        owner_public_key.encode('utf-8')).hexdigest()[-10:]
+    manager_prefix = hashlib.sha512(
+        manager_public_key.encode('utf-8')).hexdigest()[-10:]
     return NAMESPACE + RECORD_PREFIX + owner_prefix + manager_prefix \
-           + hashlib.sha512(record_id.encode('utf-8')).hexdigest()[:47]
+           + hashlib.sha512(record_id.encode('utf-8')).hexdigest()[:36]
 
 
 def get_address_type(address):
@@ -69,33 +74,36 @@ def get_address_type(address):
         return AddressSpace.OTHER_FAMILY
     if address == ENVIRONMENT_ADDRESS:
         return AddressSpace.ENVIRONMENT
-    infix = address[6:8]
+    infix = address[6:9]
 
-    if infix == '00':
+    if infix == ACTOR_PREFIX:
         return AddressSpace.ACTOR
-    if infix == '01':
+    if infix == VOTING_PREFIX:
         return AddressSpace.VOTING
-    if infix == '10':
+    if infix == CLASS_PREFIX:
         return AddressSpace.CLASS
-    if infix == '11':
+    if infix == RECORD_PREFIX:
         return AddressSpace.RECORD
+    if infix == PORTFOLIO_PREFIX:
+        return AddressSpace.PORTFOLIO
 
     return AddressSpace.OTHER_FAMILY
 
 
 def is_owner(record_address, owner_public_key):
-    infix = record_address[6:8]
-    if infix != '11':
+    infix = record_address[6:9]
+    if infix != RECORD_PREFIX:
         return False
-    if record_address[8:18] == owner_public_key[-10:]:
+    if record_address[9:19] == hashlib.sha512(
+            owner_public_key.encode('utf-8')).hexdigest()[-10:]:
         return True
     return False
 
 
 def is_manager(record_address, manager_public_key):
-    infix = record_address[6:8]
+    infix = record_address[6:9]
     if infix != '11':
         return False
-    if record_address[18:23] == manager_public_key[-5:]:
+    if record_address[19:29] == manager_public_key[-10:]:
         return True
     return False
