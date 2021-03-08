@@ -102,7 +102,7 @@ def is_owner(record_address, owner_public_key):
 
 def is_manager(record_address, manager_public_key):
     infix = record_address[6:9]
-    if infix != '11':
+    if infix != RECORD_PREFIX:
         return False
     if record_address[19:29] == manager_public_key[-10:]:
         return True
