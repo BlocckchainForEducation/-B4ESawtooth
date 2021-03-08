@@ -22,10 +22,11 @@ from addressing.b4e_addressing import addresser
 from protobuf.b4e_protobuf import payload_pb2
 
 from processor.b4e_tp.payload import B4EPayload
-from processor.b4e_tp.state import B4EState
+from processor.b4e_tp.state.state import B4EState
 
-from processor.b4e_tp import handler_action
-from processor.b4e_tp import validator
+from processor.b4e_tp.handler import actor_handler, \
+    class_handler, portfolio_handler, record_handler, \
+    voting_handler, validator, b4e_environment_handler
 
 import logging
 
@@ -54,74 +55,116 @@ class B4EHandler(TransactionHandler):
 
         validator.validate_timestamp(payload.timestamp)
 
-        if payload.action == payload_pb2.B4EPayload.CREATE_INSTITUTION:
-            handler_action.create_institution(
+        if payload.action == payload_pb2.B4EPayload.CREATE_ACTOR:
+            actor_handler.create_actor(
+                state=state,
+                public_key=header.signer_public_key,
+                transaction_id=transaction.signature,
+                payload=payload)
+        elif payload.action == payload_pb2.B4EPayload.CREATE_INSTITUTION:
+            actor_handler.create_institution(
                 state=state,
                 public_key=header.signer_public_key,
                 transaction_id=transaction.signature,
                 payload=payload)
         elif payload.action == payload_pb2.B4EPayload.CREATE_TEACHER:
-            handler_action.create_teacher(
+            actor_handler.create_teacher(
                 state=state,
                 public_key=header.signer_public_key,
                 transaction_id=transaction.signature,
                 payload=payload)
-        elif payload.action == payload_pb2.B4EPayload.CREATE_EDU_OFFICER:
-            handler_action.create_edu_officer(
-                state=state,
-                public_key=header.signer_public_key,
-                transaction_id=transaction.signature,
-                payload=payload)
-        elif payload.action == payload_pb2.B4EPayload.CREATE_VOTE:
-            handler_action.vote(
-                state=state,
-                public_key=header.signer_public_key,
-                transaction_id=transaction.signature,
-                payload=payload)
-        elif payload.action == payload_pb2.B4EPayload.CREATE_RECORD:
-            handler_action.create_record(
-                state=state,
-                public_key=header.signer_public_key,
-                transaction_id=transaction.signature,
-                payload=payload)
-        elif payload.action == payload_pb2.B4EPayload.CREATE_CERT:
-            handler_action.create_cert(
-                state=state,
-                public_key=header.signer_public_key,
-                transaction_id=transaction.signature,
-                payload=payload)
-        elif payload.action == payload_pb2.B4EPayload.CREATE_SUBJECT:
-            handler_action.create_subject(
-                state=state,
-                public_key=header.signer_public_key,
-                transaction_id=transaction.signature,
-                payload=payload)
-        elif payload.action == payload_pb2.B4EPayload.UPDATE_RECORD:
-            handler_action.update_record(
+        elif payload.action == payload_pb2.B4EPayload.CREATE_PORTFOLIO:
+            portfolio_handler.create_portfolio(
                 state=state,
                 public_key=header.signer_public_key,
                 transaction_id=transaction.signature,
                 payload=payload)
         elif payload.action == payload_pb2.B4EPayload.CREATE_CLASS:
-            handler_action.create_class(
+            class_handler.create_class(
                 state=state,
                 public_key=header.signer_public_key,
                 transaction_id=transaction.signature,
                 payload=payload)
-        elif payload.action == payload_pb2.B4EPayload.UPDATE_ACTOR_INFO:
-            handler_action.update_actor_info(
+        elif payload.action == payload_pb2.B4EPayload.CREATE_VOTING:
+            voting_handler.create_voting(
                 state=state,
                 public_key=header.signer_public_key,
                 transaction_id=transaction.signature,
                 payload=payload)
-        elif payload.action == payload_pb2.B4EPayload.SET_B4E_ENVIRONMENT:
-            handler_action.set_b4e_environment(
+        elif payload.action == payload_pb2.B4EPayload.VOTE:
+            voting_handler.vote(
+                state=state,
+                public_key=header.signer_public_key,
+                transaction_id=transaction.signature,
+                payload=payload)
+        elif payload.action == payload_pb2.B4EPayload.CREATE_RECORD:
+            record_handler.create_record(
+                state=state,
+                public_key=header.signer_public_key,
+                transaction_id=transaction.signature,
+                payload=payload)
+        elif payload.action == payload_pb2.B4EPayload.CREATE_CERT:
+            record_handler.create_cert(
+                state=state,
+                public_key=header.signer_public_key,
+                transaction_id=transaction.signature,
+                payload=payload)
+        elif payload.action == payload_pb2.B4EPayload.CREATE_SUBJECT:
+            record_handler.create_subject(
+                state=state,
+                public_key=header.signer_public_key,
+                transaction_id=transaction.signature,
+                payload=payload)
+        elif payload.action == payload_pb2.B4EPayload.UPDATE_RECORD:
+            record_handler.update_record(
+                state=state,
+                public_key=header.signer_public_key,
+                transaction_id=transaction.signature,
+                payload=payload)
+        elif payload.action == payload_pb2.B4EPayload.MODIFY_SUBJECT:
+            record_handler.modify_subject(
+                state=state,
+                public_key=header.signer_public_key,
+                transaction_id=transaction.signature,
+                payload=payload)
+        elif payload.action == payload_pb2.B4EPayload.MODIFY_CERT:
+            record_handler.modifiy_cert(
+                state=state,
+                public_key=header.signer_public_key,
+                transaction_id=transaction.signature,
+                payload=payload)
+        elif payload.action == payload_pb2.B4EPayload.REVOKE_CERT:
+            record_handler.revoke_cert(
+                state=state,
+                public_key=header.signer_public_key,
+                transaction_id=transaction.signature,
+                payload=payload)
+        elif payload.action == payload_pb2.B4EPayload.REACTIVE_CERT:
+            record_handler.reactive_cert(
+                state=state,
+                public_key=header.signer_public_key,
+                transaction_id=transaction.signature,
+                payload=payload)
+        elif payload.action == payload_pb2.B4EPayload.UPDATE_ACTOR_PROFILE:
+            actor_handler.update_actor_profile(
                 state=state,
                 public_key=header.signer_public_key,
                 transaction_id=transaction.signature,
                 payload=payload)
         elif payload.action == payload_pb2.B4EPayload.REJECT_INSTITUTION:
-            handler_action.set_b4e_environment(
+            actor_handler.reject_institution(
+                state=state,
+                public_key=header.signer_public_key,
+                transaction_id=transaction.signature,
+                payload=payload)
+        elif payload.action == payload_pb2.B4EPayload.ACTIVE_INSTITUTION:
+            actor_handler.active_institution(
+                state=state,
+                public_key=header.signer_public_key,
+                transaction_id=transaction.signature,
+                payload=payload)
+        elif payload.action == payload_pb2.B4EPayload.SET_B4E_ENVIRONMENT:
+            b4e_environment_handler.set_b4e_environment(
                 state=state,
                 public_key=header.signer_public_key,
                 transaction_id=transaction.signature,

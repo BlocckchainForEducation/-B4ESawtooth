@@ -5,10 +5,9 @@ message Class {
   string subject_id = 2;
   int32 credit = 3;
   string teacher_public_key = 4;
-  string edu_officer_public_key = 5;
-  string institution_public_key = 6;
-  uint64 timestamp = 7;
-  string transaction_id = 8;
+  string institution_public_key = 5;
+  uint64 timestamp = 6;
+  string transaction_id = 7;
 }
 
 message ClassContainer {

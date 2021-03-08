@@ -34,7 +34,7 @@ message B4EPayload{
   CreatePortfolioAction create_portfolio = 5;
   CreateClassAction create_class = 6;
   CreateVotingAction create_voting = 7;
-  CreateVoteAction create_vote = 8;
+  VoteAction vote = 8;
   CreateRecordAction create_record = 9;
   CreateRecordAction create_cert = 10;
   CreateRecordAction create_subject = 11;
@@ -83,7 +83,7 @@ message CreateVotingAction{
   VoteType voteType = 2;
 }
 
-message CreateVoteAction {
+message VoteAction {
   string elector_public_key = 1;
   bool accept = 2;
 }

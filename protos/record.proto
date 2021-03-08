@@ -17,7 +17,7 @@ message Record {
     string portfolio_id = 1;
     string cipher = 2;
     string hash = 3;
-    RecordStatus recordStatus = 4;
+    RecordStatus record_status = 4;
     uint64 timestamp = 5;
     string transaction_id = 6;
   }

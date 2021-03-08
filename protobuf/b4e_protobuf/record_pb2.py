@@ -19,7 +19,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='',
   syntax='proto3',
   serialized_options=None,
-  serialized_pb=_b('\n\x0crecord.proto\"\xc7\x03\n\x06Record\x12\x18\n\x10owner_public_key\x18\x01 \x01(\t\x12\x19\n\x11issuer_public_key\x18\x02 \x01(\t\x12\x1a\n\x12manager_public_key\x18\x03 \x01(\t\x12\x11\n\trecord_id\x18\x04 \x01(\t\x12\'\n\x0brecord_type\x18\x05 \x01(\x0e\x32\x12.Record.RecordType\x12$\n\x08versions\x18\x06 \x03(\x0b\x32\x12.Record.RecordData\x1a\x97\x01\n\nRecordData\x12\x14\n\x0cportfolio_id\x18\x01 \x01(\t\x12\x0e\n\x06\x63ipher\x18\x02 \x01(\t\x12\x0c\n\x04hash\x18\x03 \x01(\t\x12*\n\x0crecordStatus\x18\x04 \x01(\x0e\x32\x14.Record.RecordStatus\x12\x11\n\ttimestamp\x18\x05 \x01(\x04\x12\x16\n\x0etransaction_id\x18\x06 \x01(\t\"5\n\nRecordType\x12\x0f\n\x0b\x43\x45RTIFICATE\x10\x00\x12\x0b\n\x07SUBJECT\x10\x01\x12\t\n\x05OTHER\x10\x02\"9\n\x0cRecordStatus\x12\x0b\n\x07\x43REATED\x10\x00\x12\x0b\n\x07REVOKED\x10\x01\x12\x0f\n\x0bREACTIVATED\x10\x02\"+\n\x0fRecordContainer\x12\x18\n\x07\x65ntries\x18\x01 \x03(\x0b\x32\x07.Recordb\x06proto3')
+  serialized_pb=_b('\n\x0crecord.proto\"\xc8\x03\n\x06Record\x12\x18\n\x10owner_public_key\x18\x01 \x01(\t\x12\x19\n\x11issuer_public_key\x18\x02 \x01(\t\x12\x1a\n\x12manager_public_key\x18\x03 \x01(\t\x12\x11\n\trecord_id\x18\x04 \x01(\t\x12\'\n\x0brecord_type\x18\x05 \x01(\x0e\x32\x12.Record.RecordType\x12$\n\x08versions\x18\x06 \x03(\x0b\x32\x12.Record.RecordData\x1a\x98\x01\n\nRecordData\x12\x14\n\x0cportfolio_id\x18\x01 \x01(\t\x12\x0e\n\x06\x63ipher\x18\x02 \x01(\t\x12\x0c\n\x04hash\x18\x03 \x01(\t\x12+\n\rrecord_status\x18\x04 \x01(\x0e\x32\x14.Record.RecordStatus\x12\x11\n\ttimestamp\x18\x05 \x01(\x04\x12\x16\n\x0etransaction_id\x18\x06 \x01(\t\"5\n\nRecordType\x12\x0f\n\x0b\x43\x45RTIFICATE\x10\x00\x12\x0b\n\x07SUBJECT\x10\x01\x12\t\n\x05OTHER\x10\x02\"9\n\x0cRecordStatus\x12\x0b\n\x07\x43REATED\x10\x00\x12\x0b\n\x07REVOKED\x10\x01\x12\x0f\n\x0bREACTIVATED\x10\x02\"+\n\x0fRecordContainer\x12\x18\n\x07\x65ntries\x18\x01 \x03(\x0b\x32\x07.Recordb\x06proto3')
 )
 
 
@@ -45,8 +45,8 @@ _RECORD_RECORDTYPE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=360,
-  serialized_end=413,
+  serialized_start=361,
+  serialized_end=414,
 )
 _sym_db.RegisterEnumDescriptor(_RECORD_RECORDTYPE)
 
@@ -71,8 +71,8 @@ _RECORD_RECORDSTATUS = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=415,
-  serialized_end=472,
+  serialized_start=416,
+  serialized_end=473,
 )
 _sym_db.RegisterEnumDescriptor(_RECORD_RECORDSTATUS)
 
@@ -106,7 +106,7 @@ _RECORD_RECORDDATA = _descriptor.Descriptor(
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='recordStatus', full_name='Record.RecordData.recordStatus', index=3,
+      name='record_status', full_name='Record.RecordData.record_status', index=3,
       number=4, type=14, cpp_type=8, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
@@ -139,7 +139,7 @@ _RECORD_RECORDDATA = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=207,
-  serialized_end=358,
+  serialized_end=359,
 )
 
 _RECORD = _descriptor.Descriptor(
@@ -206,7 +206,7 @@ _RECORD = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=17,
-  serialized_end=472,
+  serialized_end=473,
 )
 
 
@@ -236,11 +236,11 @@ _RECORDCONTAINER = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=474,
-  serialized_end=517,
+  serialized_start=475,
+  serialized_end=518,
 )
 
-_RECORD_RECORDDATA.fields_by_name['recordStatus'].enum_type = _RECORD_RECORDSTATUS
+_RECORD_RECORDDATA.fields_by_name['record_status'].enum_type = _RECORD_RECORDSTATUS
 _RECORD_RECORDDATA.containing_type = _RECORD
 _RECORD.fields_by_name['record_type'].enum_type = _RECORD_RECORDTYPE
 _RECORD.fields_by_name['versions'].message_type = _RECORD_RECORDDATA

@@ -54,7 +54,7 @@ class B4EPayload(object):
                 self._transaction.action == \
                 payload_pb2.B4EPayload.CREATE_VOTING:
             return self._transaction.create_voting
-        if self._transaction.HasField('create_vote') and \
+        if self._transaction.HasField('vote') and \
                 self._transaction.action == \
                 payload_pb2.B4EPayload.VOTE:
             return self._transaction.vote
