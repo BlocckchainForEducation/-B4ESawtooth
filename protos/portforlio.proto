@@ -21,6 +21,6 @@ message Portfolio {
 }
 
 
-message ActorContainer {
+message PortfolioContainer {
   repeated Portfolio entries = 1;
 }
