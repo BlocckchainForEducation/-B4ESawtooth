@@ -12,14 +12,18 @@ def get_voting(self, public_key):
         address = addresser.get_voting_address(public_key)
         state_entries = self._context.get_state(
             addresses=[address], timeout=self._timeout)
+        latest_voting = None
+        timestamp = -1
         if state_entries:
             container = voting_pb2.VotingContainer()
             container.ParseFromString(state_entries[0].data)
             for voting in container.entries:
                 if voting.elector_public_key == public_key:
-                    return voting
+                    if voting.timestamp > timestamp:
+                        latest_voting = voting
+                        timestamp = voting.timestamp
 
-        return None
+        return latest_voting
     except Exception as e:
         print("Err :", e)
         return None

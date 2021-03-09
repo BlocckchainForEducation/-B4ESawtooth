@@ -138,21 +138,84 @@ def create_subject(state, public_key, transaction_id, payload):
     state.update_portfolio_data(payload.data.portfolio_id, owner_public_key, manager_public_key)
 
 
+def _get_record_status(i):
+    switcher = {
+        payload_pb2.CREATED: record_pb2.Record.CREATED,
+        payload_pb2.REVOKED: record_pb2.Record.REVOKED,
+        payload_pb2.REACTIVATED: record_pb2.Record.REACTIVATED
+    }
+    return switcher.get(i)
+
+
 def update_record(state, public_key, transaction_id, payload):
-    pass
+    actor = state.get_actor(public_key)
+    _check_is_valid_actor(actor)
+    record_id = payload.data.record_id
+    owner_public_key = payload.data.owner_public_key
+    manager_public_key = payload.data.manager_public_key
+    record = state.get_record(record_id, owner_public_key, manager_public_key)
+    _check_modify_permission(state, record, payload, manager_public_key, public_key)
+
+    status = _get_record_status(payload.data.status)
+    state.update_record(record_id, owner_public_key, manager_public_key, payload.data.record_data,
+                        payload.data.record_hash, status,
+                        payload.timestamp, transaction_id)
+
+
+def _check_modify_permission(state, record, payload, manager_public_key, public_key):
+    if not record:
+        raise InvalidTransaction("Record doesn't exist")
+
+    class_ = state.get_class(payload.data.record_id, manager_public_key)
+    has_permission = False
+    if class_:
+        if class_.teacher_public_key == public_key:
+            has_permission = True
+
+    if public_key != record.manager_public_key or has_permission:
+        raise InvalidTransaction("Invalid permission")
+
+
+def modify_record(state, public_key, transaction_id, payload):
+    actor = state.get_actor(public_key)
+    _check_is_valid_actor(actor)
+    record_id = payload.data.record_id
+    owner_public_key = payload.data.owner_public_key
+    manager_public_key = payload.data.manager_public_key
+    record = state.get_record(record_id, owner_public_key, manager_public_key)
+    _check_modify_permission(state, record, payload, manager_public_key, public_key)
+
+    state.modify_record(record_id, owner_public_key, manager_public_key, payload.data.record_data,
+                        payload.data.record_hash,
+                        payload.timestamp, transaction_id)
 
 
 def modify_subject(state, public_key, transaction_id, payload):
-    pass
+    modify_record(state, public_key, transaction_id, payload)
 
 
 def modify_cert(state, public_key, transaction_id, payload):
-    pass
+    modify_record(state, public_key, transaction_id, payload)
+
+
+def update_status(state, public_key, transaction_id, payload, status):
+    actor = state.get_actor(public_key)
+    _check_is_valid_actor(actor)
+    record_id = payload.data.record_id
+    owner_public_key = payload.data.owner_public_key
+    manager_public_key = payload.data.manager_public_key
+    record = state.get_record(record_id, owner_public_key, manager_public_key)
+    _check_modify_permission(state, record, payload, manager_public_key, public_key)
+
+    state.update_status_record(record_id, owner_public_key,
+                               manager_public_key, status,
+                               payload.timestamp, transaction_id)
 
 
 def revoke_cert(state, public_key, transaction_id, payload):
-    pass
+    update_status(state, public_key, transaction_id, payload, record_pb2.Record.REVOKED)
 
 
 def reactive_cert(state, public_key, transaction_id, payload):
-    pass
+    update_status(state, public_key, transaction_id, payload, record_pb2.Record.REACTIVATED)
+
