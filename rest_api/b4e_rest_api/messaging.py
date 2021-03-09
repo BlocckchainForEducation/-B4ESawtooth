@@ -23,7 +23,13 @@ from sawtooth_signing import secp256k1
 
 from rest_api.b4e_rest_api.errors import ApiBadRequest
 from rest_api.b4e_rest_api.errors import ApiInternalError
-from rest_api.b4e_rest_api import transaction_creation
+from rest_api.b4e_rest_api.transaction_creation import transaction_creation
+from rest_api.b4e_rest_api.transaction_creation import actor_transaction
+from rest_api.b4e_rest_api.transaction_creation import b4e_enviroment_transaction
+from rest_api.b4e_rest_api.transaction_creation import class_transaction
+from rest_api.b4e_rest_api.transaction_creation import portfolio_transaction
+from rest_api.b4e_rest_api.transaction_creation import record_transaction
+from rest_api.b4e_rest_api.transaction_creation import voting_transaction
 
 import logging
 import asyncio
@@ -95,7 +101,7 @@ class Messenger(object):
         public_key, private_key = self.get_new_key_pair()
         transaction_signer = self._crypto_factory.new_signer(
             secp256k1.Secp256k1PrivateKey.from_hex(private_key))
-        batch = transaction_creation.make_set_b4e_environment(transaction_signer, timestamp)
+        batch = b4e_enviroment_transaction.make_set_b4e_environment(transaction_signer, timestamp)
 
         await self._send_and_wait_for_commit(batch)
 
@@ -107,10 +113,10 @@ class Messenger(object):
             secp256k1.Secp256k1PrivateKey.from_hex(private_key))
         batch_signer = transaction_signer
 
-        batch = transaction_creation.make_create_institution(transaction_signer,
-                                                             batch_signer,
-                                                             profile,
-                                                             timestamp)
+        batch = actor_transaction.make_create_institution(transaction_signer,
+                                                          batch_signer,
+                                                          profile,
+                                                          timestamp)
         await self._send_and_wait_for_commit(batch)
         transaction_id = batch.transactions[0].header_signature
         return transaction_id
@@ -123,10 +129,10 @@ class Messenger(object):
             secp256k1.Secp256k1PrivateKey.from_hex(private_key))
         batch_signer = transaction_signer
 
-        batch = transaction_creation.make_create_teacher(transaction_signer,
-                                                         batch_signer,
-                                                         profile,
-                                                         timestamp)
+        batch = actor_transaction.make_create_teacher(transaction_signer,
+                                                      batch_signer,
+                                                      profile,
+                                                      timestamp)
         await self._send_and_wait_for_commit(batch)
         transaction_id = batch.transactions[0].header_signature
         return transaction_id
@@ -139,42 +145,93 @@ class Messenger(object):
             secp256k1.Secp256k1PrivateKey.from_hex(private_key))
         batch_signer = transaction_signer
 
-        list_batches = transaction_creation.make_create_teachers(transaction_signer,
-                                                                 batch_signer,
-                                                                 profiles,
-                                                                 timestamp)
+        list_batches = actor_transaction.make_create_teachers(transaction_signer,
+                                                              batch_signer,
+                                                              profiles,
+                                                              timestamp)
 
         list_transaction_id = await self.submit_multi_batches(list_batches)
         return list_transaction_id
 
-    async def send_create_edu_officer(self, private_key,
-                                      profile,
-                                      timestamp):
-
+    async def send_update_profile(self, private_key,
+                                  profile,
+                                  timestamp):
         transaction_signer = self._crypto_factory.new_signer(
             secp256k1.Secp256k1PrivateKey.from_hex(private_key))
         batch_signer = transaction_signer
 
-        batch = transaction_creation.make_create_edu_officer(transaction_signer,
-                                                             batch_signer,
-                                                             profile,
-                                                             timestamp)
+        batch = actor_transaction.make_update_profile(transaction_signer,
+                                                      batch_signer,
+                                                      profile,
+                                                      timestamp)
         await self._send_and_wait_for_commit(batch)
         transaction_id = batch.transactions[0].header_signature
         return transaction_id
 
-    async def send_create_edu_officers(self, private_key,
-                                       profiles,
-                                       timestamp):
+    async def send_reject_institution(self, private_key,
+                                      institution_public_key,
+                                      timestamp):
+        transaction_signer = self._crypto_factory.new_signer(
+            secp256k1.Secp256k1PrivateKey.from_hex(private_key))
+        batch_signer = transaction_signer
+
+        batch = actor_transaction.make_reject_institution(transaction_signer,
+                                                          batch_signer,
+                                                          institution_public_key,
+                                                          timestamp)
+        await self._send_and_wait_for_commit(batch)
+        transaction_id = batch.transactions[0].header_signature
+        return transaction_id
+
+    async def send_active_institution(self, private_key,
+                                      institution_public_key,
+                                      timestamp):
+        transaction_signer = self._crypto_factory.new_signer(
+            secp256k1.Secp256k1PrivateKey.from_hex(private_key))
+        batch_signer = transaction_signer
+
+        batch = actor_transaction.make_active_institution(transaction_signer,
+                                                          batch_signer,
+                                                          institution_public_key,
+                                                          timestamp)
+        await self._send_and_wait_for_commit(batch)
+        transaction_id = batch.transactions[0].header_signature
+        return transaction_id
+
+    async def send_create_class(self, private_key,
+                                class_id,
+                                subject_id,
+                                credit,
+                                teacher_public_key,
+                                timestamp):
 
         transaction_signer = self._crypto_factory.new_signer(
             secp256k1.Secp256k1PrivateKey.from_hex(private_key))
         batch_signer = transaction_signer
 
-        list_batches = transaction_creation.make_create_edu_officers(transaction_signer,
-                                                                     batch_signer,
-                                                                     profiles,
-                                                                     timestamp)
+        batch = class_transaction.make_create_class(transaction_signer,
+                                                    batch_signer,
+                                                    class_id,
+                                                    subject_id,
+                                                    credit,
+                                                    teacher_public_key,
+                                                    timestamp)
+        await self._send_and_wait_for_commit(batch)
+        transaction_id = batch.transactions[0].header_signature
+        return transaction_id
+
+    async def send_create_classes(self, private_key,
+                                  classes,
+                                  timestamp):
+
+        transaction_signer = self._crypto_factory.new_signer(
+            secp256k1.Secp256k1PrivateKey.from_hex(private_key))
+        batch_signer = transaction_signer
+
+        list_batches = transaction_creation.make_create_classes(transaction_signer,
+                                                                batch_signer,
+                                                                classes,
+                                                                timestamp)
         list_transaction_id = await self.submit_multi_batches(list_batches)
         return list_transaction_id
 
@@ -197,41 +254,6 @@ class Messenger(object):
         await self._send_and_wait_for_commit(batch)
         transaction_id = batch.transactions[0].header_signature
         return transaction_id
-
-    async def send_create_class(self, private_key,
-                                teacher_public_key,
-                                edu_officer_public_key,
-                                class_id,
-                                timestamp):
-
-        transaction_signer = self._crypto_factory.new_signer(
-            secp256k1.Secp256k1PrivateKey.from_hex(private_key))
-        batch_signer = transaction_signer
-
-        batch = transaction_creation.make_create_class(transaction_signer,
-                                                       batch_signer,
-                                                       teacher_public_key,
-                                                       edu_officer_public_key,
-                                                       class_id,
-                                                       timestamp)
-        await self._send_and_wait_for_commit(batch)
-        transaction_id = batch.transactions[0].header_signature
-        return transaction_id
-
-    async def send_create_classes(self, private_key,
-                                  classes,
-                                  timestamp):
-
-        transaction_signer = self._crypto_factory.new_signer(
-            secp256k1.Secp256k1PrivateKey.from_hex(private_key))
-        batch_signer = transaction_signer
-
-        list_batches = transaction_creation.make_create_classes(transaction_signer,
-                                                                batch_signer,
-                                                                classes,
-                                                                timestamp)
-        list_transaction_id = await self.submit_multi_batches(list_batches)
-        return list_transaction_id
 
     async def send_create_record(self, private_key,
                                  owner_public_key,
@@ -517,10 +539,8 @@ class Messenger(object):
             if status == client_batch_submit_pb2.ClientBatchStatus.INVALID:
                 error = status_response.batch_statuses[0].invalid_transactions[0]
                 raise ApiBadRequest(error.message)
-                break
             elif status == client_batch_submit_pb2.ClientBatchStatus.PENDING:
                 raise ApiInternalError('Transaction submitted but timed out')
-                break
             elif status == client_batch_submit_pb2.ClientBatchStatus.UNKNOWN:
                 # raise ApiInternalError('Something went wrong. Try again later')
                 continue
@@ -556,10 +576,8 @@ class Messenger(object):
             if status == client_batch_submit_pb2.ClientBatchStatus.INVALID:
                 error = status_response.batch_statuses[0].invalid_transactions[0]
                 raise ApiBadRequest(error.message)
-                break
             elif status == client_batch_submit_pb2.ClientBatchStatus.PENDING:
                 raise ApiInternalError('Transaction submitted but timed out')
-                break
             elif status == client_batch_submit_pb2.ClientBatchStatus.UNKNOWN:
                 # raise ApiInternalError('Something went wrong. Try again later')
                 continue

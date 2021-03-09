@@ -457,6 +457,32 @@ class RouteHandler(object):
         cid = ""
         return json_response({"cid": cid})
 
+    def add_route(self, app):
+        app.router.add_post('/set_b43_environment', self.set_b4e_environment)
+        app.router.add_post('/create_institution', self.create_institution)
+        app.router.add_post('/create_teacher', self.create_teacher)
+        app.router.add_post('/create_teachers', self.create_teachers)
+        app.router.add_post('/create_edu_officer', self.create_edu_officer)
+        app.router.add_post('/create_edu_officers', self.create_edu_officers)
+        app.router.add_post('/create_vote', self.create_vote)
+        app.router.add_post('/create_class', self.create_class)
+        app.router.add_post('/create_classes', self.create_classes)
+        app.router.add_post('/create_subject', self.create_subject)
+        app.router.add_post('/create_subjects', self.create_subjects)
+        app.router.add_post('/create_cert', self.create_cert)
+        app.router.add_post('/create_certs', self.create_certs)
+        app.router.add_post('/update_record', self.update_record)
+        app.router.add_post('/update_actor_info', self.update_actor_info)
+        app.router.add_post('/reject_institution', self.reject_institution)
+
+        app.router.add_post('/get_new_key_pair', self.get_new_key_pair)
+        app.router.add_get('/transaction/{transaction_id}', self.fetch_data_transaction)
+        app.router.add_get('/record/{transaction_id}', self.fetch_record_transaction)
+        app.router.add_get('/state/{data_address}', self.fetch_data_state)
+        app.router.add_get('/student_data/{student_public_key}', self.fetch_data_student)
+
+        app.router.add_post('/test_time_submit_transaction', self.test_time_create_transaction)
+
 
 async def decode_request(request):
     try:

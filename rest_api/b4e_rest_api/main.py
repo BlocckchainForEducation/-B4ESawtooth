@@ -25,7 +25,7 @@ from sawtooth_sdk.processor.log import init_console_logging
 
 from aiohttp import web
 
-from rest_api.b4e_rest_api.route_handler import RouteHandler
+from rest_api.b4e_rest_api.route_handler.route_handler import RouteHandler
 from rest_api.b4e_rest_api.database import Database
 from rest_api.b4e_rest_api.messaging import Messenger
 
