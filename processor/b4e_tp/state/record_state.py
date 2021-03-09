@@ -16,7 +16,7 @@ def get_record(self, record_id, owner_public_key, manager_public_key):
             container = record_pb2.RecordContainer()
             container.ParseFromString(state_entries[0].data)
             for record in container.entries:
-                if record.record_id == record_id:
+                if record.record_id == record_id and record.owner_public_key == owner_public_key and record.manager_public_key == manager_public_key:
                     return record
 
         return None

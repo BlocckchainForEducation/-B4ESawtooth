@@ -110,8 +110,12 @@ def create_subject(state, public_key, transaction_id, payload):
     if not class_:
         raise InvalidTransaction("Class doesn't exist!")
 
-    if public_key != class_.teacher_public_key and public_key != class_.edu_officer_public_key:
+    if public_key != class_.teacher_public_key:
         raise InvalidTransaction("Invalid issuer for this class")
+
+    if owner_public_key not in class_.student_public_keys:
+        raise InvalidTransaction("Invalid issuer for this student in the class")
+
     portfolio = state.get_portfolio(id=payload.data.portfolio_id,
                                     owner_public_key=owner_public_key,
                                     manager_public_key=manager_public_key)
@@ -218,4 +222,3 @@ def revoke_cert(state, public_key, transaction_id, payload):
 
 def reactive_cert(state, public_key, transaction_id, payload):
     update_status(state, public_key, transaction_id, payload, record_pb2.Record.REACTIVATED)
-

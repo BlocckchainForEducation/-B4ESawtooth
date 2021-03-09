@@ -28,6 +28,9 @@ def create_edu_program(state, public_key, transaction_id, payload):
     if institution.role != actor_pb2.Actor.INSTITUTION:
         raise InvalidTransaction("Invalid signer!")
 
+    if state.get_portfolio(edu_id, owner_public_key, public_key):
+        raise InvalidTransaction("Edu program has been existed")
+
     portfolio_data = portfolio_pb2.Portfolio.PortfolioData(portfolio_type=portfolio_type,
                                                            data=data,
                                                            timestamp=payload.timestamp,

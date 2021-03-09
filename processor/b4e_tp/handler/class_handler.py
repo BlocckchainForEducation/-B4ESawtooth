@@ -24,6 +24,7 @@ def create_class(state, public_key, transaction_id, payload):
                              credit=payload.data.credit,
                              teacher_public_key=payload.data.teacher_public_key,
                              institution_public_key=public_key,
+                             student_public_keys=payload.data.student_public_keys,
                              timestamp=payload.timestamp,
                              transaction_id=transaction_id)
 

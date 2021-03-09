@@ -30,7 +30,7 @@ message B4EPayload{
 
   CreateActorAction create_actor = 2;
   CreateActorAction create_institution = 3;
-  CreateActorAction create_teacher = 4;
+  CreateTeacherAction create_teacher = 4;
   CreatePortfolioAction create_edu_program = 5;
   CreateClassAction create_class = 6;
   CreateVotingAction create_voting = 7;
@@ -55,6 +55,11 @@ message CreateActorAction {
   string id = 1;
   string data = 2;
 }
+message CreateTeacherAction {
+  string id = 1;
+  string teacher_public_key = 2;
+  string data = 3;
+}
 
 enum PortfolioType{
   EDU_PROGRAM = 0;
@@ -71,6 +76,7 @@ message CreateClassAction{
   string subject_id = 2;
   int32 credit = 3;
   string teacher_public_key = 4;
+  repeated string student_public_keys = 5;
 }
 
 enum VoteType{
@@ -79,7 +85,7 @@ enum VoteType{
 }
 message CreateVotingAction{
   string elector_public_key = 1;
-  VoteType voteType = 2;
+  VoteType vote_type = 2;
 }
 
 message VoteAction {
@@ -94,6 +100,7 @@ enum RecordType{
 }
 message CreateRecordAction {
   string owner_public_key = 1;
+  string manager_public_key = 2;
   string record_id = 3;
   RecordType record_type = 4;
   string portfolio_id = 5;
@@ -112,27 +119,24 @@ message UpdateRecordAction {
   string record_id = 3;
   string cipher = 4;
   string hash = 5;
-  RecordStatus recordStatus = 6;
+  RecordStatus record_status = 6;
 }
 
 message ModifyRecordAction{
   string owner_public_key = 1;
-  string manager_public_key = 2;
-  string record_id = 3;
-  string cipher = 4;
-  string hash = 5;
+  string record_id = 2;
+  string cipher = 3;
+  string hash = 4;
 }
 message RevokeCertAction{
   string owner_public_key = 1;
-  string manager_public_key = 2;
-  string record_id = 3;
+  string record_id = 2;
 
 }
 
 message ReactiveCertAction {
   string owner_public_key = 1;
-  string manager_public_key = 2;
-  string record_id = 3;
+  string record_id = 2;
 }
 
 message UpdateActorProfileAction {

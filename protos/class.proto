@@ -6,8 +6,9 @@ message Class {
   int32 credit = 3;
   string teacher_public_key = 4;
   string institution_public_key = 5;
-  uint64 timestamp = 6;
-  string transaction_id = 7;
+  repeated string student_public_keys = 6;
+  uint64 timestamp = 7;
+  string transaction_id = 8;
 }
 
 message ClassContainer {
