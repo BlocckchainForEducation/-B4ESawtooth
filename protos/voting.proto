@@ -20,7 +20,7 @@ message Voting {
 
   string publisher_public_key = 1;
   string elector_public_key = 2;
-  VoteType voteType = 3;
+  VoteType vote_type = 3;
   repeated  Vote vote = 4;
   VoteResult vote_result = 5;
   uint64 close_vote_timestamp = 6;

@@ -10,6 +10,7 @@ from protobuf.b4e_protobuf import voting_pb2
 def get_actor(self, public_key):
     try:
         address = addresser.get_actor_address(public_key)
+        print(address)
         state_entries = self._context.get_state(
             addresses=[address], timeout=self._timeout)
         if state_entries:

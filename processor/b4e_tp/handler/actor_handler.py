@@ -14,7 +14,7 @@ with open("list_ministry_public_key") as fp:
 def _check_is_valid_actor(actor):
     if not actor:
         raise InvalidTransaction("Actor doesn't exist")
-    if actor.status != actor_pb2.Actor.ACTIVE:
+    if actor.profile[-1].status != actor_pb2.Actor.ACTIVE:
         raise InvalidTransaction("Actor is not active")
 
 
@@ -57,7 +57,7 @@ def create_institution(state, public_key, transaction_id, payload):
 
     voting = voting_pb2.Voting(publisher_public_key=public_key,
                                elector_public_key=public_key,
-                               voteType=voting_pb2.Voting.ACTIVE,
+                               vote_type=voting_pb2.Voting.ACTIVE,
                                vote=[],
                                vote_result=voting_pb2.Voting.UNKNOWN,
                                close_vote_timestamp=0,

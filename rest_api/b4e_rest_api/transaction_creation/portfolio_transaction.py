@@ -29,7 +29,7 @@ def make_create_edu_program(transaction_signer,
 
     payload = payload_pb2.B4EPayload(
         action=payload_pb2.B4EPayload.CREATE_EDU_PROGRAM,
-        create_teacher=action,
+        create_edu_program=action,
         timestamp=timestamp)
 
     payload_bytes = payload.SerializeToString()
@@ -56,7 +56,7 @@ def make_create_edu_programs(transaction_signer,
         list_outputs = []
         list_payload_bytes = []
         for profile in profiles:
-            edu_id = profile.get("eduProgramId")
+            edu_id = profile.get("eduProgram").get("eduProgramId")
             student_public_key = profile.get('publicKey')
             edu_program = profile
             edu_program_address = addresser.get_portfolio_address(edu_id,
@@ -73,7 +73,7 @@ def make_create_edu_programs(transaction_signer,
 
             payload = payload_pb2.B4EPayload(
                 action=payload_pb2.B4EPayload.CREATE_EDU_PROGRAM,
-                create_teacher=action,
+                create_edu_program=action,
                 timestamp=timestamp)
             payload_bytes = payload.SerializeToString()
 

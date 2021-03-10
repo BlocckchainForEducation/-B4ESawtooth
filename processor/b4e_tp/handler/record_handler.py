@@ -38,12 +38,11 @@ def _create_record_with_type(state, transaction_id, payload, record_type):
                                                transaction_id=transaction_id)
     record = record_pb2.Record(owner_public_key=payload.data.owner_public_key,
                                manager_public_key=payload.data.manager_public_key,
-                               issuer_public_key=payload.data.issuer_public_key,
                                record_id=payload.data.record_id,
                                record_type=record_type,
                                versions=[record_data])
 
-    state.set_record(payload.data.record_id, record)
+    state.set_record(record)
 
 
 def _get_record_type(i):
@@ -71,18 +70,22 @@ def create_cert(state, public_key, transaction_id, payload):
     portfolio = state.get_portfolio(id=payload.data.portfolio_id,
                                     owner_public_key=owner_public_key,
                                     manager_public_key=manager_public_key)
-    if not portfolio or portfolio.portfolio_data[-1]:
+    if not portfolio or not portfolio.portfolio_data[-1]:
         raise InvalidTransaction("Invalid edu program")
     portfolio_data = portfolio.portfolio_data[-1]
-    if portfolio_data.type != portfolio_pb2.Portfolio.EDU_PROGRAM:
+    if portfolio_data.portfolio_type != portfolio_pb2.Portfolio.EDU_PROGRAM:
         raise InvalidTransaction("Invalid portfolio type")
 
     edu_program_data = json.loads(portfolio_data.data)
     if (not edu_program_data.get("currentCredit")) or (
             not edu_program_data.get("startTimestamp")) or (not edu_program_data.get("latestTimestamp")):
         raise InvalidTransaction("Not enough condition ")
+    print(" pass condition")
+    
     if int(edu_program_data.get("currentCredit")) < int(edu_program_data.get("totalCredit")):
         raise InvalidTransaction("Not enough credit")
+
+    print("pass credit")
     start_year = time_handler.timestamp_to_datetime(int(edu_program_data.get("startTimestamp"))).year
     latest_year = time_handler.timestamp_to_datetime(int(edu_program_data.get("latestTimestamp"))).year
     duration = latest_year - start_year
@@ -91,7 +94,7 @@ def create_cert(state, public_key, transaction_id, payload):
         raise InvalidTransaction("Not reach min year")
     if duration > int(edu_program_data.get("maxYear")):
         raise InvalidTransaction("Exceed max year")
-
+    print("pass time")
     record_type = record_pb2.Record.CERTIFICATE
     _create_record_with_type(state, transaction_id, payload, record_type)
 
@@ -119,11 +122,10 @@ def create_subject(state, public_key, transaction_id, payload):
     portfolio = state.get_portfolio(id=payload.data.portfolio_id,
                                     owner_public_key=owner_public_key,
                                     manager_public_key=manager_public_key)
-
-    if not portfolio or portfolio.portfolio_data[-1]:
+    if not portfolio or not portfolio.portfolio_data[-1]:
         raise InvalidTransaction("Invalid edu program")
     portfolio_data = portfolio.portfolio_data[-1]
-    if portfolio_data.type != portfolio_pb2.Portfolio.EDU_PROGRAM:
+    if portfolio_data.portfolio_type != portfolio_pb2.Portfolio.EDU_PROGRAM:
         raise InvalidTransaction("Invalid portfolio type")
     edu_program_data = json.loads(portfolio_data.data)
     if not edu_program_data.get('currentCredit'):
@@ -133,13 +135,16 @@ def create_subject(state, public_key, transaction_id, payload):
 
     if not edu_program_data.get("startTimestamp"):
         edu_program_data["startTimestamp"] = payload.timestamp
-    else:
+    if not edu_program_data.get("latestTimestamp"):
+        edu_program_data["latestTimestamp"] = payload.timestamp
+    elif edu_program_data.get("latestTimestamp") < payload.timestamp:
         edu_program_data["latestTimestamp"] = payload.timestamp
 
     record_type = record_pb2.Record.SUBJECT
     _create_record_with_type(state, transaction_id, payload, record_type)
 
-    state.update_portfolio_data(payload.data.portfolio_id, owner_public_key, manager_public_key)
+    state.update_portfolio_data(payload.data.portfolio_id, owner_public_key, manager_public_key,
+                                json.dumps(edu_program_data))
 
 
 def _get_record_status(i):
@@ -161,8 +166,8 @@ def update_record(state, public_key, transaction_id, payload):
     _check_modify_permission(state, record, payload, manager_public_key, public_key)
 
     status = _get_record_status(payload.data.status)
-    state.update_record(record_id, owner_public_key, manager_public_key, payload.data.record_data,
-                        payload.data.record_hash, status,
+    state.update_record(record_id, owner_public_key, manager_public_key, payload.data.cipher,
+                        payload.data.hash, status,
                         payload.timestamp, transaction_id)
 
 
@@ -171,13 +176,10 @@ def _check_modify_permission(state, record, payload, manager_public_key, public_
         raise InvalidTransaction("Record doesn't exist")
 
     class_ = state.get_class(payload.data.record_id, manager_public_key)
-    has_permission = False
-    if class_:
-        if class_.teacher_public_key == public_key:
-            has_permission = True
 
-    if public_key != record.manager_public_key or has_permission:
-        raise InvalidTransaction("Invalid permission")
+    if class_:
+        if class_.teacher_public_key != public_key:
+            raise InvalidTransaction("Invalid permission")
 
 
 def modify_record(state, public_key, transaction_id, payload):
@@ -189,8 +191,8 @@ def modify_record(state, public_key, transaction_id, payload):
     record = state.get_record(record_id, owner_public_key, manager_public_key)
     _check_modify_permission(state, record, payload, manager_public_key, public_key)
 
-    state.modify_record(record_id, owner_public_key, manager_public_key, payload.data.record_data,
-                        payload.data.record_hash,
+    state.modify_record(record_id, owner_public_key, manager_public_key, payload.data.cipher,
+                        payload.data.hash,
                         payload.timestamp, transaction_id)
 
 

@@ -19,11 +19,11 @@ def make_create_vote(transaction_signer,
     outputs = [voting_address, elector_address, environment_address]
 
     action = payload_pb2.VoteAction(elector_public_key=elector_public_key,
-                                    accepted=_get_vote_decision(decision))
+                                    accept=_get_vote_decision(decision))
 
     payload = payload_pb2.B4EPayload(
         action=payload_pb2.B4EPayload.VOTE,
-        create_vote=action,
+        vote=action,
         timestamp=timestamp)
 
     payload_bytes = payload.SerializeToString()

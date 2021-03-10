@@ -74,7 +74,7 @@ class RecordRouteHandler(object):
 
     async def create_subjects(self, request):
         body = await decode_request(request)
-        required_fields = ['privateKeyHex', 'universityPublicKey' 'classId', 'grades']
+        required_fields = ['privateKeyHex', 'universityPublicKey', 'classId', 'grades']
         validate_fields(required_fields, body)
 
         required_fields = ['studentPublicKey', 'eduProgramId', 'cipher', 'hash']
@@ -89,7 +89,7 @@ class RecordRouteHandler(object):
                                                                          list_subjects=body.get('grades'),
                                                                          timestamp=get_time())
 
-        list_subjects = tolist(slice_per(body.get('points'), SawtoothConfig.MAX_BATCH_SIZE))
+        list_subjects = tolist(slice_per(body.get('grades'), SawtoothConfig.MAX_BATCH_SIZE))
         transactions = []
         class_id = body.get('classId')
         for i in range(len(list_transaction_id)):
@@ -179,11 +179,12 @@ class RecordRouteHandler(object):
 
     async def modify_subject(self, request):
         body = await decode_request(request)
-        required_fields = ['privateKeyHex', 'studentPublicKey', 'classId', 'cipher', 'hash']
+        required_fields = ['privateKeyHex', 'studentPublicKey', 'universityPublicKey', 'classId', 'cipher', 'hash']
         validate_fields(required_fields, body)
 
         transaction_id = await self._messenger.send_modify_subject(private_key=body.get('privateKeyHex'),
                                                                    owner_public_key=body.get('studentPublicKey'),
+                                                                   manager_public_key=body.get('universityPublicKey'),
                                                                    record_id=body.get('classId'),
                                                                    cipher=body.get('cipher'),
                                                                    record_hash=body.get('hash'),
@@ -200,7 +201,7 @@ class RecordRouteHandler(object):
         required_fields = ['privateKeyHex', 'studentPublicKey', 'eduProgramId', 'cipher', 'hash']
         validate_fields(required_fields, body)
 
-        transaction_id = await self._messenger.send_modify_subject(private_key=body.get('privateKeyHex'),
+        transaction_id = await self._messenger.send_modify_cert(private_key=body.get('privateKeyHex'),
                                                                    owner_public_key=body.get('studentPublicKey'),
                                                                    record_id=body.get('eduProgramId'),
                                                                    cipher=body.get('cipher'),
@@ -248,11 +249,11 @@ class RecordRouteHandler(object):
     def add_route(self, app):
         app.router.add_post('/create-record', self.create_record)
         app.router.add_post('/staff/create-subject', self.create_subject)
-        app.router.add_post('/staff/create-subjects', self.create_subjects)
+        app.router.add_post('/teacher/submit-grade', self.create_subjects)
         app.router.add_post('/staff/create-certificate', self.create_cert)
         app.router.add_post('/staff/create-certificates', self.create_certs)
         app.router.add_post('/staff/update-record', self.update_record)
-        app.router.add_post('/staff/modify-subject', self.modify_subject)
+        app.router.add_post('/teacher/edit-grade', self.modify_subject)
         app.router.add_post('/staff/modify-certificate', self.modify_cert)
         app.router.add_post('/staff/revoke-certificate', self.revoke_cert)
         app.router.add_post('/staff/reactive-certificate', self.reactive_cert)

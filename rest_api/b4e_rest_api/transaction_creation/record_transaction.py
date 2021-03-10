@@ -116,13 +116,15 @@ def make_create_subjects(transaction_signer,
             subject_address = addresser.get_record_address(class_id,
                                                            subject.get('studentPublicKey'),
                                                            manager_public_key)
-            inputs = [manager_address, issuer_address, subject_address, class_address]
+            edu_program_address = addresser.get_portfolio_address(subject.get("eduProgramId"),
+                                                                  subject.get("studentPublicKey"),
+                                                                  manager_public_key)
+            inputs = [manager_address, issuer_address, subject_address, class_address, edu_program_address]
 
-            outputs = [subject_address]
+            outputs = [subject_address, edu_program_address]
 
             action = payload_pb2.CreateRecordAction(owner_public_key=subject.get("studentPublicKey"),
                                                     manager_public_key=manager_public_key,
-                                                    issuer_public_key=issuer_public_key,
                                                     record_id=class_id,
                                                     record_type=record_type,
                                                     portfolio_id=subject.get("eduProgramId"),
@@ -222,7 +224,6 @@ def make_create_certs(transaction_signer,
 
             action = payload_pb2.CreateRecordAction(owner_public_key=cert.get("studentPublicKey"),
                                                     manager_public_key=manager_public_key,
-                                                    issuer_public_key=manager_public_key,
                                                     record_id=cert.get("eduProgramId"),
                                                     record_type=record_type,
                                                     portfolio_id=cert.get("eduProgramId"),
@@ -298,27 +299,38 @@ def make_update_record(transaction_signer,
 def _modify_record(transaction_signer,
                    batch_signer,
                    owner_public_key,
+                   manager_public_key,
                    record_id,
                    cipher,
                    record_hash,
                    modify_action,
                    timestamp):
-    manager_public_key = transaction_signer.get_public_key().as_hex()
+    modifier_public_key = transaction_signer.get_public_key().as_hex()
+    modifier_address = addresser.get_actor_address(modifier_public_key)
     manager_address = addresser.get_actor_address(manager_public_key)
     record_address = addresser.get_record_address(record_id, owner_public_key, manager_public_key, )
 
-    inputs = [manager_address, record_address]
+    inputs = [modifier_address, manager_address, record_address]
 
     outputs = [record_address]
     action = payload_pb2.ModifyRecordAction(record_id=record_id,
                                             cipher=cipher,
                                             hash=record_hash,
-                                            owner_public_key=owner_public_key)
+                                            owner_public_key=owner_public_key,
+                                            manager_public_key=manager_public_key
+                                            )
+    payload = None
 
-    payload = payload_pb2.B4EPayload(
-        action=modify_action,
-        update_record=action,
-        timestamp=timestamp)
+    if modify_action == payload_pb2.B4EPayload.MODIFY_SUBJECT:
+        payload = payload_pb2.B4EPayload(
+            action=modify_action,
+            modify_subject=action,
+            timestamp=timestamp)
+    elif modify_action == payload_pb2.B4EPayload.MODIFY_CERT:
+        payload = payload_pb2.B4EPayload(
+            action=modify_action,
+            modify_cert=action,
+            timestamp=timestamp)
 
     payload_bytes = payload.SerializeToString()
 
@@ -333,12 +345,13 @@ def _modify_record(transaction_signer,
 def make_modify_subject(transaction_signer,
                         batch_signer,
                         owner_public_key,
+                        manager_public_key,
                         record_id,
                         cipher,
                         record_hash,
                         timestamp):
     return _modify_record(transaction_signer, batch_signer,
-                          owner_public_key, record_id, cipher,
+                          owner_public_key, manager_public_key, record_id, cipher,
                           record_hash, payload_pb2.B4EPayload.MODIFY_SUBJECT, timestamp)
 
 
@@ -349,8 +362,9 @@ def make_modify_cert(transaction_signer,
                      cipher,
                      record_hash,
                      timestamp):
+    manager_public_key = transaction_signer.get_public_key().as_hex()
     return _modify_record(transaction_signer, batch_signer,
-                          owner_public_key, record_id, cipher,
+                          owner_public_key, manager_public_key, record_id, cipher,
                           record_hash, payload_pb2.B4EPayload.MODIFY_CERT, timestamp)
 
 
@@ -369,11 +383,17 @@ def _status_change(transaction_signer,
     outputs = [record_address]
     action = payload_pb2.RevokeCertAction(record_id=record_id,
                                           owner_public_key=owner_public_key)
-
-    payload = payload_pb2.B4EPayload(
-        action=action_name,
-        update_record=action,
-        timestamp=timestamp)
+    payload = None
+    if action_name == payload_pb2.B4EPayload.REVOKE_CERT:
+        payload = payload_pb2.B4EPayload(
+            action=action_name,
+            revoke_cert=action,
+            timestamp=timestamp)
+    elif action_name == payload_pb2.B4EPayload.REACTIVE_CERT:
+        payload = payload_pb2.B4EPayload(
+            action=action_name,
+            reactive_cert=action,
+            timestamp=timestamp)
 
     payload_bytes = payload.SerializeToString()
 

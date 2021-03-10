@@ -64,11 +64,12 @@ class StudentRouteHandler(object):
                                                                              profiles=body.get('profiles'),
                                                                              timestamp=get_time())
 
-        list_classes = tolist(slice_per(body.get('classes'), SawtoothConfig.MAX_BATCH_SIZE))
+        list_classes = tolist(slice_per(body.get('profiles'), SawtoothConfig.MAX_BATCH_SIZE))
         transactions = []
         for i in range(len(list_transaction_id)):
             transactions.append({
-                "classId": list_classes[i].get("classId"),
+                "publicKey": list_classes[i].get("publicKey"),
+                "eduProgramId": list_classes[i].get("eduProgram").get("eduProgramId"),
                 "transactionId": list_transaction_id[i]
             })
 

@@ -33,15 +33,15 @@ class B4EPayload(object):
         if self._transaction.HasField('create_actor') and \
                 self._transaction.action == \
                 payload_pb2.B4EPayload.CREATE_ACTOR:
-            return self._transaction.create_institution
+            return self._transaction.create_actor
         if self._transaction.HasField('create_institution') and \
                 self._transaction.action == \
                 payload_pb2.B4EPayload.CREATE_INSTITUTION:
-            return self._transaction.create_teacher
+            return self._transaction.create_institution
         if self._transaction.HasField('create_teacher') and \
                 self._transaction.action == \
                 payload_pb2.B4EPayload.CREATE_TEACHER:
-            return self._transaction.create_edu_officer
+            return self._transaction.create_teacher
         if self._transaction.HasField('create_edu_program') and \
                 self._transaction.action == \
                 payload_pb2.B4EPayload.CREATE_EDU_PROGRAM:

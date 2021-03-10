@@ -22,7 +22,3 @@ def timestamp_to_datetime(timestamp):
 
 def to_time_stamp(date_time):
     return datetime.datetime.timestamp(date_time)
-
-print(timestamp_to_datetime(int("24345435")).year)
-
-print(2 < int("3"))

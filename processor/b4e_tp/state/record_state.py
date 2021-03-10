@@ -83,14 +83,14 @@ def modify_record(self, record_id, owner_public_key,
             if record.record_id == record_id:
                 pre_data = record.versions[-1]
                 new_data = record_pb2.Record.RecordData(
-                    protfolio_id=pre_data.portfolio,
+                    portfolio_id=pre_data.portfolio_id,
                     cipher=cipher,
                     hash=hash_data,
                     record_status=pre_data.record_status,
                     timestamp=timestamp,
                     transaction_id=transaction_id
                 )
-                record.record_data.extend([new_data])
+                record.versions.extend([new_data])
 
     data = container.SerializeToString()
     updated_state = {}

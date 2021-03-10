@@ -28,4 +28,4 @@ def create_class(state, public_key, transaction_id, payload):
                              timestamp=payload.timestamp,
                              transaction_id=transaction_id)
 
-    state.set_class(payload.data.class_id, class_)
+    state.set_class(class_)

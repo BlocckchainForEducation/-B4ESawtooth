@@ -1,3 +1,5 @@
+import logging
+
 from sawtooth_sdk.processor.exceptions import InvalidTransaction
 
 from processor.b4e_tp.handler.actor_handler import _check_is_valid_actor
@@ -10,6 +12,8 @@ from protobuf.b4e_protobuf import portfolio_pb2
 
 import json
 
+LOGGER = logging.getLogger(__name__)
+
 
 def create_portfolio(state, public_key, transaction_id, payload):
     pass
@@ -20,16 +24,20 @@ def create_edu_program(state, public_key, transaction_id, payload):
     edu_id = payload.data.id
     portfolio_type = portfolio_pb2.Portfolio.EDU_PROGRAM
     data = payload.data.data
-
+    LOGGER.info("edu program")
+    LOGGER.info(edu_id + " - " + owner_public_key + ' ' + public_key)
     institution = state.get_actor(public_key)
     if _check_is_valid_actor(institution):
-        raise InvalidTransaction("Invalid fields on edu program")
+        raise InvalidTransaction("Invalid institution")
 
     if institution.role != actor_pb2.Actor.INSTITUTION:
         raise InvalidTransaction("Invalid signer!")
 
     if state.get_portfolio(edu_id, owner_public_key, public_key):
         raise InvalidTransaction("Edu program has been existed")
+
+    if _check_data_edu_program(data):
+        raise InvalidTransaction("Invalid fields on edu program")
 
     portfolio_data = portfolio_pb2.Portfolio.PortfolioData(portfolio_type=portfolio_type,
                                                            data=data,

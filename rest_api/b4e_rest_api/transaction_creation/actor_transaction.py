@@ -148,7 +148,7 @@ def make_update_profile(transaction_signer,
 
     payload = payload_pb2.B4EPayload(
         action=payload_pb2.B4EPayload.UPDATE_ACTOR_INFO,
-        update_actor_info=action,
+        update_actor_profile=action,
         timestamp=timestamp)
 
     payload_bytes = payload.SerializeToString()
@@ -175,7 +175,7 @@ def make_reject_institution(transaction_signer,
 
     payload = payload_pb2.B4EPayload(
         action=payload_pb2.B4EPayload.REJECT_INSTITUTION,
-        update_actor_info=action,
+        reject_institution=action,
         timestamp=timestamp)
 
     payload_bytes = payload.SerializeToString()
@@ -202,7 +202,7 @@ def make_active_institution(transaction_signer,
 
     payload = payload_pb2.B4EPayload(
         action=payload_pb2.B4EPayload.ACTIVE_INSTITUTION,
-        update_actor_info=action,
+        active_institution=action,
         timestamp=timestamp)
 
     payload_bytes = payload.SerializeToString()

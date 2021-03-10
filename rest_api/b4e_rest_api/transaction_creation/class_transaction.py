@@ -1,10 +1,12 @@
+import logging
+
 from addressing.b4e_addressing import addresser
 from config.config import SawtoothConfig
 from protobuf.b4e_protobuf import payload_pb2
 from rest_api.b4e_rest_api.transaction_creation.transaction_creation import _make_batch, _make_batch_multi_transactions, \
     slice_per
 
-
+LOGGER = logging.getLogger(__name__)
 def make_create_class(transaction_signer,
                       batch_signer,
                       class_id,
@@ -63,10 +65,11 @@ def make_create_classes(transaction_signer,
             inputs = [class_address, teacher_address, institution_address]
 
             outputs = [class_address]
-
+            LOGGER.info(class_.get("studentPublicKeys"))
+            LOGGER.info(type(class_.get("studentPublicKeys")))
             action = payload_pb2.CreateClassAction(class_id=class_.get("classId"),
                                                    subject_id=class_.get("subjectId"),
-                                                   credit=class_.get("credit"),
+                                                   credit=int(class_.get("credit")),
                                                    teacher_public_key=class_.get("teacherPublicKey"),
                                                    student_public_keys=class_.get("studentPublicKeys"))
 

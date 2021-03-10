@@ -458,7 +458,7 @@ class RouteHandler(object):
         return json_response({"cid": cid})
 
     def add_route(self, app):
-        app.router.add_post('/set_b43_environment', self.set_b4e_environment)
+        app.router.add_post('/set-b4e-environment', self.set_b4e_environment)
 
         app.router.add_post('/get_new_key_pair', self.get_new_key_pair)
         app.router.add_get('/transaction/{transaction_id}', self.fetch_data_transaction)

@@ -230,10 +230,10 @@ class Messenger(object):
             secp256k1.Secp256k1PrivateKey.from_hex(private_key))
         batch_signer = transaction_signer
 
-        list_batches = transaction_creation.make_create_classes(transaction_signer,
-                                                                batch_signer,
-                                                                classes,
-                                                                timestamp)
+        list_batches = class_transaction.make_create_classes(transaction_signer,
+                                                             batch_signer,
+                                                             classes,
+                                                             timestamp)
         list_transaction_id = await self.submit_multi_batches(list_batches)
         return list_transaction_id
 
@@ -399,6 +399,7 @@ class Messenger(object):
 
     async def send_modify_subject(self, private_key,
                                   owner_public_key,
+                                  manager_public_key,
                                   record_id,
                                   cipher,
                                   record_hash,
@@ -411,6 +412,7 @@ class Messenger(object):
         batch = record_transaction.make_modify_subject(transaction_signer,
                                                        batch_signer,
                                                        owner_public_key,
+                                                       manager_public_key,
                                                        record_id,
                                                        cipher,
                                                        record_hash,

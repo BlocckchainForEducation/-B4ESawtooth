@@ -25,7 +25,7 @@ def get_class(self, class_id, institution_public_key):
         return
 
 
-def set_class(self,  class_):
+def set_class(self, class_):
     class_address = addresser.get_class_address(class_.class_id, class_.institution_public_key)
     container = class_pb2.ClassContainer()
 

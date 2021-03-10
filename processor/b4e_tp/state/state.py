@@ -107,4 +107,4 @@ class B4EState(object):
         portfolio_state.create_edu_program(self, portfolio)
 
     def update_portfolio_data(self, id, owner_public_key, manager_public_key, data):
-        portfolio_state.update_data(self, id, owner_public_key, manager_public_key)
+        portfolio_state.update_data(self, id, owner_public_key, manager_public_key, data)

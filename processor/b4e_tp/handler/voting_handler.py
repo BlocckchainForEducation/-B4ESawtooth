@@ -76,22 +76,73 @@ def vote(state, public_key, transaction_id, payload):
         if vote.issuer_public_key == public_key:
             raise InvalidTransaction("Issuer has voted!")
 
-    actor_vote = voting_pb2.Voting.Vote(issuer_public_key=public_key, accepted=payload.data.accepted,
+    timestamp = payload.timestamp
+    actor_vote = voting_pb2.Voting.Vote(issuer_public_key=public_key, accept=payload.data.accept,
                                         timestamp=payload.timestamp, transaction_id=transaction_id)
     if public_key in list_ministry_public_key:
 
-        if payload.data.accepted:
+        if payload.data.accept:
             close_vote_timestamp = payload.timestamp
             vote_result = voting_pb2.Voting.WIN
             state.add_one_b4e_environment(transaction_id=transaction_id)
-            if voting.accepted:
-                state.set_active_actor(payload.data.elector_public_key)
-            else:
-                state.set_reject_actor(payload.data.elector_public_key)
+            if voting.vote_type == voting_pb2.Voting.ACTIVE:
+                state.set_active_actor(payload.data.elector_public_key, timestamp, transaction_id)
+            elif voting.vote_type == voting_pb2.Voting.REJECT:
+                state.set_reject_actor(payload.data.elector_public_key, timestamp, transaction_id)
         else:
-            vote_result = voting_pb2.Voting.UNKNOWN
+            if voting.vote_type == voting_pb2.Voting.REJECT:
+                state.set_active_actor(payload.data.elector_public_key, timestamp, transaction_id)
+            elif voting.vote_type == voting_pb2.Voting.ACTIVE:
+                state.set_reject_actor(payload.data.elector_public_key, timestamp, transaction_id)
 
         state.update_voting(payload.data.elector_public_key, vote_result,
                             actor_vote, timestamp=close_vote_timestamp)
 
         return
+
+    actor = state.get_actor(public_key)
+    _check_is_valid_actor(actor)
+    if actor.role != actor_pb2.Actor.INSTITUTION:
+        raise InvalidTransaction("Actor must be INSTITUTION")
+
+    env = state.get_b4e_environment()
+    election = voting.vote
+    accept = 0
+    reject = 0
+    total = env.institution_number + 1
+    # count accept and reject voted
+    for voted in election:
+        if voted.accept:
+            accept += 1
+        else:
+            reject += 1
+    # add voted
+    if payload.data.accept:
+        accept += 1
+    else:
+        reject += 1
+
+        # check for close vote
+    if accept / total > VOTE_RATE:
+        vote_result = voting_pb2.Voting.WIN
+        state.update_voting(payload.data.elector_public_key, vote_result,
+                            actor_vote, timestamp=payload.timestamp)
+        if voting.vote_type == voting_pb2.Voting.ACTIVE:
+            state.set_active_actor(payload.data.elector_public_key, timestamp, transaction_id)
+        elif voting.vote_type == voting_pb2.Voting.REJECT:
+            state.set_reject_actor(payload.data.elector_public_key, timestamp, transaction_id)
+        return
+
+    if reject / total > VOTE_RATE:
+        vote_result = voting_pb2.Voting.LOSE
+        state.update_voting(payload.data.elector_public_key, vote_result,
+                            actor_vote, timestamp=payload.timestamp)
+        if voting.vote_type == voting_pb2.Voting.REJECT:
+            state.set_active_actor(payload.data.elector_public_key, timestamp, transaction_id)
+        elif voting.vote_type == voting_pb2.Voting.ACTIVE:
+            state.set_reject_actor(payload.data.elector_public_key, timestamp, transaction_id)
+        return
+        #
+    vote_result = voting_pb2.Voting.UNKNOWN
+    state.update_voting(payload.data.elector_public_key, vote_result,
+                        actor_vote, timestamp=close_vote_timestamp)

@@ -14,7 +14,7 @@ def get_portfolio(self, id, owner_public_key, manager_public_key):
         state_entries = self._context.get_state(
             addresses=[address], timeout=self._timeout)
         if state_entries:
-            container = record_pb2.RecordContainer()
+            container = portfolio_pb2.PortfolioContainer()
             container.ParseFromString(state_entries[0].data)
             for portfolio in container.entries:
                 if portfolio.id == id and portfolio.owner_public_key == owner_public_key \
@@ -47,7 +47,7 @@ def create_edu_program(self, portfolio):
 def update_data(self, id, owner_public_key,
                 manager_public_key, new_data):
     address = addresser.get_portfolio_address(id, owner_public_key, manager_public_key)
-    container = record_pb2.RecordContainer()
+    container = portfolio_pb2.PortfolioContainer()
     state_entries = self._context.get_state(
         addresses=[address], timeout=self._timeout)
     if state_entries:
@@ -56,7 +56,7 @@ def update_data(self, id, owner_public_key,
             if portfolio.id == id \
                     and portfolio.owner_public_key == owner_public_key \
                     and portfolio.manager_public_key == manager_public_key:
-                portfolio_data = portfolio.versions[-1]
+                portfolio_data = portfolio.portfolio_data[-1]
                 portfolio_data.data = new_data
 
     data = container.SerializeToString()
