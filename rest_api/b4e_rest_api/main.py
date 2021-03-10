@@ -26,6 +26,12 @@ from sawtooth_sdk.processor.log import init_console_logging
 from aiohttp import web
 
 from rest_api.b4e_rest_api.route_handler.route_handler import RouteHandler
+from rest_api.b4e_rest_api.route_handler.actor_route_handler import ActorRouteHandler
+from rest_api.b4e_rest_api.route_handler.blockchain_route_handler import BlockchainRouteHandler
+from rest_api.b4e_rest_api.route_handler.class_route_handler import ClassRouteHandler
+from rest_api.b4e_rest_api.route_handler.record_route_handler import RecordRouteHandler
+from rest_api.b4e_rest_api.route_handler.student_route_handler import StudentRouteHandler
+from rest_api.b4e_rest_api.route_handler.voting_route_handler import VotingRouteHandler
 from rest_api.b4e_rest_api.database import Database
 from rest_api.b4e_rest_api.messaging import Messenger
 
@@ -98,32 +104,19 @@ def start_rest_api(host, port, messenger, database):
     messenger.open_db_collection()
 
     handler = RouteHandler(loop, messenger, database)
-
-    app.router.add_post('/set_b43_environment', handler.set_b4e_environment)
-    app.router.add_post('/create_institution', handler.create_institution)
-    app.router.add_post('/create_teacher', handler.create_teacher)
-    app.router.add_post('/create_teachers', handler.create_teachers)
-    app.router.add_post('/create_edu_officer', handler.create_edu_officer)
-    app.router.add_post('/create_edu_officers', handler.create_edu_officers)
-    app.router.add_post('/create_vote', handler.create_vote)
-    app.router.add_post('/create_class', handler.create_class)
-    app.router.add_post('/create_classes', handler.create_classes)
-    app.router.add_post('/create_subject', handler.create_subject)
-    app.router.add_post('/create_subjects', handler.create_subjects)
-    app.router.add_post('/create_cert', handler.create_cert)
-    app.router.add_post('/create_certs', handler.create_certs)
-    app.router.add_post('/update_record', handler.update_record)
-    app.router.add_post('/update_actor_info', handler.update_actor_info)
-    app.router.add_post('/reject_institution', handler.reject_institution)
-
-    app.router.add_post('/get_new_key_pair', handler.get_new_key_pair)
-    app.router.add_get('/transaction/{transaction_id}', handler.fetch_data_transaction)
-    app.router.add_get('/record/{transaction_id}', handler.fetch_record_transaction)
-    app.router.add_get('/state/{data_address}', handler.fetch_data_state)
-    app.router.add_get('/student_data/{student_public_key}', handler.fetch_data_student)
-
-    app.router.add_post('/test_time_submit_transaction', handler.test_time_create_transaction)
-
+    actor_handler = ActorRouteHandler(loop, messenger, database)
+    blockchain_handler = BlockchainRouteHandler(loop, messenger, database)
+    class_handler = ClassRouteHandler(loop, messenger, database)
+    record_handler = RecordRouteHandler(loop, messenger, database)
+    student_handler = StudentRouteHandler(loop, messenger, database)
+    voting_handler = VotingRouteHandler(loop, messenger, database)
+    handler.add_route(app)
+    actor_handler.add_route(app)
+    blockchain_handler.add_route(app)
+    class_handler.add_route(app)
+    record_handler.add_route(app)
+    student_handler.add_route(app)
+    voting_handler.add_route(app)
     LOGGER.info('Starting Simple Supply REST API on %s:%s', host, port)
     web.run_app(
         app,

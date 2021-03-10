@@ -203,6 +203,7 @@ class Messenger(object):
                                 subject_id,
                                 credit,
                                 teacher_public_key,
+                                student_public_keys,
                                 timestamp):
 
         transaction_signer = self._crypto_factory.new_signer(
@@ -215,6 +216,7 @@ class Messenger(object):
                                                     subject_id,
                                                     credit,
                                                     teacher_public_key,
+                                                    student_public_keys,
                                                     timestamp)
         await self._send_and_wait_for_commit(batch)
         transaction_id = batch.transactions[0].header_signature
@@ -235,52 +237,85 @@ class Messenger(object):
         list_transaction_id = await self.submit_multi_batches(list_batches)
         return list_transaction_id
 
-    async def send_create_vote(self, private_key,
-                               elector_public_key,
-                               accepted,
-                               timestamp):
-
+    async def send_create_edu_program(self, private_key, student_public_key, edu_program, timestamp):
         transaction_signer = self._crypto_factory.new_signer(
             secp256k1.Secp256k1PrivateKey.from_hex(private_key))
-        issuer_public_key = transaction_signer.get_public_key().as_hex()
         batch_signer = transaction_signer
 
-        batch = transaction_creation.make_create_vote(transaction_signer,
-                                                      batch_signer,
-                                                      issuer_public_key,
-                                                      elector_public_key,
-                                                      accepted,
-                                                      timestamp)
-        await self._send_and_wait_for_commit(batch)
-        transaction_id = batch.transactions[0].header_signature
-        return transaction_id
+        batch = portfolio_transaction.make_create_edu_program(transaction_signer,
+                                                              batch_signer,
+                                                              student_public_key,
+                                                              edu_program,
+                                                              timestamp)
+        list_transaction_id = await self._send_and_wait_for_commit(batch)
+        return list_transaction_id
+
+    async def send_create_edu_programs(self, private_key, profiles, timestamp):
+        transaction_signer = self._crypto_factory.new_signer(
+            secp256k1.Secp256k1PrivateKey.from_hex(private_key)
+        )
+        batch_signer = transaction_signer
+        list_batches = portfolio_transaction.make_create_edu_programs(transaction_signer,
+                                                                      batch_signer,
+                                                                      profiles,
+                                                                      timestamp)
+        list_transaction_id = await self.submit_multi_batches(list_batches)
+        return list_transaction_id
 
     async def send_create_record(self, private_key,
                                  owner_public_key,
                                  manager_public_key,
                                  record_id,
-                                 record_type,
-                                 record_data,
+                                 portfolio_id,
+                                 cipher,
+                                 record_hash,
                                  timestamp):
 
         transaction_signer = self._crypto_factory.new_signer(
             secp256k1.Secp256k1PrivateKey.from_hex(private_key))
         batch_signer = transaction_signer
 
-        batch = transaction_creation.make_create_record(transaction_signer,
-                                                        batch_signer,
-                                                        owner_public_key,
-                                                        manager_public_key,
-                                                        record_id,
-                                                        record_type,
-                                                        record_data,
-                                                        timestamp)
+        batch = record_transaction.make_create_record(transaction_signer,
+                                                      batch_signer,
+                                                      owner_public_key,
+                                                      manager_public_key,
+                                                      record_id,
+                                                      portfolio_id,
+                                                      cipher,
+                                                      record_hash,
+                                                      timestamp)
+        await self._send_and_wait_for_commit(batch)
+        transaction_id = batch.transactions[0].header_signature
+        return transaction_id
+
+    async def send_create_subject(self, private_key,
+                                  owner_public_key,
+                                  manager_public_key,
+                                  record_id,
+                                  portfolio_id,
+                                  cipher,
+                                  record_hash,
+                                  timestamp):
+
+        transaction_signer = self._crypto_factory.new_signer(
+            secp256k1.Secp256k1PrivateKey.from_hex(private_key))
+        batch_signer = transaction_signer
+
+        batch = record_transaction.make_create_subject(transaction_signer,
+                                                       batch_signer,
+                                                       owner_public_key,
+                                                       manager_public_key,
+                                                       record_id,
+                                                       portfolio_id,
+                                                       cipher,
+                                                       record_hash,
+                                                       timestamp)
         await self._send_and_wait_for_commit(batch)
         transaction_id = batch.transactions[0].header_signature
         return transaction_id
 
     async def send_create_subjects(self, private_key,
-                                   institution_public_key,
+                                   manager_public_key,
                                    class_id,
                                    list_subjects,
                                    timestamp):
@@ -289,14 +324,38 @@ class Messenger(object):
             secp256k1.Secp256k1PrivateKey.from_hex(private_key))
         batch_signer = transaction_signer
 
-        list_batches = transaction_creation.make_create_subjects(transaction_signer,
-                                                                 batch_signer,
-                                                                 institution_public_key,
-                                                                 class_id,
-                                                                 list_subjects,
-                                                                 timestamp)
+        list_batches = record_transaction.make_create_subjects(transaction_signer,
+                                                               batch_signer,
+                                                               manager_public_key,
+                                                               class_id,
+                                                               list_subjects,
+                                                               timestamp)
         list_transaction_id = await self.submit_multi_batches(list_batches)
         return list_transaction_id
+
+    async def send_create_cert(self, private_key,
+                               owner_public_key,
+                               record_id,
+                               portfolio_id,
+                               cipher,
+                               record_hash,
+                               timestamp):
+
+        transaction_signer = self._crypto_factory.new_signer(
+            secp256k1.Secp256k1PrivateKey.from_hex(private_key))
+        batch_signer = transaction_signer
+
+        batch = record_transaction.make_create_cert(transaction_signer,
+                                                    batch_signer,
+                                                    owner_public_key,
+                                                    record_id,
+                                                    portfolio_id,
+                                                    cipher,
+                                                    record_hash,
+                                                    timestamp)
+        await self._send_and_wait_for_commit(batch)
+        transaction_id = batch.transactions[0].header_signature
+        return transaction_id
 
     async def send_create_certs(self, private_key,
                                 certs,
@@ -306,19 +365,42 @@ class Messenger(object):
             secp256k1.Secp256k1PrivateKey.from_hex(private_key))
         batch_signer = transaction_signer
 
-        list_batches = transaction_creation.make_create_certs(transaction_signer,
-                                                              batch_signer,
-                                                              certs,
-                                                              timestamp)
+        list_batches = record_transaction.make_create_certs(transaction_signer,
+                                                            batch_signer,
+                                                            certs,
+                                                            timestamp)
 
         list_transaction_id = await self.submit_multi_batches(list_batches)
         return list_transaction_id
 
-    async def send_create_subject(self, private_key,
+    async def send_update_record(self, private_key,
+                                 owner_public_key,
+                                 record_id,
+                                 cipher,
+                                 record_hash,
+                                 status,
+                                 timestamp):
+
+        transaction_signer = self._crypto_factory.new_signer(
+            secp256k1.Secp256k1PrivateKey.from_hex(private_key))
+        batch_signer = transaction_signer
+
+        batch = record_transaction.make_update_record(transaction_signer,
+                                                      batch_signer,
+                                                      owner_public_key,
+                                                      record_id,
+                                                      cipher,
+                                                      record_hash,
+                                                      status,
+                                                      timestamp)
+        await self._send_and_wait_for_commit(batch)
+        transaction_id = batch.transactions[0].header_signature
+        return transaction_id
+
+    async def send_modify_subject(self, private_key,
                                   owner_public_key,
-                                  manager_public_key,
                                   record_id,
-                                  record_data,
+                                  cipher,
                                   record_hash,
                                   timestamp):
 
@@ -326,64 +408,107 @@ class Messenger(object):
             secp256k1.Secp256k1PrivateKey.from_hex(private_key))
         batch_signer = transaction_signer
 
-        batch = transaction_creation.make_create_subject(transaction_signer,
-                                                         batch_signer,
-                                                         owner_public_key,
-                                                         manager_public_key,
-                                                         record_id,
-                                                         record_data,
-                                                         record_hash,
-                                                         timestamp)
+        batch = record_transaction.make_modify_subject(transaction_signer,
+                                                       batch_signer,
+                                                       owner_public_key,
+                                                       record_id,
+                                                       cipher,
+                                                       record_hash,
+                                                       timestamp)
         await self._send_and_wait_for_commit(batch)
         transaction_id = batch.transactions[0].header_signature
         return transaction_id
 
-    async def send_create_cert(self, private_key,
+    async def send_modify_cert(self, private_key,
                                owner_public_key,
                                record_id,
-                               record_data,
+                               cipher,
                                record_hash,
                                timestamp):
 
         transaction_signer = self._crypto_factory.new_signer(
             secp256k1.Secp256k1PrivateKey.from_hex(private_key))
         batch_signer = transaction_signer
-        manager_public_key = transaction_signer.get_public_key().as_hex()
 
-        batch = transaction_creation.make_create_cert(transaction_signer,
-                                                      batch_signer,
-                                                      owner_public_key,
-                                                      manager_public_key,
-                                                      record_id,
-                                                      record_data,
-                                                      record_hash,
-                                                      timestamp)
+        batch = record_transaction.make_modify_cert(transaction_signer,
+                                                    batch_signer,
+                                                    owner_public_key,
+                                                    record_id,
+                                                    cipher,
+                                                    record_hash,
+                                                    timestamp)
         await self._send_and_wait_for_commit(batch)
         transaction_id = batch.transactions[0].header_signature
         return transaction_id
 
-    async def send_update_record(self, private_key,
+    async def send_revoke_cert(self, private_key,
+                               owner_public_key,
+                               record_id,
+                               timestamp):
+
+        transaction_signer = self._crypto_factory.new_signer(
+            secp256k1.Secp256k1PrivateKey.from_hex(private_key))
+        batch_signer = transaction_signer
+
+        batch = record_transaction.make_revoke_cert(transaction_signer,
+                                                    batch_signer,
+                                                    owner_public_key,
+                                                    record_id,
+                                                    timestamp)
+        await self._send_and_wait_for_commit(batch)
+        transaction_id = batch.transactions[0].header_signature
+        return transaction_id
+
+    async def send_reactive_cert(self, private_key,
                                  owner_public_key,
-                                 manager_public_key,
                                  record_id,
-                                 record_data,
-                                 record_hash,
-                                 active,
                                  timestamp):
 
         transaction_signer = self._crypto_factory.new_signer(
             secp256k1.Secp256k1PrivateKey.from_hex(private_key))
         batch_signer = transaction_signer
 
-        batch = transaction_creation.make_update_record(transaction_signer,
-                                                        batch_signer,
-                                                        owner_public_key,
-                                                        manager_public_key,
-                                                        record_id,
-                                                        record_data,
-                                                        record_hash,
-                                                        active,
-                                                        timestamp)
+        batch = record_transaction.make_reactive_cert(transaction_signer,
+                                                      batch_signer,
+                                                      owner_public_key,
+                                                      record_id,
+                                                      timestamp)
+        await self._send_and_wait_for_commit(batch)
+        transaction_id = batch.transactions[0].header_signature
+        return transaction_id
+
+    async def send_create_vote(self, private_key,
+                               elector_public_key,
+                               decision,
+                               timestamp):
+
+        transaction_signer = self._crypto_factory.new_signer(
+            secp256k1.Secp256k1PrivateKey.from_hex(private_key))
+        batch_signer = transaction_signer
+
+        batch = voting_transaction.make_create_vote(transaction_signer,
+                                                    batch_signer,
+                                                    elector_public_key,
+                                                    decision,
+                                                    timestamp)
+        await self._send_and_wait_for_commit(batch)
+        transaction_id = batch.transactions[0].header_signature
+        return transaction_id
+
+    async def send_create_voting(self, private_key,
+                                 elector_public_key,
+                                 vote_type,
+                                 timestamp):
+
+        transaction_signer = self._crypto_factory.new_signer(
+            secp256k1.Secp256k1PrivateKey.from_hex(private_key))
+        batch_signer = transaction_signer
+
+        batch = voting_transaction.make_create_voting(transaction_signer,
+                                                      batch_signer,
+                                                      elector_public_key,
+                                                      vote_type,
+                                                      timestamp)
         await self._send_and_wait_for_commit(batch)
         transaction_id = batch.transactions[0].header_signature
         return transaction_id
@@ -406,22 +531,6 @@ class Messenger(object):
                                                             email,
                                                             address,
                                                             timestamp)
-        await self._send_and_wait_for_commit(batch)
-        transaction_id = batch.transactions[0].header_signature
-        return transaction_id
-
-    async def send_reject_institution(self, private_key,
-                                      institution_public_key,
-                                      timestamp):
-
-        transaction_signer = self._crypto_factory.new_signer(
-            secp256k1.Secp256k1PrivateKey.from_hex(private_key))
-        batch_signer = transaction_signer
-
-        batch = transaction_creation.make_reject_institution(transaction_signer,
-                                                             batch_signer,
-                                                             institution_public_key,
-                                                             timestamp)
         await self._send_and_wait_for_commit(batch)
         transaction_id = batch.transactions[0].header_signature
         return transaction_id
@@ -502,17 +611,18 @@ class Messenger(object):
     async def submit_multi_batches(self, list_batches):
         nest_asyncio.apply()
         loop = asyncio.get_event_loop()
-        futures = []
+        # futures = []
         list_transaction_id = []
 
         for batch in list_batches:
             await self._send_and_wait_for_commit(batch)
-            futures.append(self._send_and_wait_for_commit(batch))
+            # futures.append(self._send_and_wait_for_commit(batch))
             for transaction in batch.transactions:
                 list_transaction_id.append(transaction.header_signature)
 
-        loop.run_until_complete(asyncio.wait(futures))
-        # await self._send_and_wait_for_commit_multi_batches(list_batches)
+        # loop.run_until_complete(asyncio.wait(futures))
+        # loop.run_until_complete(asyncio.wait([self._send_and_wait_for_commit_multi_batches(list_batches)], timeout=None,
+        #                                      return_when=asyncio.ALL_COMPLETED))
         return list_transaction_id
 
     async def _send_and_wait_for_commit(self, batch):

@@ -14,11 +14,13 @@ from protobuf.b4e_protobuf.b4e_environment_pb2 import B4EEnvironmentContainer
 from protobuf.b4e_protobuf.voting_pb2 import VotingContainer
 from protobuf.b4e_protobuf.class_pb2 import ClassContainer
 from protobuf.b4e_protobuf.record_pb2 import RecordContainer
+from protobuf.b4e_protobuf.portfolio_pb2 import PortfolioContainer
 from google.protobuf.json_format import MessageToJson
 from google.protobuf.json_format import MessageToDict
 
 CONTAINERS = {
     AddressSpace.ACTOR: ActorContainer,
+    AddressSpace.PORTFOLIO: PortfolioContainer,
     AddressSpace.RECORD: RecordContainer,
     AddressSpace.CLASS: ClassContainer,
     AddressSpace.VOTING: VotingContainer,
@@ -211,7 +213,7 @@ def get_student_data(student_public_key):
         try:
             state_dict = json.loads(response.content)
             # print(state_dict['data'])
-            cert = {}
+            cert = []
             subjects = []
             for state in state_dict['data']:
                 if addresser.is_owner(state['address'], student_public_key):
@@ -221,16 +223,17 @@ def get_student_data(student_public_key):
                     # latest_record_data = max(deserialize['record_data'], key=lambda obj: obj['timestamp'])
                     record = {'address': state['address'], 'versions': []}
 
-                    for record_data in deserialize['record_data']:
+                    for record_data in deserialize['versions']:
                         record['versions'].append({
                             'txid': record_data['transaction_id'],
                             'timestamp': record_data['timestamp'],
-                            'active': record_data['active'],
-                            'cipher': record_data['record_data']
+                            'type': record_data['record_status'],
+                            'cipher': record_data['cipher'],
+                            'hash': record_data['hash'],
 
                         })
                     if deserialize['record_type'] == 'CERTIFICATE':
-                        cert = record
+                        cert.append(record)
                     elif deserialize['record_type'] == 'SUBJECT':
                         subjects.append(record)
 

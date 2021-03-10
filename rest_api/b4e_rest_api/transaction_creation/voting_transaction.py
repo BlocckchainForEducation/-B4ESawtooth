@@ -6,7 +6,7 @@ from rest_api.b4e_rest_api.transaction_creation.transaction_creation import _mak
 def make_create_vote(transaction_signer,
                      batch_signer,
                      elector_public_key,
-                     accepted,
+                     decision,
                      timestamp):
     issuer_public_key = transaction_signer.get_public_key().as_hex()
     environment_address = addresser.ENVIRONMENT_ADDRESS
@@ -19,7 +19,7 @@ def make_create_vote(transaction_signer,
     outputs = [voting_address, elector_address, environment_address]
 
     action = payload_pb2.VoteAction(elector_public_key=elector_public_key,
-                                    accepted=accepted)
+                                    accepted=_get_vote_decision(decision))
 
     payload = payload_pb2.B4EPayload(
         action=payload_pb2.B4EPayload.VOTE,
@@ -34,6 +34,14 @@ def make_create_vote(transaction_signer,
         outputs=outputs,
         transaction_signer=transaction_signer,
         batch_signer=batch_signer)
+
+
+def _get_vote_decision(i):
+    switch = {
+        "accept": True,
+        "decline": False
+    }
+    return switch.get(i)
 
 
 def _get_vote_type(i):
