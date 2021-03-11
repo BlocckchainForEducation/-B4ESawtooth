@@ -62,7 +62,7 @@ def update_record(self, record_id, owner_public_key,
                     timestamp=timestamp,
                     transaction_id=transaction_id
                 )
-                record.record_data.extend([new_data])
+                record.versions.extend([new_data])
 
     data = container.SerializeToString()
     updated_state = {}
@@ -111,14 +111,14 @@ def update_status(self, record_id, owner_public_key,
             if record.record_id == record_id:
                 pre_data = record.versions[-1]
                 new_data = record_pb2.Record.RecordData(
-                    protfolio_id=pre_data.portfolio,
+                    portfolio_id=pre_data.portfolio_id,
                     cipher=pre_data.cipher,
-                    hash=pre_data.hash_data,
+                    hash=pre_data.hash,
                     record_status=record_status,
                     timestamp=timestamp,
                     transaction_id=transaction_id
                 )
-                record.record_data.extend([new_data])
+                record.versions.extend([new_data])
 
     data = container.SerializeToString()
     updated_state = {}

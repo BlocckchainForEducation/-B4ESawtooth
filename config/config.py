@@ -36,13 +36,14 @@ class MongoDBConfig:
     PORT = 27017
     USER_NAME = ""
     PASSWORD = ""
-    DATABASE = "B4E_Ministry_Backend"
+    DATABASE = "B4E_blockchain"
     UNIVERSITY_PROFILE = "UniversityProfile"
     VOTE_REQUEST = "VoteRequest"
     USER_COLLECTION = 'b4e_users'
     ENVIRONMENT_COLLECTION = 'b4e_environments'
     CLASS_COLLECTION = 'b4e_classes'
     ACTOR_COLLECTION = 'b4e_actors'
+    PORTFOLIO_COLLECTION = 'b4e_portfolio'
     CERT_COLLECTION = 'b4e_certs'
     SUBJECT_COLLECTION = 'b4e_subjects'
     VOTING_COLLECTION = 'b4e_votings'
@@ -115,3 +116,9 @@ class Test:
     HASH_DATA = "WQRUY124YOU23Y40IIWUQROPWQERU"
     DATABASE = "test_db"
     TEST_COLLECTION = "test_collection"
+
+
+class SubscriberConfig:
+    HOST = "localhost"
+    PORT = 1212
+    PROTOCOL = "http://"

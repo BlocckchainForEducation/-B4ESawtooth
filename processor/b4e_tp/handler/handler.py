@@ -128,7 +128,7 @@ class B4EHandler(TransactionHandler):
                 transaction_id=transaction.signature,
                 payload=payload)
         elif payload.action == payload_pb2.B4EPayload.MODIFY_CERT:
-            record_handler.modifiy_cert(
+            record_handler.modify_cert(
                 state=state,
                 public_key=header.signer_public_key,
                 transaction_id=transaction.signature,

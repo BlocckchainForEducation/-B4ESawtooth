@@ -73,9 +73,9 @@ def get_portfolio_address(id, owner_public_key, manager_public_key):
     owner_prefix = hashlib.sha512(
         owner_public_key.encode('utf-8')).hexdigest()[-10:]
     manager_prefix = hashlib.sha512(
-        manager_public_key.encode('utf-8')).hexdigest()[-10:]
+        manager_public_key.encode('utf-8')).hexdigest()[-20:]
     return NAMESPACE + RECORD_PREFIX + owner_prefix + manager_prefix \
-           + hashlib.sha512(id.encode('utf-8')).hexdigest()[:41]
+           + hashlib.sha512(id.encode('utf-8')).hexdigest()[:31]
 
 
 def get_address_type(address):

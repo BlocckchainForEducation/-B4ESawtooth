@@ -36,8 +36,10 @@ def create_edu_program(state, public_key, transaction_id, payload):
     if state.get_portfolio(edu_id, owner_public_key, public_key):
         raise InvalidTransaction("Edu program has been existed")
 
-    if _check_data_edu_program(data):
+    if not _check_data_edu_program(data):
         raise InvalidTransaction("Invalid fields on edu program")
+
+    _check_type_edu_program_field(data)
 
     portfolio_data = portfolio_pb2.Portfolio.PortfolioData(portfolio_type=portfolio_type,
                                                            data=data,
@@ -59,6 +61,14 @@ def _check_data_edu_program(data):
     except Exception as e:
         print(e)
         return False
+
+
+def _check_type_edu_program_field(data):
+    edu_program_data = json.loads(data)
+    fields = ["totalCredit", "minYear", "maxYear"]
+    for field in fields:
+        if type(edu_program_data.get(field)) != int:
+            raise InvalidTransaction(field + " must be int type")
 
 
 def _validate_fields(required_fields, data):

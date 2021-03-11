@@ -28,7 +28,7 @@ def get_portfolio(self, id, owner_public_key, manager_public_key):
 
 
 def create_edu_program(self, portfolio):
-    address = addresser.get_record_address(portfolio.id, portfolio.owner_public_key, portfolio.manager_public_key)
+    address = addresser.get_portfolio_address(portfolio.id, portfolio.owner_public_key, portfolio.manager_public_key)
 
     container = portfolio_pb2.PortfolioContainer()
     state_entries = self._context.get_state(

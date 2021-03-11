@@ -41,8 +41,8 @@ message B4EPayload{
   UpdateRecordAction update_record = 12;
   ModifyRecordAction modify_subject = 13;
   ModifyRecordAction modify_cert = 14;
-  RevokeCertAction revoke_cert = 15;
-  ReactiveCertAction reactive_cert = 16;
+  ChangeStatusCertAction revoke_cert = 15;
+  ChangeStatusCertAction reactive_cert = 16;
   UpdateActorProfileAction update_actor_profile = 17;
   RejectInstitutionAction reject_institution = 18;
   ActiveInstitutionAction active_institution = 19;
@@ -129,15 +129,10 @@ message ModifyRecordAction{
   string cipher = 4;
   string hash = 5;
 }
-message RevokeCertAction{
+message ChangeStatusCertAction{
   string owner_public_key = 1;
   string record_id = 2;
 
-}
-
-message ReactiveCertAction {
-  string owner_public_key = 1;
-  string record_id = 2;
 }
 
 message UpdateActorProfileAction {
