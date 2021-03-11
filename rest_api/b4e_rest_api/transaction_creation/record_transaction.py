@@ -381,8 +381,8 @@ def _status_change(transaction_signer,
     inputs = [manager_address, record_address]
 
     outputs = [record_address]
-    action = payload_pb2.RevokeCertAction(record_id=record_id,
-                                          owner_public_key=owner_public_key)
+    action = payload_pb2.ChangeStatusCertAction(record_id=record_id,
+                                                owner_public_key=owner_public_key)
     payload = None
     if action_name == payload_pb2.B4EPayload.REVOKE_CERT:
         payload = payload_pb2.B4EPayload(

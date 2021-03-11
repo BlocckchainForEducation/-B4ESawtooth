@@ -1,10 +1,13 @@
 import json
+import logging
 
 from addressing.b4e_addressing import addresser
 from config.config import SawtoothConfig
 from protobuf.b4e_protobuf import payload_pb2
 from rest_api.b4e_rest_api.transaction_creation.transaction_creation import slice_per, _make_batch, \
     _make_batch_multi_transactions
+
+LOGGER = logging.getLogger(__name__)
 
 
 def make_create_edu_program(transaction_signer,
@@ -58,12 +61,17 @@ def make_create_edu_programs(transaction_signer,
         for profile in profiles:
             edu_id = profile.get("eduProgram").get("eduProgramId")
             student_public_key = profile.get('publicKey')
-            edu_program = profile
+            edu_program = profile.get("eduProgram")
+            data = json.dumps(edu_program)
+            LOGGER.info("edu_program")
+            LOGGER.info(edu_program)
+            LOGGER.info("data")
+            LOGGER.info(data)
             edu_program_address = addresser.get_portfolio_address(edu_id,
                                                                   student_public_key,
                                                                   institution_public_key)
             inputs = [institution_address, edu_program_address]
-
+            LOGGER.info(inputs)
             outputs = [edu_program_address]
 
             action = payload_pb2.CreatePortfolioAction(id=edu_id,
