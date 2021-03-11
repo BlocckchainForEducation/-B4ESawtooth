@@ -12,6 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 # ------------------------------------------------------------------------------
+import logging
 
 from addressing.b4e_addressing import addresser
 from addressing.b4e_addressing.addresser import AddressSpace
@@ -20,14 +21,18 @@ from protobuf.b4e_protobuf.b4e_environment_pb2 import B4EEnvironmentContainer
 from protobuf.b4e_protobuf.voting_pb2 import VotingContainer
 from protobuf.b4e_protobuf.class_pb2 import ClassContainer
 from protobuf.b4e_protobuf.record_pb2 import RecordContainer
+from protobuf.b4e_protobuf.portfolio_pb2 import PortfolioContainer
 
 CONTAINERS = {
     AddressSpace.ACTOR: ActorContainer,
     AddressSpace.RECORD: RecordContainer,
+    AddressSpace.PORTFOLIO: PortfolioContainer,
     AddressSpace.CLASS: ClassContainer,
     AddressSpace.VOTING: VotingContainer,
     AddressSpace.ENVIRONMENT: B4EEnvironmentContainer
 }
+
+LOGGER = logging.getLogger(__name__)
 
 
 def deserialize_data(address, data):
@@ -60,11 +65,9 @@ def _parse_proto(proto_class, data):
 
 def _convert_proto_to_dict(proto):
     result = {}
-
     for field in proto.DESCRIPTOR.fields:
         key = field.name
         value = getattr(proto, key)
-
         if field.type == field.TYPE_MESSAGE:
             if field.label == field.LABEL_REPEATED:
                 result[key] = [_convert_proto_to_dict(p) for p in value]

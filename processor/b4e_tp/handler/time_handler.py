@@ -22,6 +22,3 @@ def timestamp_to_datetime(timestamp):
 
 def to_time_stamp(date_time):
     return datetime.datetime.timestamp(date_time)
-
-
-

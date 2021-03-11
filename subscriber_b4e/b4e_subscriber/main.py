@@ -21,7 +21,7 @@ from subscriber_b4e.b4e_subscriber.mongodb import Database
 from subscriber_b4e.b4e_subscriber.subscriber import Subscriber
 from subscriber_b4e.b4e_subscriber.event_handling import get_events_handler
 
-from config.config import SawtoothConfig, MongoDBConfig
+from config.config import SawtoothConfig, MongoDBConfig, SubscriberConfig
 
 KNOWN_COUNT = 15
 LOGGER = logging.getLogger(__name__)
@@ -46,6 +46,18 @@ def parse_args(args):
         '--db-port',
         help='The port of the database',
         default='27017')
+    database_parser.add_argument(
+        '--subscriber-host',
+        help='The host of the subscriber',
+        default='localhost')
+    database_parser.add_argument(
+        '--subscriber-port',
+        help='The port of the subscriber',
+        default='1212')
+    database_parser.add_argument(
+        '--subscriber-protocol',
+        help='The protocol of the subscriber',
+        default='http')
     database_parser.add_argument(
         '--db-user',
         help='The authorized user of the database',
@@ -138,7 +150,12 @@ def main():
     MongoDBConfig.PASSWORD = opts.db_password
     MongoDBConfig.HOST = opts.db_host
     MongoDBConfig.PORT = opts.db_port
+
+    SubscriberConfig.HOST = opts.subscriber_host
+    SubscriberConfig.PORT = opts.subscriber_port
+    SubscriberConfig.PROTOCOL = opts.subscriber_protocol
     SawtoothConfig.VALIDATOR_TCP = opts.connect
+
     LOGGER.info("database host:" + MongoDBConfig.HOST)
     do_subscribe()
 

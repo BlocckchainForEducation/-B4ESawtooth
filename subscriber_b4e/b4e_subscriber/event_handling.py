@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 # ------------------------------------------------------------------------------
-
+import json
 import re
 import logging
 import math
@@ -21,6 +21,7 @@ from sawtooth_sdk.protobuf.transaction_receipt_pb2 import StateChangeList
 
 from addressing.b4e_addressing.addresser import AddressSpace
 from addressing.b4e_addressing.addresser import NAMESPACE
+from subscriber_b4e.b4e_subscriber import request_api
 from subscriber_b4e.b4e_subscriber.decoding import deserialize_data
 
 MAX_BLOCK_NUMBER = int(math.pow(2, 63)) - 1
@@ -90,6 +91,8 @@ def _apply_state_changes(database, events, block_num, block_id):
             _apply_environment_change(database, block_num, resources)
         elif data_type == AddressSpace.CLASS:
             _apply_class_change(database, block_num, resources)
+        elif data_type == AddressSpace.PORTFOLIO:
+            _apply_portfolio_change(database, block_num, resources)
         else:
             LOGGER.warning('Unsupported data type: %s', data_type)
 
@@ -112,6 +115,7 @@ def _apply_actor_change(database, block_num, actors):
         actor['block_num'] = block_num
         actor['end_block_num'] = MAX_BLOCK_NUMBER
         database.insert_actor(actor)
+        request_api.request_registration(actor)
 
 
 def _apply_record_change(database, block_num, records):
@@ -126,6 +130,7 @@ def _apply_voting_change(database, block_num, votings):
         voting['block_num'] = block_num
         voting['end_block_num'] = MAX_BLOCK_NUMBER
         database.insert_voting(voting)
+        request_api.request_vote(voting)
 
 
 def _apply_environment_change(database, block_num, environments):
@@ -140,3 +145,10 @@ def _apply_class_change(database, block_num, classes):
         class_['block_num'] = block_num
         class_['end_block_num'] = MAX_BLOCK_NUMBER
         database.insert_class(class_)
+
+
+def _apply_portfolio_change(database, block_num, portfolios):
+    for portfolio in portfolios:
+        portfolio['block_num'] = block_num
+        portfolio['end_block_num'] = MAX_BLOCK_NUMBER
+        database.insert_portfolio(portfolio)

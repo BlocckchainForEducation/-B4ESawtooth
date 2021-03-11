@@ -183,6 +183,9 @@ services:
         --db-host mongo-ministry \
         --db-user b4e \
         --db-password b4e_bkc \
+        --subscriber-host 192.168.0.105 \
+        --subscriber-port 1212 \
+        --subscriber-protocol http \
         -C tcp://validator-0:4004 \
         -vv
       "

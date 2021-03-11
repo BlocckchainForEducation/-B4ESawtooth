@@ -7,6 +7,8 @@ from rest_api.b4e_rest_api.transaction_creation.transaction_creation import _mak
     slice_per
 
 LOGGER = logging.getLogger(__name__)
+
+
 def make_create_class(transaction_signer,
                       batch_signer,
                       class_id,
@@ -67,11 +69,14 @@ def make_create_classes(transaction_signer,
             outputs = [class_address]
             LOGGER.info(class_.get("studentPublicKeys"))
             LOGGER.info(type(class_.get("studentPublicKeys")))
+            student_public_keys = []
+            for student_public_key in class_.get("studentPublicKeys"):
+                student_public_keys.append(student_public_key)
             action = payload_pb2.CreateClassAction(class_id=class_.get("classId"),
                                                    subject_id=class_.get("subjectId"),
                                                    credit=int(class_.get("credit")),
                                                    teacher_public_key=class_.get("teacherPublicKey"),
-                                                   student_public_keys=class_.get("studentPublicKeys"))
+                                                   student_public_keys=student_public_keys)
 
             payload = payload_pb2.B4EPayload(
                 action=payload_pb2.B4EPayload.CREATE_CLASS,
