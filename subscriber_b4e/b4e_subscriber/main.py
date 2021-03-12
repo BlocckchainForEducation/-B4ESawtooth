@@ -47,17 +47,13 @@ def parse_args(args):
         help='The port of the database',
         default='27017')
     database_parser.add_argument(
-        '--subscriber-host',
+        '--rest-api-default',
+        help='The rest api default of sawtooth',
+        default='rest-api-0:8008 ')
+    database_parser.add_argument(
+        '--subscriber-host-url',
         help='The host of the subscriber',
-        default='localhost')
-    database_parser.add_argument(
-        '--subscriber-port',
-        help='The port of the subscriber',
-        default='1212')
-    database_parser.add_argument(
-        '--subscriber-protocol',
-        help='The protocol of the subscriber',
-        default='http')
+        default='http://localhost:1212')
     database_parser.add_argument(
         '--db-user',
         help='The authorized user of the database',
@@ -151,10 +147,16 @@ def main():
     MongoDBConfig.HOST = opts.db_host
     MongoDBConfig.PORT = opts.db_port
 
-    SubscriberConfig.HOST = opts.subscriber_host
-    SubscriberConfig.PORT = opts.subscriber_port
-    SubscriberConfig.PROTOCOL = opts.subscriber_protocol
+    SubscriberConfig.HOST_URL = opts.subscriber_host_url
+    LOGGER.info("SubscriberConfig.HOST_URL : " + SubscriberConfig.HOST_URL)
+
     SawtoothConfig.VALIDATOR_TCP = opts.connect
+
+    restapi = opts.rest_api_default
+    if "http://" not in restapi:
+        restapi = "http://" + restapi
+
+    SawtoothConfig.REST_API = restapi
 
     LOGGER.info("database host:" + MongoDBConfig.HOST)
     do_subscribe()

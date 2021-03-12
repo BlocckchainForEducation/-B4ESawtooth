@@ -115,7 +115,6 @@ def _apply_actor_change(database, block_num, actors):
         actor['block_num'] = block_num
         actor['end_block_num'] = MAX_BLOCK_NUMBER
         database.insert_actor(actor)
-        request_api.request_registration(actor)
 
 
 def _apply_record_change(database, block_num, records):
@@ -130,7 +129,7 @@ def _apply_voting_change(database, block_num, votings):
         voting['block_num'] = block_num
         voting['end_block_num'] = MAX_BLOCK_NUMBER
         database.insert_voting(voting)
-        request_api.request_vote(voting)
+        request_api.request_on_voting(voting)
 
 
 def _apply_environment_change(database, block_num, environments):

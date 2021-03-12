@@ -14,6 +14,8 @@
 # ------------------------------------------------------------------------------
 import logging
 
+import google
+
 from addressing.b4e_addressing import addresser
 from addressing.b4e_addressing.addresser import AddressSpace
 from protobuf.b4e_protobuf.actor_pb2 import ActorContainer
@@ -80,6 +82,8 @@ def _convert_proto_to_dict(proto):
             result[key] = name
 
         else:
+            if type(value) == google.protobuf.pyext._message.RepeatedScalarContainer:
+                value = list(value)
             result[key] = value
 
     return result

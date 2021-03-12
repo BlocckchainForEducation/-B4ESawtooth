@@ -14,6 +14,8 @@
 # -----------------------------------------------------------------------------
 
 import logging
+
+import google
 from pymongo import MongoClient
 import datetime
 import time
@@ -183,11 +185,9 @@ class Database(object):
 
     def insert_class(self, class_dict):
         try:
-            LOGGER.info("class_dict")
-            LOGGER.info(str(class_dict))
             key = {'class_id': class_dict['class_id'],
                    'institution_public_key': class_dict['institution_public_key']}
-            class_dict["student_public_keys"] = list(class_dict["student_public_keys"])
+            # class_dict["student_public_keys"] = list(class_dict["student_public_keys"])
             data = {"$set": class_dict}
             res = self.b4e_class_collection.update_one(key, data, upsert=True)
             return res
@@ -198,8 +198,6 @@ class Database(object):
 
     def insert_portfolio(self, portfolio_dict):
         try:
-            LOGGER.info("portfolio_dict")
-            LOGGER.info(str(portfolio_dict))
             key = {'owner_public_key': portfolio_dict['owner_public_key'],
                    'manager_public_key': portfolio_dict['manager_public_key'],
                    'id': portfolio_dict['id']}

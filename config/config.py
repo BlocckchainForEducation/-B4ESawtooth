@@ -122,3 +122,4 @@ class SubscriberConfig:
     HOST = "localhost"
     PORT = 1212
     PROTOCOL = "http://"
+    HOST_URL = "http://localhost:1212"
