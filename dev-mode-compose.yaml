@@ -188,6 +188,28 @@ services:
         -C tcp://validator-0:4004 \
         -vv
       "
+  b4e-student-endpoint:
+    build:
+      context: .
+      dockerfile: ./student_endpoint/Dockerfile
+    image: sawtooth-b4e-student-endpoint
+    container_name: b4e-student-endpoint
+    volumes:
+      - '.:/project/sawtooth-b4e'
+    depends_on:
+      - mongo-student
+    ports:
+      - '2727:8000'
+    command: |
+      bash -c "
+        b4e-student-api.py subscribe \
+        -B b4e-student-endpoint:8000 \
+        --db-host mongo-student \
+        --db-user b4e \
+        --db-password b4e_bkc \
+        -C tcp://validator-0:4004 \
+        -vv
+      "
   mongo-ministry:
     image: mongo
     container_name: mongo-ministry
@@ -199,6 +221,16 @@ services:
     environment:
       MONGO_INITDB_ROOT_USERNAME: b4e
       MONGO_INITDB_ROOT_PASSWORD: b4e_bkc
-    volumes:
-      - mongodb_data_ministry:/data
+
+  mongo-student:
+    image: mongo
+    container_name: mongo-student
+    restart: always
+    expose:
+      - 27017
+    ports:
+      - '27027:27017'
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: b4e
+      MONGO_INITDB_ROOT_PASSWORD: b4e_bkc
 

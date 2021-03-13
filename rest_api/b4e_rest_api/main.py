@@ -117,7 +117,7 @@ def start_rest_api(host, port, messenger, database):
     record_handler.add_route(app)
     student_handler.add_route(app)
     voting_handler.add_route(app)
-    LOGGER.info('Starting Simple Supply REST API on %s:%s', host, port)
+    LOGGER.info('Starting B4E REST API on %s:%s', host, port)
     web.run_app(
         app,
         host=host,

@@ -15,10 +15,10 @@
 
 import logging
 
-import google
 from pymongo import MongoClient
 import datetime
-import time
+
+from addressing.b4e_addressing import addresser
 from config.config import MongoDBConfig
 
 LOGGER = logging.getLogger(__name__)
@@ -134,16 +134,20 @@ class Database(object):
 
     def insert_record(self, record_dict):
         try:
-            key = {'owner_public_key': record_dict['owner_public_key'],
-                   'manager_public_key': record_dict['manager_public_key'],
-                   'record_id': record_dict['record_id']}
+            record_id = record_dict['owner_public_key']
+            owner_public_key = record_dict['manager_public_key']
+            manager_public_key = record_dict['record_id']
 
+            address = addresser.get_record_address(record_id, owner_public_key, manager_public_key)
+            key = {"address": address}
             new_version = record_dict['versions'][-1]
             new_version['block_num'] = record_dict['block_num']
             old_record = self.b4e_record_collection.find_one(key)
             if old_record:
                 old_record.get("versions").extend([new_version])
                 record_dict = old_record
+
+            record_dict["address"] = address
             data = {"$set": record_dict}
             res = self.b4e_record_collection.update_one(key, data, upsert=True)
             return
@@ -207,6 +211,11 @@ class Database(object):
             print(e)
             LOGGER.warning(e)
             return None
+
+    def get_student_data(self, public_key):
+        key = {"owner_public_key": public_key}
+        res = self.b4e_record_collection.find(key)
+        return res
 
 
 def timestamp_to_datetime(timestamp):
