@@ -31,6 +31,7 @@ class StudentAPI(object):
         LOGGER.info('Starting Student REST API on %s:%s', self._host, self._port)
 
         app.router.add_get('/student/data/{student_public_key}', self.student_data)
+        app.router.add_get('/record/{address}', self.record_address)
         app.router.add_get('/', self.hello_student)
 
         web.run_app(
@@ -66,8 +67,16 @@ class StudentAPI(object):
             }
         return json_response(student_data)
 
-    def record_address(self,request):
+    def record_address(self, request):
         address = request.match_info.get('address', '')
+        try:
+            record = self._database.get_record_by_address(address)
+            record_data = {"address": address,
+                           "versions": self.standard_versions(record.get("versions"))}
+        except Exception as e:
+            record_data = {"err": str(e)}
+
+        return json_response(record_data)
 
     def hello_student(self, request):
         return "hello"

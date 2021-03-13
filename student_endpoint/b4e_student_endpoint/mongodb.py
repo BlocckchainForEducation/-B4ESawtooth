@@ -134,9 +134,9 @@ class Database(object):
 
     def insert_record(self, record_dict):
         try:
-            record_id = record_dict['owner_public_key']
-            owner_public_key = record_dict['manager_public_key']
-            manager_public_key = record_dict['record_id']
+            record_id = record_dict['record_id']
+            owner_public_key = record_dict['owner_public_key']
+            manager_public_key = record_dict['manager_public_key']
 
             address = addresser.get_record_address(record_id, owner_public_key, manager_public_key)
             key = {"address": address}
@@ -216,6 +216,11 @@ class Database(object):
         key = {"owner_public_key": public_key}
         res = self.b4e_record_collection.find(key)
         return res
+
+    def get_record_by_address(self, address):
+        key = {"address": address}
+
+        return self.b4e_record_collection.find_one(key)
 
 
 def timestamp_to_datetime(timestamp):
