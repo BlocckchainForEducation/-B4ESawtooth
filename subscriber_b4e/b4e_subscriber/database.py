@@ -30,7 +30,7 @@ class Database(object):
 
     def connect(self, host=ElasticSearchConfig.HOST, port=ElasticSearchConfig.PORT):
         self.es = Elasticsearch([{"host": host, "port": port}])
-        # print("db connected")
+
 
     def create_indexes(self):
 

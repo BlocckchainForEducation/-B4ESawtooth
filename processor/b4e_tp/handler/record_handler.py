@@ -30,7 +30,6 @@ def create_record(state, public_key, transaction_id, payload):
 
 
 def _create_record_with_type(state, transaction_id, payload, record_type):
-    print(" create record")
     record_data = record_pb2.Record.RecordData(portfolio_id=payload.data.portfolio_id,
                                                cipher=payload.data.cipher,
                                                hash=payload.data.hash,
@@ -43,10 +42,7 @@ def _create_record_with_type(state, transaction_id, payload, record_type):
                                record_type=record_type,
                                versions=[record_data])
 
-    print("creating")
-    print(record)
     state.set_record(record)
-    print("created")
 
 
 def _get_record_type(i):
@@ -79,26 +75,17 @@ def create_cert(state, public_key, transaction_id, payload):
     portfolio_data = portfolio.portfolio_data[-1]
     if portfolio_data.portfolio_type != portfolio_pb2.Portfolio.EDU_PROGRAM:
         raise InvalidTransaction("Invalid portfolio type")
-    print(portfolio)
-    print("------------------------------------------")
-    print(portfolio_data)
+
     data = portfolio_data.data
-    print(data)
-    # with open('keys.json', encoding='utf-8') as data:
-    #     edu_program_data = json.load(data)
+
     edu_program_data = json.loads(data)
     if (not edu_program_data.get("currentCredit")) or (
             not edu_program_data.get("startTimestamp")) or (not edu_program_data.get("latestTimestamp")):
         raise InvalidTransaction("Not enough condition ")
-    print(" pass condition")
-    print("start ", edu_program_data.get("startTimestamp"))
-    print(edu_program_data.get("latestTimestamp"))
-    print("credit", edu_program_data.get("currentCredit"))
-    print("credit", edu_program_data.get("totalCredit"))
+
     if int(edu_program_data.get("currentCredit")) < int(edu_program_data.get("totalCredit")):
         raise InvalidTransaction("Not enough credit")
 
-    print("pass credit")
     start_year = time_handler.timestamp_to_datetime(int(edu_program_data.get("startTimestamp"))).year
     latest_year = time_handler.timestamp_to_datetime(int(edu_program_data.get("latestTimestamp"))).year
     duration = latest_year - start_year
@@ -107,9 +94,8 @@ def create_cert(state, public_key, transaction_id, payload):
         raise InvalidTransaction("Not reach min year")
     if duration > int(edu_program_data.get("maxYear")):
         raise InvalidTransaction("Exceed max year")
-    print("pass time")
+
     record_type = record_pb2.Record.CERTIFICATE
-    print("_create_record_with_type")
     _create_record_with_type(state, transaction_id, payload, record_type)
 
 
@@ -142,8 +128,6 @@ def create_subject(state, public_key, transaction_id, payload):
     if portfolio_data.portfolio_type != portfolio_pb2.Portfolio.EDU_PROGRAM:
         raise InvalidTransaction("Invalid portfolio type")
     edu_program_data = json.loads(portfolio_data.data)
-    print("edu_program_data"),
-    print(edu_program_data.get("minYear"))
 
     if not edu_program_data.get('currentCredit'):
         edu_program_data['currentCredit'] = class_.credit

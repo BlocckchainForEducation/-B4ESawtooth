@@ -117,7 +117,7 @@ def get_payload_from_block(block_id, address):
 
                 for transaction in batch['transactions']:
                     tran = json.loads(json.dumps(transaction))
-                    print(tran['header']['outputs'])
+
                     if address in transaction['header']['outputs']:
                         return transaction['payload']
 
