@@ -1,4 +1,5 @@
 import asyncio
+import json
 import logging
 import sys
 import nest_asyncio
@@ -8,6 +9,7 @@ from aiohttp import web
 from aiohttp.web import json_response
 
 from addressing.b4e_addressing import addresser
+from statistic.b4e_statistic.errors import ApiNotFound
 
 LOGGER = logging.getLogger(__name__)
 
@@ -33,6 +35,8 @@ class StudentAPI(object):
         app.router.add_get('/student/data/{student_public_key}', self.student_data)
         app.router.add_get('/record/{address}', self.record_address)
         app.router.add_get('/', self.hello_student)
+        app.router.add_get('/records', self.get_records)
+        app.router.add_get('/statistic', self.get_statistic)
 
         web.run_app(
             app,
@@ -67,8 +71,13 @@ class StudentAPI(object):
             }
         return json_response(student_data)
 
+    async def get_statistic(self, request):
+        records = await self._database.get_cert_by_year()
+        return json_response(records)
+
     def record_address(self, request):
         address = request.match_info.get('address', '')
+
         try:
             record = self._database.get_record_by_address(address)
             record_data = {"address": address,
@@ -80,6 +89,25 @@ class StudentAPI(object):
 
     def hello_student(self, request):
         return "hello"
+
+    async def get_records(self, request):
+        all_records = await self._database.get_records()
+        all_blocks = await self._database.get_blocks()
+        all_edu = await self._database.get_edus()
+        all_classes = await self._database.get_classes()
+        all_actors = await self._database.get_actors()
+        all_records = date_to_string_record(all_records)
+        all_edu = date_to_string_record(all_edu)
+        all_classes = date_to_string_record(all_classes)
+        all_actors = date_to_string_record(all_actors)
+
+        return json_response({
+            "all_blocks": list(all_blocks),
+            "all_records": all_records,
+            "edus": all_edu,
+            "classes": all_classes,
+            "actors": all_actors,
+        })
 
     def standard_versions(self, versions):
         for version in versions:
@@ -98,3 +126,13 @@ class StudentAPI(object):
             "REACTIVATED": "reactive"
         }
         return switch.get(i)
+
+
+def date_to_string_record(list_record):
+    new_list = []
+    for record in list_record:
+        to_list = list(record)
+        to_list[-2] = to_list[-2].strftime("%H:%M:%S")
+        new_list.append(to_list)
+    list_record = new_list
+    return new_list

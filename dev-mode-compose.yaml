@@ -224,9 +224,17 @@ services:
       - '3333:8000'
     command: |
       bash -c "
+        b4e-statistic.py init \
+        --db-name b4e-statistic\
+        --db-host postgres-statistic \
+        --db-user b4e \
+        --db-password b4e_bkc \
+        -vv
+        sleep 3
         b4e-statistic.py subscribe \
-        -B b4e-student-endpoint:8000 \
-        --db-host mongo-student \
+        -B b4e-statistic:8000 \
+        --db-name b4e-statistic\
+        --db-host postgres-statistic \
         --db-user b4e \
         --db-password b4e_bkc \
         -C tcp://validator-0:4004 \
@@ -259,11 +267,13 @@ services:
 
   postgres-statistic:
     image: postgres:alpine
-    container_name: simple-supply-postgres
+    container_name: postgres-statistic
     restart: always
     environment:
       POSTGRES_USER: b4e
       POSTGRES_PASSWORD: b4e_bkc
       POSTGRES_DB: b4e-statistic
+    expose:
+      - 5432
     ports:
       - '5432:5432'

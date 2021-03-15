@@ -23,10 +23,7 @@ from config.config import MongoDBConfig
 
 LOGGER = logging.getLogger(__name__)
 
-
 class Database(object):
-    """Simple object for managing a connection to a postgres database
-    """
 
     def __init__(self):
         self.mongo = None

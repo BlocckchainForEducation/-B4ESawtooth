@@ -36,10 +36,12 @@ CREATE TABLE IF NOT EXISTS blocks (
 
 ACTOR_STMTS = """
 CREATE TABLE IF NOT EXISTS actors (
-    actor_public_key   varchar PRIMARY KEY,
+    address            varchar PRIMARY KEY,
+    actor_public_key   varchar ,
     manager_public_key varchar,
     id                 varchar,
     role               varchar,
+    status               varchar,
     start_block_num    bigint,
     timestamp          date,
     transaction_id     varchar 
@@ -48,11 +50,12 @@ CREATE TABLE IF NOT EXISTS actors (
 
 CLASS_STMTS = """
 CREATE TABLE IF NOT EXISTS classes (
-    class_id                varchar PRIMARY KEY,
-    institution_public_key  varchar PRIMARY KEY,
+    address                 varchar PRIMARY KEY,
+    class_id                varchar ,
+    institution_public_key  varchar ,
     subject_id              varchar,
     teacher_public_key      varchar,
-    credit                  tinyint,
+    credit                  smallint,
     student_public_keys     varchar,
     start_block_num         bigint,
     timestamp               date,
@@ -62,13 +65,14 @@ CREATE TABLE IF NOT EXISTS classes (
 
 EDU_PROGRAM_STMTS = """
 CREATE TABLE IF NOT EXISTS edu_programs (
-    owner_public_key    varchar PRIMARY KEY,
-    manager_public_key  varchar PRIMARY KEY,
-    id                  varchar PRIMARY KEY,
+    address             varchar PRIMARY KEY ,
+    owner_public_key    varchar ,
+    manager_public_key  varchar ,
+    id                  varchar ,
     name                varchar,
     total_credit        int,
-    min_year            tinyint,
-    max_year            tinyint,
+    min_year            smallint,
+    max_year            smallint,
     start_block_num     bigint,
     timestamp           date,
     transaction_id      varchar 
@@ -77,10 +81,11 @@ CREATE TABLE IF NOT EXISTS edu_programs (
 
 RECORD_STMTS = """
 CREATE TABLE IF NOT EXISTS records (
-    owner_public_key    varchar PRIMARY KEY,
+    address             varchar PRIMARY KEY ,
+    owner_public_key    varchar ,
     issuer_public_key   varchar ,
-    manager_public_key  varchar PRIMARY KEY,
-    record_id           varchar PRIMARY KEY,
+    manager_public_key  varchar ,
+    record_id           varchar ,
     portfolio_id        varchar,
     record_status        varchar,
     record_type         varchar,
@@ -128,22 +133,27 @@ class Database(object):
         LOGGER.info('Successfully connected to database')
 
     def create_tables(self):
-        """Creates the Simple Supply tables
+        """Creates the B4E tables
         """
         with self._conn.cursor() as cursor:
             LOGGER.debug('Creating table: blocks')
+            LOGGER.debug(CREATE_BLOCK_STMTS)
             cursor.execute(CREATE_BLOCK_STMTS)
 
             LOGGER.debug('Creating table: actors')
+            LOGGER.debug(ACTOR_STMTS)
             cursor.execute(ACTOR_STMTS)
 
             LOGGER.debug('Creating table: classes')
+            LOGGER.debug(CLASS_STMTS)
             cursor.execute(CLASS_STMTS)
 
             LOGGER.debug('Creating table: portfolios')
+            LOGGER.info(EDU_PROGRAM_STMTS)
             cursor.execute(EDU_PROGRAM_STMTS)
 
             LOGGER.debug('Creating table: records')
+            LOGGER.debug(RECORD_STMTS)
             cursor.execute(RECORD_STMTS)
 
         self._conn.commit()
@@ -208,6 +218,8 @@ class Database(object):
         return blocks
 
     def fetch_block(self, block_num):
+        if not block_num:
+            return None
         fetch = """
         SELECT block_num, block_id FROM blocks WHERE block_num = {}
         """.format(block_num)
@@ -219,80 +231,109 @@ class Database(object):
         return block
 
     def insert_block(self, block_dict):
-        insert = """
+        insert_ = """
         INSERT INTO blocks (
         block_num,
         block_id)
-        VALUES ('{}', '{}');
+        VALUES ('{}', '{}')
+        ON CONFLICT (block_num)
+        DO NOTHING;
         """.format(
             block_dict['block_num'],
             block_dict['block_id'])
-
+        LOGGER.info("insert block")
+        LOGGER.info(insert_)
         with self._conn.cursor() as cursor:
-            cursor.execute(insert)
+            res = cursor.execute(insert_)
+            LOGGER.info(str(res))
 
     def insert_actor(self, actor_dict):
+        LOGGER.info("insert actor")
+        LOGGER.info(actor_dict)
         actor_dict['timestamp'] = timestamp_to_datetime(actor_dict['timestamp']).date()
+        LOGGER.info(actor_dict['timestamp'])
         insert_ = """
-                INSERT INTO agents (
+                INSERT INTO actors (
+                address,
                 actor_public_key,
                 manager_public_key,
                 id,
                 role,
+                status,
                 start_block_num,
                 timestamp,
                 transaction_id)
-                VALUES ('{}', '{}', '{}', '{}', '{}');
+                VALUES ('{}','{}','{}','{}', '{}', '{}', '{}','{}', '{}')
+                ON CONFLICT (address)
+                DO UPDATE 
+                SET status = excluded.status, 
+                    start_block_num = excluded.start_block_num;
                 """.format(
+            actor_dict["address"],
             actor_dict['actor_public_key'],
             actor_dict['manager_public_key'],
             actor_dict['id'],
             actor_dict['role'],
+            actor_dict['profile'][-1]['status'],
             actor_dict['start_block_num'],
             actor_dict['timestamp'],
-            actor_dict['transaction_id'],
+            actor_dict['transaction_id']
         )
 
+        LOGGER.info("insert actor")
+        LOGGER.info(insert_)
         with self._conn.cursor() as cursor:
-            cursor.execute(insert_)
+            res = cursor.execute(insert_)
+            LOGGER.info(str(res))
 
     def insert_class(self, class_dict):
         class_dict['timestamp'] = timestamp_to_datetime(class_dict['timestamp']).date()
-        insert_ = """
-                        INSERT INTO agents (
-                        class_id,
-                        institution_public_key,
-                        subject_id,
-                        teacher_public_key,
-                        credit,
-                        student_public_keys,
-                        start_block_num,
-                        timestamp,
-                        transaction_id)
-                        VALUES ('{}', '{}', '{}', '{}', '{}');
-                        """.format(
-            class_dict['class_id'],
-            class_dict['institution_public_key'],
-            class_dict['subject_id'],
-            class_dict['teacher_public_key'],
-            class_dict['credit'],
-            class_dict['student_public_keys'],
-            class_dict['start_block_num'],
-            class_dict['timestamp'],
-            class_dict['transaction_id'],
-        )
+        for student_public_key in class_dict.get("student_public_keys"):
+            insert_ = """
+                            INSERT INTO classes (
+                            address,
+                            class_id,
+                            institution_public_key,
+                            subject_id,
+                            teacher_public_key,
+                            credit,
+                            student_public_keys,
+                            start_block_num,
+                            timestamp,
+                            transaction_id)
+                            VALUES ('{}','{}','{}','{}','{}','{}', '{}', '{}', '{}', '{}')
+                            ON CONFLICT (address)
+                            DO NOTHING;
+                            """.format(
+                class_dict["address"],
+                class_dict['class_id'],
+                class_dict['institution_public_key'],
+                class_dict['subject_id'],
+                class_dict['teacher_public_key'],
+                class_dict['credit'],
+                student_public_key,
+                class_dict['start_block_num'],
+                class_dict['timestamp'],
+                class_dict['transaction_id']
+            )
 
-        with self._conn.cursor() as cursor:
-            cursor.execute(insert_)
+            LOGGER.info("insert class")
+            LOGGER.info(insert_)
+            with self._conn.cursor() as cursor:
+                res = cursor.execute(insert_)
+                LOGGER.info(str(res))
 
     def insert_portfolio(self, portfolio_dict):
-        if portfolio_dict['portfolio_data']["portfolio_type"] != "EDU_PROGRAM":
-            return
-        portfolio_dict['timestamp'] = timestamp_to_datetime(portfolio_dict['timestamp']).date()
-        edu_program_data = json.loads(portfolio_dict["portfolio_data"][-1])
 
-        insert_agent = """
+        LOGGER.info("portfolio_dict---------------------------------------------------------------------")
+        LOGGER.info(portfolio_dict)
+        portfolio_dict['timestamp'] = timestamp_to_datetime(portfolio_dict['timestamp']).date()
+        edu_program_data = json.loads(portfolio_dict["portfolio_data"][-1]["data"])
+        if portfolio_dict["portfolio_data"][-1]["portfolio_type"] != "EDU_PROGRAM":
+            return
+        insert_ = """
                         INSERT INTO edu_programs (
+                        address,
                         owner_public_key,
                         manager_public_key,
                         id,
@@ -303,8 +344,11 @@ class Database(object):
                         start_block_num,
                         timestamp,
                         transaction_id)
-                        VALUES ('{}', '{}', '{}', '{}', '{}');
+                        VALUES ('{}', '{}','{}','{}','{}','{}','{}','{}', '{}', '{}', '{}')
+                        ON CONFLICT (address)
+                        DO NOTHING;
                         """.format(
+            portfolio_dict["address"],
             portfolio_dict['owner_public_key'],
             portfolio_dict['manager_public_key'],
             portfolio_dict['id'],
@@ -314,16 +358,24 @@ class Database(object):
             edu_program_data['maxYear'],
             portfolio_dict['start_block_num'],
             portfolio_dict['timestamp'],
-            portfolio_dict['transaction_id'],
+            portfolio_dict['transaction_id']
         )
 
+        LOGGER.info("insert portfolio")
+        LOGGER.info(insert_)
         with self._conn.cursor() as cursor:
-            cursor.execute(insert_agent)
+            res = cursor.execute(insert_)
+            LOGGER.info(str(res))
 
     def insert_record(self, record_dict):
-        record_dict['timestamp'] = timestamp_to_datetime(record_dict['timestamp']).date()
+        LOGGER.info("insert record")
+        LOGGER.info(record_dict)
+        record_dict['timestamp'] = timestamp_to_datetime(record_dict['versions'][-1]['timestamp']).date()
+        LOGGER.info(record_dict['timestamp'])
+        LOGGER.info("verrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr")
         insert_ = """
                         INSERT INTO records (
+                        address,
                         owner_public_key,
                         issuer_public_key,
                         manager_public_key,
@@ -334,23 +386,31 @@ class Database(object):
                         start_block_num,
                         timestamp,
                         transaction_id)
-                        VALUES ('{}', '{}', '{}', '{}', '{}');
+                        VALUES ('{}', '{}', '{}', '{}','{}','{}','{}','{}','{}','{}', '{}')
+                        ON CONFLICT (address)
+                        DO UPDATE 
+                        SET record_status = excluded.record_status, 
+                            start_block_num = excluded.start_block_num;
                         """.format(
+            record_dict["address"],
             record_dict['owner_public_key'],
             record_dict['issuer_public_key'],
             record_dict['manager_public_key'],
             record_dict['record_id'],
-            record_dict['record_type'],
             record_dict['versions'][-1]["portfolio_id"],
             record_dict['versions'][-1]["record_status"],
             record_dict['record_type'],
             record_dict['start_block_num'],
             record_dict['timestamp'],
-            record_dict['transaction_id'],
+            record_dict['versions'][-1]['transaction_id']
         )
+        LOGGER.info(record_dict['versions'][-1])
 
+        LOGGER.info("insert record")
+        LOGGER.info(insert_)
         with self._conn.cursor() as cursor:
-            cursor.execute(insert_)
+            res = cursor.execute(insert_)
+            LOGGER.info(str(res))
 
     def insert_voting(self, voting_dict):
         return
@@ -374,6 +434,100 @@ class Database(object):
 
     def get_record_by_address(self, address):
         return ""
+
+    async def get_records(self):
+        fetch = """
+                SELECT * FROM records;
+                """
+        # Creating a cursor object using the cursor() method
+        cursor = self._conn.cursor()
+
+        # Retrieving single row
+        sql = '''SELECT * from records'''
+
+        # Executing the query
+        cursor.execute(sql)
+
+        # Fetching 1st row from the table
+        result = cursor.fetchall()
+        LOGGER.info(result)
+        return result
+
+    async def get_edus(self):
+
+        cursor = self._conn.cursor()
+
+        sql = '''SELECT * from edu_programs'''
+
+        # Executing the query
+        cursor.execute(sql)
+
+        # Fetching 1st row from the table
+        result = cursor.fetchall()
+        LOGGER.info(result)
+        return result
+
+    async def get_blocks(self):
+
+        cursor = self._conn.cursor()
+
+        sql = '''SELECT * from blocks'''
+
+        # Executing the query
+        cursor.execute(sql)
+
+        # Fetching 1st row from the table
+        result = cursor.fetchall()
+        LOGGER.info(result)
+        return result
+
+    async def get_actors(self):
+
+        cursor = self._conn.cursor()
+
+        sql = '''SELECT * from actors'''
+
+        # Executing the query
+        cursor.execute(sql)
+
+        # Fetching 1st row from the table
+        result = cursor.fetchall()
+        LOGGER.info(result)
+        return result
+
+    async def get_classes(self):
+
+        cursor = self._conn.cursor()
+
+        sql = '''SELECT * from classes'''
+
+        # Executing the query
+        cursor.execute(sql)
+
+        # Fetching 1st row from the table
+        result = cursor.fetchall()
+        LOGGER.info(result)
+        return result
+
+    async def get_cert_by_year(self):
+        sql = """
+        SELECT id, count(records.address) ,EXTRACT(YEAR FROM records.timestamp) from actors, records
+        WHERE role = 'INSTITUTION' 
+            and record_type = 'CERTIFICATE'
+            and actors.actor_public_key = records.manager_public_key
+        GROUP BY id , EXTRACT(YEAR FROM records.timestamp)
+        """
+        return self.query_sql(sql)
+
+    def query_sql(self, sql):
+        cursor = self._conn.cursor()
+        # Executing the query
+        cursor.execute(sql)
+
+        # Fetching 1st row from the table
+        result = cursor.fetchall()
+        LOGGER.info(result)
+        return result
 
 
 def timestamp_to_datetime(timestamp):

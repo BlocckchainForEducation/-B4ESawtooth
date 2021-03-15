@@ -45,7 +45,7 @@ def make_create_institution(transaction_signer,
 
     outputs = [actor_address, voting_address]
 
-    action = payload_pb2.CreateActorAction(data=json.dumps(profile), id=profile.get('uid'))
+    action = payload_pb2.CreateActorAction(data=json.dumps(profile), id=profile.get('universityName'))
 
     payload = payload_pb2.B4EPayload(
         action=payload_pb2.B4EPayload.CREATE_INSTITUTION,

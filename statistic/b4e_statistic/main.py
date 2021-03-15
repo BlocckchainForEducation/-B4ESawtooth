@@ -49,7 +49,7 @@ def parse_args(args):
     database_parser.add_argument(
         '--db-name',
         help='The name of the database',
-        default='b4e')
+        default='b4e-statistic')
     database_parser.add_argument(
         '--db-host',
         help='The host of the database',
@@ -57,7 +57,7 @@ def parse_args(args):
     database_parser.add_argument(
         '--db-port',
         help='The port of the database',
-        default='27017')
+        default='5432')
     database_parser.add_argument(
         '--rest-api-default',
         help='The rest api default of sawtooth',
@@ -107,7 +107,7 @@ def init_logger(level):
 
 
 def do_subscribe(opts):
-    LOGGER.info('Starting subscriber_b4e for student...')
+    LOGGER.info('Starting subscriber...')
     try:
         dsn = 'dbname={} user={} password={} host={} port={}'.format(
             opts.db_name,
@@ -115,16 +115,14 @@ def do_subscribe(opts):
             opts.db_password,
             opts.db_host,
             opts.db_port)
+
         database = Database(dsn)
         database.connect()
-
-        subscriber = Subscriber(SawtoothConfig.VALIDATOR_TCP)
+        subscriber = Subscriber(opts.connect)
         subscriber.add_handler(get_events_handler(database))
         known_blocks = database.fetch_last_known_blocks(KNOWN_COUNT)
         known_ids = [block['block_id'] for block in known_blocks]
         subscriber.start(known_ids=known_ids)
-
-
 
     except KeyboardInterrupt:
         sys.exit(0)
@@ -143,31 +141,38 @@ def do_subscribe(opts):
     LOGGER.info('Subscriber shut down successfully')
 
 
-def rest_api(host, port):
-    database = Database()
-    database.connect(host=MongoDBConfig.HOST, port=MongoDBConfig.PORT, user_name=MongoDBConfig.USER_NAME,
-                     password=MongoDBConfig.PASSWORD)
-    LOGGER.info('Run Student Rest API')
-    rest_api = StudentAPI(database, host, port)
-    rest_api.run()
-
-
-def do_init():
-    LOGGER.info('Initializing subscriber_b4e...')
+def rest_api(opts, host, port):
     try:
-
-        database = Database()
+        LOGGER.info('Run Statistic API ......')
+        dsn = 'dbname={} user={} password={} host={} port={}'.format(
+            opts.db_name,
+            opts.db_user,
+            opts.db_password,
+            opts.db_host,
+            opts.db_port)
+        database = Database(dsn)
         database.connect()
-        print("creating indexes")
-        database.create_collections()
-
-        rest_api = StudentAPI(database)
-
-        LOGGER.info('Run Student Rest API')
+        rest_api = StudentAPI(database, host, port)
         rest_api.run()
+    except Exception as e:
+        LOGGER.error(e)
+
+
+def do_init(opts):
+    LOGGER.info('Initializing subscriber...')
+    try:
+        dsn = 'dbname={} user={} password={} host={} port={}'.format(
+            opts.db_name,
+            opts.db_user,
+            opts.db_password,
+            opts.db_host,
+            opts.db_port)
+        database = Database(dsn)
+        database.connect()
+        database.create_tables()
 
     except Exception as err:  # pylint: disable=broad-except
-        LOGGER.exception('Unable to initialize subscriber_b4e database: %s', err)
+        LOGGER.exception('Unable to initialize subscriber database: %s', err)
 
     finally:
         database.disconnect()
@@ -179,46 +184,41 @@ def main():
 
     opts = parse_args(sys.argv[1:])
     init_logger(opts.verbose)
-    MongoDBConfig.USER_NAME = opts.db_user
-    MongoDBConfig.PASSWORD = opts.db_password
-    MongoDBConfig.HOST = opts.db_host
-    MongoDBConfig.PORT = opts.db_port
+    LOGGER.info(opts)
+    LOGGER.debug("------------------------------------------------------------")
+    LOGGER.info("opts.command")
+    LOGGER.info(opts.command)
+    if opts.command == 'subscribe':
 
-    SawtoothConfig.VALIDATOR_TCP = opts.connect
+        LOGGER.debug("helloooooooooooooooooooooooooooooooooooooooooooooo")
 
-    LOGGER.info("database host:" + MongoDBConfig.HOST)
+        MongoDBConfig.USER_NAME = opts.db_user
+        MongoDBConfig.PASSWORD = opts.db_password
+        MongoDBConfig.HOST = opts.db_host
+        MongoDBConfig.PORT = opts.db_port
 
-    try:
-        host, port = opts.bind.split(":")
-        port = int(port)
-    except ValueError:
-        print("Unable to parse binding {}: Must be in the format"
-              " host:port".format(opts.bind))
-        sys.exit(1)
+        SawtoothConfig.VALIDATOR_TCP = opts.connect
 
-    LOGGER.info("rest api " + host + ":" + str(port))
+        LOGGER.info("DB HOST:" + opts.db_host)
 
-    Process(target=rest_api, args=(host, port)).start()
-    Process(target=do_subscribe, args=(opts)).start()
+        try:
+            host, port = opts.bind.split(":")
+            port = int(port)
+        except ValueError:
+            print("Unable to parse binding {}: Must be in the format"
+                  " host:port".format(opts.bind))
+            sys.exit(1)
 
-
-async def non_blocking(loop, executor, host, port):
-    # Run three of the blocking tasks concurrently. asyncio.wait will
-    # automatically wrap these in Tasks. If you want explicit access
-    # to the tasks themselves, use asyncio.ensure_future, or add a
-    # "done, pending = asyncio.wait..." assignment
-    await asyncio.wait(
-        fs={
-
-            loop.run_in_executor(executor, rest_api, host, port),
-
-            loop.run_in_executor(executor, do_subscribe),
-
-        },
-        return_when=asyncio.ALL_COMPLETED
-    )
+        LOGGER.info("rest api " + host + ":" + str(port))
+        Process(target=rest_api, args=(opts, host, port)).start()
+        Process(target=do_subscribe, args=(opts,)).start()
+    elif opts.command == 'init':
+        LOGGER.info("run init")
+        do_init(opts)
+    else:
+        LOGGER.exception('Invalid command: "%s"', opts.command)
 
 
 if __name__ == '__main__':
     # do_init()
-    do_subscribe()
+    main()
