@@ -184,14 +184,7 @@ def main():
 
     opts = parse_args(sys.argv[1:])
     init_logger(opts.verbose)
-    LOGGER.info(opts)
-    LOGGER.debug("------------------------------------------------------------")
-    LOGGER.info("opts.command")
-    LOGGER.info(opts.command)
     if opts.command == 'subscribe':
-
-        LOGGER.debug("helloooooooooooooooooooooooooooooooooooooooooooooo")
-
         MongoDBConfig.USER_NAME = opts.db_user
         MongoDBConfig.PASSWORD = opts.db_password
         MongoDBConfig.HOST = opts.db_host
@@ -208,8 +201,6 @@ def main():
             print("Unable to parse binding {}: Must be in the format"
                   " host:port".format(opts.bind))
             sys.exit(1)
-
-        LOGGER.info("rest api " + host + ":" + str(port))
         Process(target=rest_api, args=(opts, host, port)).start()
         Process(target=do_subscribe, args=(opts,)).start()
     elif opts.command == 'init':

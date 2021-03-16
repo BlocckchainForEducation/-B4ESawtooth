@@ -44,7 +44,7 @@ def _handle_events(database, events):
             _apply_state_changes(database, events, block_num, block_id)
         database.commit()
     except Exception as err:
-        LOGGER.info("errrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr")
+        LOGGER.info("err")
         LOGGER.info(err)
 
 
@@ -116,15 +116,11 @@ def _apply_actor_change(database, block_num, actors):
         actor['start_block_num'] = block_num
         actor['end_block_num'] = MAX_BLOCK_NUMBER
         actor['address'] = addresser.get_actor_address(actor.get('actor_public_key'))
-        LOGGER.info(actor)
         database.insert_actor(actor)
 
 
 def _apply_record_change(database, block_num, records):
     for record in records:
-        LOGGER.info("record---------------------------------------------------------------------")
-        LOGGER.info(record)
-        LOGGER.info("record---------------------------------------------------------------------")
         record['start_block_num'] = block_num
         record['end_block_num'] = MAX_BLOCK_NUMBER
         record_id = record.get("record_id")
@@ -132,19 +128,16 @@ def _apply_record_change(database, block_num, records):
         manager_public_key = record.get("manager_public_key")
         record['address'] = addresser.get_record_address(record_id, owner_public_key, manager_public_key)
 
-        LOGGER.info("record---------------------------------------------------------------------")
-        LOGGER.info(record)
-        LOGGER.info("record---------------------------------------------------------------------")
         database.insert_record(record)
 
 
 def _apply_voting_change(database, block_num, votings):
     for voting in votings:
-        LOGGER.info(voting)
+
         voting['start_block_num'] = block_num
         voting['end_block_num'] = MAX_BLOCK_NUMBER
         voting['address'] = addresser.get_voting_address(voting.get("elector_public_key"))
-        LOGGER.info(voting['address'])
+
         database.insert_voting(voting)
 
 
@@ -163,21 +156,15 @@ def _apply_class_change(database, block_num, classes):
         class_id = class_.get("class_id")
         institution_public_key = class_.get("institution_public_key")
         class_['address'] = addresser.get_class_address(class_id, institution_public_key)
-        LOGGER.info(class_)
         database.insert_class(class_)
 
 
 def _apply_portfolio_change(database, block_num, portfolios):
     for portfolio in portfolios:
-        LOGGER.info("portfolio--------------------------------------------------")
-        LOGGER.info(portfolio)
         portfolio['start_block_num'] = block_num
         portfolio['end_block_num'] = MAX_BLOCK_NUMBER
         _id = portfolio.get("id")
         owner_public_key = portfolio.get("owner_public_key")
         manager_public_key = portfolio.get("manager_public_key")
         portfolio['address'] = addresser.get_portfolio_address(_id, owner_public_key, manager_public_key)
-
-        LOGGER.info("portfolio--------------------------------------------------")
-        LOGGER.info(portfolio)
         database.insert_portfolio(portfolio)

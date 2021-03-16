@@ -241,17 +241,11 @@ class Database(object):
         """.format(
             block_dict['block_num'],
             block_dict['block_id'])
-        LOGGER.info("insert block")
-        LOGGER.info(insert_)
         with self._conn.cursor() as cursor:
             res = cursor.execute(insert_)
-            LOGGER.info(str(res))
 
     def insert_actor(self, actor_dict):
-        LOGGER.info("insert actor")
-        LOGGER.info(actor_dict)
         actor_dict['timestamp'] = timestamp_to_datetime(actor_dict['timestamp']).date()
-        LOGGER.info(actor_dict['timestamp'])
         insert_ = """
                 INSERT INTO actors (
                 address,
@@ -279,12 +273,8 @@ class Database(object):
             actor_dict['timestamp'],
             actor_dict['transaction_id']
         )
-
-        LOGGER.info("insert actor")
-        LOGGER.info(insert_)
         with self._conn.cursor() as cursor:
             res = cursor.execute(insert_)
-            LOGGER.info(str(res))
 
     def insert_class(self, class_dict):
         class_dict['timestamp'] = timestamp_to_datetime(class_dict['timestamp']).date()
@@ -317,16 +307,11 @@ class Database(object):
                 class_dict['transaction_id']
             )
 
-            LOGGER.info("insert class")
-            LOGGER.info(insert_)
             with self._conn.cursor() as cursor:
                 res = cursor.execute(insert_)
-                LOGGER.info(str(res))
 
     def insert_portfolio(self, portfolio_dict):
 
-        LOGGER.info("portfolio_dict---------------------------------------------------------------------")
-        LOGGER.info(portfolio_dict)
         portfolio_dict['timestamp'] = timestamp_to_datetime(portfolio_dict['timestamp']).date()
         edu_program_data = json.loads(portfolio_dict["portfolio_data"][-1]["data"])
         if portfolio_dict["portfolio_data"][-1]["portfolio_type"] != "EDU_PROGRAM":
@@ -361,18 +346,12 @@ class Database(object):
             portfolio_dict['transaction_id']
         )
 
-        LOGGER.info("insert portfolio")
-        LOGGER.info(insert_)
         with self._conn.cursor() as cursor:
             res = cursor.execute(insert_)
-            LOGGER.info(str(res))
 
     def insert_record(self, record_dict):
-        LOGGER.info("insert record")
-        LOGGER.info(record_dict)
         record_dict['timestamp'] = timestamp_to_datetime(record_dict['versions'][-1]['timestamp']).date()
-        LOGGER.info(record_dict['timestamp'])
-        LOGGER.info("verrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr")
+
         insert_ = """
                         INSERT INTO records (
                         address,
@@ -404,13 +383,10 @@ class Database(object):
             record_dict['timestamp'],
             record_dict['versions'][-1]['transaction_id']
         )
-        LOGGER.info(record_dict['versions'][-1])
 
-        LOGGER.info("insert record")
-        LOGGER.info(insert_)
         with self._conn.cursor() as cursor:
             res = cursor.execute(insert_)
-            LOGGER.info(str(res))
+
 
     def insert_voting(self, voting_dict):
         return
@@ -517,6 +493,21 @@ class Database(object):
             and actors.actor_public_key = records.manager_public_key
         GROUP BY id , EXTRACT(YEAR FROM records.timestamp)
         """
+        return self.query_sql(sql)
+
+    async def get_certs_of_university(self, public_key):
+        sql = """
+                SELECT EXTRACT(YEAR FROM records.timestamp),edu_programs.name, records.transaction_id 
+                FROM actors, edu_programs, records
+                WHERE
+                    actors.actor_public_key = '{}'
+                    and role = 'INSTITUTION' 
+                    and record_type = 'CERTIFICATE'
+                    and actors.actor_public_key = records.manager_public_key
+                    and edu_programs.id = records.portfolio_id
+                """.format(public_key)
+        LOGGER.info("sqllllllllllllllllllllllllllllllllllllllllllllllllllll")
+        LOGGER.info(sql)
         return self.query_sql(sql)
 
     def query_sql(self, sql):

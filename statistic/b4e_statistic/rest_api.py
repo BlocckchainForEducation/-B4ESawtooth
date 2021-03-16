@@ -37,6 +37,8 @@ class StudentAPI(object):
         app.router.add_get('/', self.hello_student)
         app.router.add_get('/records', self.get_records)
         app.router.add_get('/statistic', self.get_statistic)
+        app.router.add_get('/statistic/certificates-for-years', self.cert_for_years)
+        app.router.add_get('/statistic/certificates-of-university/{public_key}', self.cert_of_university)
 
         web.run_app(
             app,
@@ -74,6 +76,39 @@ class StudentAPI(object):
     async def get_statistic(self, request):
         records = await self._database.get_cert_by_year()
         return json_response(records)
+
+    async def cert_for_years(self, request):
+        records = await  self._database.get_cert_by_year()
+
+        cert_by_year = {}
+        for record in records:
+            schoolName = record[0]
+            numCert = record[1]
+            year = str(int(record[2]))
+            if not cert_by_year.get(year):
+                cert_by_year[year] = {}
+
+            cert_by_year[year][schoolName] = numCert
+
+        return json_response(cert_by_year)
+
+    async def cert_of_university(self, request):
+        public_key = request.match_info.get('public_key', '')
+        records = await self._database.get_certs_of_university(public_key)
+        certs_of_university = {}
+        for record in records:
+            year = str(int(record[0]))
+            edu_program = record[1]
+            cert = record[2]
+
+            if not certs_of_university.get(year):
+                certs_of_university[year] = {}
+            if not certs_of_university[year].get(edu_program):
+                certs_of_university[year][edu_program] = []
+
+            certs_of_university[year][edu_program].append(cert)
+
+        return json_response(certs_of_university)
 
     def record_address(self, request):
         address = request.match_info.get('address', '')
