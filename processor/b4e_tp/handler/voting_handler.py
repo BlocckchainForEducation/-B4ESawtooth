@@ -76,6 +76,9 @@ def vote(state, public_key, transaction_id, payload):
         if vote.issuer_public_key == public_key:
             raise InvalidTransaction("Issuer has voted!")
 
+    env = state.get_b4e_environment()
+    if not env:
+        state.env = state.set_b4e_environment(transaction_id)
     timestamp = payload.timestamp
     actor_vote = voting_pb2.Voting.Vote(issuer_public_key=public_key, accept=payload.data.accept,
                                         timestamp=payload.timestamp, transaction_id=transaction_id)
@@ -108,7 +111,6 @@ def vote(state, public_key, transaction_id, payload):
     if actor.role != actor_pb2.Actor.INSTITUTION:
         raise InvalidTransaction("Actor must be INSTITUTION")
 
-    env = state.get_b4e_environment()
     election = voting.vote
     accept = 0
     reject = 0
