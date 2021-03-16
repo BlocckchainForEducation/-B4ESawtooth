@@ -41,7 +41,7 @@ CREATE TABLE IF NOT EXISTS actors (
     manager_public_key varchar,
     id                 varchar,
     role               varchar,
-    status               varchar,
+    status             varchar,
     start_block_num    bigint,
     timestamp          date,
     transaction_id     varchar 
@@ -505,9 +505,9 @@ class Database(object):
                     and record_type = 'CERTIFICATE'
                     and actors.actor_public_key = records.manager_public_key
                     and edu_programs.id = records.portfolio_id
+                    and edu_programs.owner_public_key = records.owner_public_key
                 """.format(public_key)
-        LOGGER.info("sqllllllllllllllllllllllllllllllllllllllllllllllllllll")
-        LOGGER.info(sql)
+        
         return self.query_sql(sql)
 
     def query_sql(self, sql):
