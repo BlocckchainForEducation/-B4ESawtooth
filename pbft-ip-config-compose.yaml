@@ -22,7 +22,7 @@ services:
   b4e-shell-ministry:
     build:
       context: .
-      dockerfile: ../shell/Dockerfile
+      dockerfile: ./shell/Dockerfile
     image: sawtooth-b4e-shell
     container_name: b4e-shell-ministry
     volumes:
@@ -38,7 +38,7 @@ services:
   b4e-tp-0:
     build:
       context: .
-      dockerfile: ../processor/Dockerfile
+      dockerfile: ./processor/Dockerfile
     image: sawtooth-b4e-tp
     container_name: b4e-tp-0
     volumes:
@@ -56,7 +56,7 @@ services:
   b4e-tp-1:
     build:
       context: .
-      dockerfile: ../processor/Dockerfile
+      dockerfile: ./processor/Dockerfile
     image: sawtooth-b4e-tp
     container_name: b4e-tp-1
     volumes:
@@ -72,7 +72,7 @@ services:
   b4e-tp-2:
     build:
       context: .
-      dockerfile: ../processor/Dockerfile
+      dockerfile: ./processor/Dockerfile
     image: sawtooth-b4e-tp
     container_name: b4e-tp-2
     volumes:
@@ -89,7 +89,7 @@ services:
   b4e-tp-3:
     build:
       context: .
-      dockerfile: ../processor/Dockerfile
+      dockerfile: ./processor/Dockerfile
     image: sawtooth-b4e-tp
     container_name: b4e-tp-3
     volumes:
@@ -106,7 +106,7 @@ services:
 #  b4e-tp-4:
 #    build:
 #      context: .
-#      dockerfile: ../processor/Dockerfile
+#      dockerfile: ./processor/Dockerfile
 #    image: sawtooth-b4e-tp
 #    container_name: b4e-tp-4
 #    volumes:
