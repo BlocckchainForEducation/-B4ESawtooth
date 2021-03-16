@@ -62,16 +62,12 @@ def make_create_edu_programs(transaction_signer,
             edu_id = profile.get("eduProgram").get("eduProgramId")
             student_public_key = profile.get('publicKey')
             edu_program = profile.get("eduProgram")
-            data = json.dumps(edu_program)
-            LOGGER.info("edu_program")
-            LOGGER.info(edu_program)
-            LOGGER.info("data")
-            LOGGER.info(data)
+
             edu_program_address = addresser.get_portfolio_address(edu_id,
                                                                   student_public_key,
                                                                   institution_public_key)
             inputs = [institution_address, edu_program_address]
-            LOGGER.info(inputs)
+
             outputs = [edu_program_address]
 
             action = payload_pb2.CreatePortfolioAction(id=edu_id,

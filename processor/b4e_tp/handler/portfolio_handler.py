@@ -24,8 +24,7 @@ def create_edu_program(state, public_key, transaction_id, payload):
     edu_id = payload.data.id
     portfolio_type = portfolio_pb2.Portfolio.EDU_PROGRAM
     data = payload.data.data
-    LOGGER.info("edu program")
-    LOGGER.info(edu_id + " - " + owner_public_key + ' ' + public_key)
+
     institution = state.get_actor(public_key)
     if _check_is_valid_actor(institution):
         raise InvalidTransaction("Invalid institution")

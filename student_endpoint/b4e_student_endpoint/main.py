@@ -191,8 +191,6 @@ def main():
               " host:port".format(opts.bind))
         sys.exit(1)
 
-    LOGGER.info("rest api " + host + ":" + str(port))
-
     Process(target=rest_api, args=(host, port)).start()
     Process(target=do_subscribe, args=()).start()
 

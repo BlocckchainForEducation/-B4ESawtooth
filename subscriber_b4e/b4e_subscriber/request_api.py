@@ -44,7 +44,6 @@ def request_on_actor(data):
 def request_on_voting(data):
     # for registration
     if len(data.get("vote")) < 1:
-        LOGGER.info("registration")
         registration = get_actor_from_state(data.get('elector_public_key'))
         profile = registration.get("profile")[-1].get("data")
         request_registration({"profile": json.loads(profile)})

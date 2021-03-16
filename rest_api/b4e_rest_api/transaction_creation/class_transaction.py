@@ -67,8 +67,7 @@ def make_create_classes(transaction_signer,
             inputs = [class_address, teacher_address, institution_address]
 
             outputs = [class_address]
-            LOGGER.info(class_.get("studentPublicKeys"))
-            LOGGER.info(type(class_.get("studentPublicKeys")))
+
             student_public_keys = []
             for student_public_key in class_.get("studentPublicKeys"):
                 student_public_keys.append(student_public_key)

@@ -148,7 +148,6 @@ def main():
     MongoDBConfig.PORT = opts.db_port
 
     SubscriberConfig.HOST_URL = opts.subscriber_host_url
-    LOGGER.info("SubscriberConfig.HOST_URL : " + SubscriberConfig.HOST_URL)
 
     SawtoothConfig.VALIDATOR_TCP = opts.connect
 
