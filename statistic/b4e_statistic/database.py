@@ -137,23 +137,18 @@ class Database(object):
         """
         with self._conn.cursor() as cursor:
             LOGGER.debug('Creating table: blocks')
-            LOGGER.debug(CREATE_BLOCK_STMTS)
             cursor.execute(CREATE_BLOCK_STMTS)
 
             LOGGER.debug('Creating table: actors')
-            LOGGER.debug(ACTOR_STMTS)
             cursor.execute(ACTOR_STMTS)
 
             LOGGER.debug('Creating table: classes')
-            LOGGER.debug(CLASS_STMTS)
             cursor.execute(CLASS_STMTS)
 
             LOGGER.debug('Creating table: portfolios')
-            LOGGER.info(EDU_PROGRAM_STMTS)
             cursor.execute(EDU_PROGRAM_STMTS)
 
             LOGGER.debug('Creating table: records')
-            LOGGER.debug(RECORD_STMTS)
             cursor.execute(RECORD_STMTS)
 
         self._conn.commit()
