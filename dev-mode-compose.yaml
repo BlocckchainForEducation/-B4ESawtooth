@@ -208,7 +208,7 @@ services:
   b4e-statistic:
     build:
       context: .
-      dockerfile: ./student_endpoint/Dockerfile
+      dockerfile: ./statistic/Dockerfile
     image: sawtooth-b4e-statistic
     container_name: b4e-statistic
     volumes:
@@ -219,7 +219,6 @@ services:
       - '${STATISTIC_PORT}:8000'
     command: |
       bash -c "
-        b4e-statistic.py init \
         b4e-statistic.py init \
         --db-name b4e-statistic\
         --db-host postgres-statistic \
