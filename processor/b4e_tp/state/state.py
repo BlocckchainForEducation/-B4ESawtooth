@@ -44,6 +44,9 @@ class B4EState(object):
     def add_one_b4e_environment(self, transaction_id):
         b4e_environment_state.add_one(self, transaction_id)
 
+    def subtract_one_b4e_environment(self, transaction_id):
+        b4e_environment_state.subtract_one(self, transaction_id)
+
     def get_actor(self, public_key):
         return actor_state.get_actor(self, public_key)
 

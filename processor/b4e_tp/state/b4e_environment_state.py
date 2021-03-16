@@ -55,3 +55,20 @@ def add_one(self, transaction_id):
     updated_state = {}
     updated_state[address] = data
     self._context.set_state(updated_state, timeout=self._timeout)
+
+
+def subtract_one(self, transaction_id):
+    address = addresser.ENVIRONMENT_ADDRESS
+    container = b4e_environment_pb2.B4EEnvironmentContainer()
+    state_entries = self._context.get_state(
+        addresses=[address], timeout=self._timeout)
+    if state_entries:
+        container.ParseFromString(state_entries[0].data)
+        for env in container.entries:
+            env.institution_number -= 1
+            env.transaction_id = transaction_id
+
+    data = container.SerializeToString()
+    updated_state = {}
+    updated_state[address] = data
+    self._context.set_state(updated_state, timeout=self._timeout)

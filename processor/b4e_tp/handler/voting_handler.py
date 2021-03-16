@@ -84,16 +84,19 @@ def vote(state, public_key, transaction_id, payload):
         if payload.data.accept:
             close_vote_timestamp = payload.timestamp
             vote_result = voting_pb2.Voting.WIN
-            state.add_one_b4e_environment(transaction_id=transaction_id)
             if voting.vote_type == voting_pb2.Voting.ACTIVE:
                 state.set_active_actor(payload.data.elector_public_key, timestamp, transaction_id)
+                state.add_one_b4e_environment(transaction_id=transaction_id)
             elif voting.vote_type == voting_pb2.Voting.REJECT:
                 state.set_reject_actor(payload.data.elector_public_key, timestamp, transaction_id)
+                state.subtract_one_b4e_environment(transaction_id=transaction_id)
         else:
             if voting.vote_type == voting_pb2.Voting.REJECT:
                 state.set_active_actor(payload.data.elector_public_key, timestamp, transaction_id)
+                state.subtract_one_b4e_environment(transaction_id=transaction_id)
             elif voting.vote_type == voting_pb2.Voting.ACTIVE:
                 state.set_reject_actor(payload.data.elector_public_key, timestamp, transaction_id)
+                state.add_one_b4e_environment(transaction_id=transaction_id)
 
         state.update_voting(payload.data.elector_public_key, vote_result,
                             actor_vote, timestamp=close_vote_timestamp)
