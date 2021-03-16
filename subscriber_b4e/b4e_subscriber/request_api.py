@@ -17,9 +17,9 @@ LOGGER = logging.getLogger(__name__)
 def request_to_host(data, url_name):
     HOST_URL = SubscriberConfig.HOST_URL
     URL = {
-        "registration": HOST_URL + "/events/registration",
-        "vote": HOST_URL + "/events/vote",
-        "vote_close": HOST_URL + "/events/vote-closed",
+        "registration": HOST_URL + "/api/v1.2/events/registration",
+        "vote": HOST_URL + "/api/v1.2/events/vote",
+        "vote_close": HOST_URL + "/api/v1.2/events/vote-closed",
 
     }
     LOGGER.info(URL.get(url_name))
