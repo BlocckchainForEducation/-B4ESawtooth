@@ -540,7 +540,7 @@ services:
       bash -c "
         b4e-rest-api \
           -B b4e-rest-api-ministry:8000 \
-          -C validator-3:4004 \
+          -C validator-0:4004 \
           -R rest-api-0:8008 \
           --db-host mongo-ministry \
           --db-user b4e \
@@ -548,7 +548,6 @@ services:
           -vv
       "
   b4e-subscriber-ministry:
-    restart: always
     build:
       context: .
       dockerfile: subscriber_b4e/Dockerfile
@@ -565,9 +564,44 @@ services:
         --db-host mongo-ministry \
         --db-user b4e \
         --db-password b4e_bkc \
-        -C tcp://validator-2:4004 \
+        --rest-api-default rest-api-0:8008  \
+        --subscriber-host-url http://192.168.137.1:1212 \
+        -C tcp://validator-0:4004 \
         -vv
       "
+
+
+  b4e-statistic:
+    build:
+      context: .
+      dockerfile: ./student_endpoint/Dockerfile
+    image: sawtooth-b4e-statistic
+    container_name: b4e-statistic
+    volumes:
+      - '.:/project/sawtooth-b4e'
+    depends_on:
+      - postgres-statistic
+    ports:
+      - '3333:8000'
+    command: |
+      bash -c "
+        b4e-statistic.py init \
+        --db-name b4e-statistic\
+        --db-host postgres-statistic \
+        --db-user b4e \
+        --db-password b4e_bkc \
+        -vv
+        sleep 3
+        b4e-statistic.py subscribe \
+        -B b4e-statistic:8000 \
+        --db-name b4e-statistic\
+        --db-host postgres-statistic \
+        --db-user b4e \
+        --db-password b4e_bkc \
+        -C tcp://validator-0:4004 \
+        -vv
+      "
+
   mongo-ministry:
     image: mongo
     container_name: mongo-ministry
@@ -579,5 +613,28 @@ services:
     environment:
       MONGO_INITDB_ROOT_USERNAME: b4e
       MONGO_INITDB_ROOT_PASSWORD: b4e_bkc
-    volumes:
-      - mongodb_data_ministry:/data_test_net/db
+
+  mongo-student:
+    image: mongo
+    container_name: mongo-student
+    restart: always
+    expose:
+      - 27017
+    ports:
+      - '27027:27017'
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: b4e
+      MONGO_INITDB_ROOT_PASSWORD: b4e_bkc
+
+  postgres-statistic:
+    image: postgres:alpine
+    container_name: postgres-statistic
+    restart: always
+    environment:
+      POSTGRES_USER: b4e
+      POSTGRES_PASSWORD: b4e_bkc
+      POSTGRES_DB: b4e-statistic
+    expose:
+      - 5432
+    ports:
+      - '5432:5432'
