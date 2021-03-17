@@ -43,11 +43,11 @@ class StudentAPI(object):
         )
 
     def student_data(self, request):
+        LOGGER.info("Student dataaaaaaaaaaaaaaaaaaasdfasfsdf")
         public_key = request.match_info.get('student_public_key', '')
         records = self._database.get_student_data(public_key)
         # records = list(records)
-        certificates = []
-        subjects = []
+        edu_programs = {}
         for record in records:
             record_id = record.get("record_id")
             owner_public_key = record.get("owner_public_key")
@@ -55,22 +55,34 @@ class StudentAPI(object):
             address = addresser.get_record_address(record_id, owner_public_key, manager_public_key)
             record_data = {"address": address,
                            "versions": self.standard_versions(record.get("versions"))}
-
+            edu_id = record.get("versions")[-1].get("portfolio_id")
+            LOGGER.info("record_dataaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
+            LOGGER.info(record_data)
+            if not edu_programs.get(edu_id):
+                edu_programs[edu_id] = {}
+            edu_program = edu_programs[edu_id]
             if record.get("record_type") == "SUBJECT":
-                subjects.append(record_data)
+                if not edu_program.get("subjects"):
+                    edu_program["subjects"] = []
+                edu_program["subjects"].append(record_data)
             elif record.get("record_type") == "CERTIFICATE":
-                certificates.append(record_data)
+                if not edu_program.get("certificate"):
+                    edu_program["certificate"] = {}
 
-            student_data = {
-                "certificates": certificates,
-                "subjects": subjects
-            }
+                edu_program["certificate"] = record_data
+
+        student_data = []
+        for key in edu_programs:
+            student_data.append(edu_programs[key])
+
         return json_response(student_data)
 
     def record_address(self, request):
         address = request.match_info.get('address', '')
         try:
             record = self._database.get_record_by_address(address)
+            if not record:
+                return "record not found"
             record_data = {"address": address,
                            "versions": self.standard_versions(record.get("versions"))}
         except Exception as e:
