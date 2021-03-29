@@ -103,22 +103,22 @@ services:
         echo b4e-tp-3 connect
       "
 
-#  b4e-tp-4:
-#    build:
-#      context: .
-#      dockerfile: ./processor/Dockerfile
-#    image: sawtooth-b4e-tp
-#    container_name: b4e-tp-4
-#    volumes:
-#      - '.:/project/sawtooth-b4e'
-#    depends_on:
-#      - b4e-shell
-#    command: |
-#      bash -c "
-#        sleep 1
-#        b4e-tp -v -C tcp://validator-4:4004
-#        echo b4e-tp-4 connect
-#      "
+  b4e-tp-4:
+    build:
+      context: .
+      dockerfile: ./processor/Dockerfile
+    image: sawtooth-b4e-tp
+    container_name: b4e-tp-4
+    volumes:
+      - '.:/project/sawtooth-b4e'
+    depends_on:
+      - b4e-shell
+    command: |
+      bash -c "
+        sleep 1
+        b4e-tp -v -C tcp://validator-4:4004
+        echo b4e-tp-4 connect
+      "
 
 
 
@@ -178,18 +178,18 @@ services:
       "
     stop_signal: SIGKILL
 
-#  rest-api-4:
-#    image: hyperledger/sawtooth-rest-api:chime
-#    container_name: sawtooth-rest-api-default-4
-#    expose:
-#      - 8008
-#    command: |
-#      bash -c "
-#        sawtooth-rest-api \
-#          --connect tcp://validator-4:4004 \
-#          --bind rest-api-4:8008
-#      "
-#    stop_signal: SIGKILL
+  rest-api-4:
+    image: hyperledger/sawtooth-rest-api:chime
+    container_name: sawtooth-rest-api-default-4
+    expose:
+      - 8008
+    command: |
+      bash -c "
+        sawtooth-rest-api \
+          --connect tcp://validator-4:4004 \
+          --bind rest-api-4:8008
+      "
+    stop_signal: SIGKILL
 
   # -------------=== settings tp ===-------------
 
@@ -225,13 +225,13 @@ services:
     command: settings-tp -C tcp://validator-3:4004
     stop_signal: SIGKILL
 
-#  settings-tp-4:
-#    image: hyperledger/sawtooth-settings-tp:chime
-#    container_name: sawtooth-settings-tp-default-4
-#    expose:
-#      - 4004
-#    command: settings-tp -C tcp://validator-4:4004
-#    stop_signal: SIGKILL
+  settings-tp-4:
+    image: hyperledger/sawtooth-settings-tp:chime
+    container_name: sawtooth-settings-tp-default-4
+    expose:
+      - 4004
+    command: settings-tp -C tcp://validator-4:4004
+    stop_signal: SIGKILL
 
   # -------------=== shell ===-------------
 
@@ -420,44 +420,44 @@ services:
           --peers tcp://139.59.125.235:8802
       "
 
-#  validator-4:
-#    image: hyperledger/sawtooth-validator:chime
-#    container_name: sawtooth-validator-default-4
-#    expose:
-#      - 4004
-#      - 5050
-#      - 8800
-#    ports:
-#      - '4008:4004'
-#      - '8804:8800'
-#    volumes:
-#      - pbft-shared:/pbft-shared
-#    command: |
-#      bash -c "
-#        if [ -e /pbft-shared/validators/validator-4.priv ]; then
-#          cp /pbft-shared/validators/validator-4.pub   /etc/sawtooth/keys/validator.pub
-#          cp /pbft-shared/validators/validator-4.priv   /etc/sawtooth/keys/validator.priv
-#        fi &&
-#        if [ ! -e /etc/sawtooth/keys/validator.priv ]; then
-#          sawadm keygen
-#          mkdir -p /pbft-shared/validators || true
-#          cp /etc/sawtooth/keys/validator.pub   /pbft-shared/validators/validator-4.pub
-#          cp /etc/sawtooth/keys/validator.priv   /pbft-shared/validators/validator-4.priv
-#        fi &&
-#        sawtooth keygen my_key &&
-#        sawtooth-validator -vv \
-#          --endpoint tcp://139.59.125.235:8804 \
-#          --bind component:tcp://eth0:4004 \
-#          --bind consensus:tcp://eth0:5050 \
-#          --bind network:tcp://eth0:8800 \
-#          --scheduler parallel \
-#          --peering static \
-#          --maximum-peer-connectivity 10000 \
-#          --peers tcp://139.59.125.235:8800 \
-#          --peers tcp://139.59.125.235:8801 \
-#          --peers tcp://139.59.125.235:8802 \
-#          --peers tcp://139.59.125.235:8803
-#      "
+  validator-4:
+    image: hyperledger/sawtooth-validator:chime
+    container_name: sawtooth-validator-default-4
+    expose:
+      - 4004
+      - 5050
+      - 8800
+    ports:
+      - '4008:4004'
+      - '8804:8800'
+    volumes:
+      - pbft-shared:/pbft-shared
+    command: |
+      bash -c "
+        if [ -e /pbft-shared/validators/validator-4.priv ]; then
+          cp /pbft-shared/validators/validator-4.pub   /etc/sawtooth/keys/validator.pub
+          cp /pbft-shared/validators/validator-4.priv   /etc/sawtooth/keys/validator.priv
+        fi &&
+        if [ ! -e /etc/sawtooth/keys/validator.priv ]; then
+          sawadm keygen
+          mkdir -p /pbft-shared/validators || true
+          cp /etc/sawtooth/keys/validator.pub   /pbft-shared/validators/validator-4.pub
+          cp /etc/sawtooth/keys/validator.priv   /pbft-shared/validators/validator-4.priv
+        fi &&
+        sawtooth keygen my_key &&
+        sawtooth-validator -vv \
+          --endpoint tcp://139.59.125.235:8804 \
+          --bind component:tcp://eth0:4004 \
+          --bind consensus:tcp://eth0:5050 \
+          --bind network:tcp://eth0:8800 \
+          --scheduler parallel \
+          --peering static \
+          --maximum-peer-connectivity 10000 \
+          --peers tcp://139.59.125.235:8800 \
+          --peers tcp://139.59.125.235:8801 \
+          --peers tcp://139.59.125.235:8802 \
+          --peers tcp://139.59.125.235:8803
+      "
 
   # -------------=== pbft engines ===-------------
 
