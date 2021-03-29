@@ -506,6 +506,7 @@ services:
     depends_on:
       - b4e-shell
       - rest-api-0
+      - validator-0
     command: |
       bash -c "
         b4e-rest-api \

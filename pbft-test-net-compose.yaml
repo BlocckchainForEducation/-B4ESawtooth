@@ -535,12 +535,12 @@ services:
     depends_on:
       - b4e-shell
       - rest-api-0
-      - validator-0
+      - validator-1
     command: |
       bash -c "
         b4e-rest-api \
           -B b4e-rest-api:8000 \
-          -C validator-0:4004 \
+          -C validator-1:4004 \
           -R rest-api-0:8008 \
           --db-host mongo-b4e \
           --db-user ${USERNAME} \
