@@ -43,7 +43,6 @@ class StudentAPI(object):
         )
 
     def student_data(self, request):
-        LOGGER.info("Student dataaaaaaaaaaaaaaaaaaasdfasfsdf")
         public_key = request.match_info.get('student_public_key', '')
         records = self._database.get_student_data(public_key)
         # records = list(records)
@@ -56,8 +55,6 @@ class StudentAPI(object):
             record_data = {"address": address,
                            "versions": self.standard_versions(record.get("versions"))}
             edu_id = record.get("versions")[-1].get("portfolio_id")
-            LOGGER.info("record_dataaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
-            LOGGER.info(record_data)
             if not edu_programs.get(edu_id):
                 edu_programs[edu_id] = {}
             edu_program = edu_programs[edu_id]
@@ -82,9 +79,10 @@ class StudentAPI(object):
         try:
             record = self._database.get_record_by_address(address)
             if not record:
-                return "record not found"
+                return json_response({"msg": "record not found"})
+            versions = self.standard_versions(record.get("versions"))
             record_data = {"address": address,
-                           "versions": self.standard_versions(record.get("versions"))}
+                           "versions": versions}
         except Exception as e:
             record_data = {"err": str(e)}
 
@@ -94,6 +92,8 @@ class StudentAPI(object):
         return "hello"
 
     def standard_versions(self, versions):
+        if not versions:
+            return ""
         for version in versions:
             status = version.get("record_status")
             version['type'] = self._version_status_type(status)

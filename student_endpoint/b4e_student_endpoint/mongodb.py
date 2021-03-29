@@ -218,9 +218,13 @@ class Database(object):
         return res
 
     def get_record_by_address(self, address):
-        key = {"address": address}
+        try:
+            key = {"address": address}
 
-        return self.b4e_record_collection.find_one(key)
+            return self.b4e_record_collection.find_one(key)
+        except Exception as e:
+            LOGGER.error(e)
+            return
 
 
 def timestamp_to_datetime(timestamp):

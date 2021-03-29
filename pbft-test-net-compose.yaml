@@ -50,7 +50,7 @@ services:
     command: |
       bash -c "
         sleep 1
-        ls
+        echo start
         b4e-tp -v -C tcp://validator-0:4004
         echo b4e-tp-0 connect
       "
@@ -535,6 +535,7 @@ services:
     depends_on:
       - b4e-shell
       - rest-api-0
+      - validator-0
     command: |
       bash -c "
         b4e-rest-api \
@@ -603,6 +604,7 @@ services:
       - '.:/project/sawtooth-b4e'
     depends_on:
       - postgres-statistic
+      - validator-0
     ports:
       - '${STATISTIC_PORT}:8000'
     command: |
