@@ -172,6 +172,7 @@ services:
     depends_on:
       - b4e-shell
       - mongo-b4e
+      - validator-0
     command: |
       bash -c "
         b4e-subscriber subscribe \
@@ -180,6 +181,29 @@ services:
         --db-password ${PASSWORD} \
         --rest-api-default rest-api-0:8008  \
         --subscriber-host-url ${BACKEND_LISTEN_SUSBSCRIBER_HOST_URL} \
+        -C tcp://validator-0:4004 \
+        -vv
+      "
+  b4e-subscriber-ministry:
+    build:
+      context: .
+      dockerfile: subscriber_b4e/Dockerfile
+    image: sawtooth-b4e-subscriber
+    container_name: b4e-subscriber-ministry
+    volumes:
+      - '.:/project/sawtooth-b4e'
+    depends_on:
+      - b4e-shell
+      - mongo-b4e-ministry
+      - validator-0
+    command: |
+      bash -c "
+        b4e-subscriber subscribe \
+        --db-host mongo-b4e \
+        --db-user ${USERNAME} \
+        --db-password ${PASSWORD} \
+        --rest-api-default rest-api-0:8008  \
+        --subscriber-host-url ${BACKEND_MINISTRY_LISTEN_SUSBSCRIBER_HOST_URL} \
         -C tcp://validator-0:4004 \
         -vv
       "
@@ -194,6 +218,7 @@ services:
       - '.:/project/sawtooth-b4e'
     depends_on:
       - mongo-student
+      - validator-0
     ports:
       - '${STUDENT_ENDPOINT_PORT}:8000'
     command: |
@@ -209,13 +234,14 @@ services:
   b4e-statistic:
     build:
       context: .
-      dockerfile: ./statistic/Dockerfile
+      dockerfile: ./student_endpoint/Dockerfile
     image: sawtooth-b4e-statistic
     container_name: b4e-statistic
     volumes:
       - '.:/project/sawtooth-b4e'
     depends_on:
       - postgres-statistic
+      - validator-0
     ports:
       - '${STATISTIC_PORT}:8000'
     command: |
@@ -245,6 +271,18 @@ services:
       - 27017
     ports:
       - '27018:27017'
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${PASSWORD}
+
+  mongo-b4e-ministry:
+    image: mongo
+    container_name: mongo-b4e-ministry
+    restart: always
+    expose:
+      - 27017
+    ports:
+      - '27019:27017'
     environment:
       MONGO_INITDB_ROOT_USERNAME: ${USERNAME}
       MONGO_INITDB_ROOT_PASSWORD: ${PASSWORD}

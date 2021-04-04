@@ -559,7 +559,7 @@ services:
     depends_on:
       - b4e-shell
       - mongo-b4e
-      - validator-0
+      - validator-1
     command: |
       bash -c "
         b4e-subscriber subscribe \
@@ -568,7 +568,30 @@ services:
         --db-password ${PASSWORD} \
         --rest-api-default rest-api-0:8008  \
         --subscriber-host-url ${BACKEND_LISTEN_SUSBSCRIBER_HOST_URL} \
-        -C tcp://validator-0:4004 \
+        -C tcp://validator-1:4004 \
+        -vv
+      "
+  b4e-subscriber-ministry:
+    build:
+      context: .
+      dockerfile: subscriber_b4e/Dockerfile
+    image: sawtooth-b4e-subscriber
+    container_name: b4e-subscriber-ministry
+    volumes:
+      - '.:/project/sawtooth-b4e'
+    depends_on:
+      - b4e-shell
+      - mongo-b4e-ministry
+      - validator-2
+    command: |
+      bash -c "
+        b4e-subscriber subscribe \
+        --db-host mongo-b4e \
+        --db-user ${USERNAME} \
+        --db-password ${PASSWORD} \
+        --rest-api-default rest-api-0:8008  \
+        --subscriber-host-url ${BACKEND_MINISTRY_LISTEN_SUSBSCRIBER_HOST_URL} \
+        -C tcp://validator-2:4004 \
         -vv
       "
 
@@ -582,7 +605,7 @@ services:
       - '.:/project/sawtooth-b4e'
     depends_on:
       - mongo-student
-      - validator-1
+      - validator-2
     ports:
       - '${STUDENT_ENDPOINT_PORT}:8000'
     command: |
@@ -592,7 +615,7 @@ services:
         --db-host mongo-student \
         --db-user ${USERNAME} \
         --db-password ${PASSWORD} \
-        -C tcp://validator-1:4004 \
+        -C tcp://validator-2:4004 \
         -vv
       "
   b4e-statistic:
@@ -605,7 +628,7 @@ services:
       - '.:/project/sawtooth-b4e'
     depends_on:
       - postgres-statistic
-      - validator-0
+      - validator-3
     ports:
       - '${STATISTIC_PORT}:8000'
     command: |
@@ -623,7 +646,7 @@ services:
         --db-host postgres-statistic \
         --db-user ${USERNAME} \
         --db-password ${PASSWORD} \
-        -C tcp://validator-0:4004 \
+        -C tcp://validator-3:4004 \
         -vv
       "
 
@@ -638,7 +661,17 @@ services:
     environment:
       MONGO_INITDB_ROOT_USERNAME: ${USERNAME}
       MONGO_INITDB_ROOT_PASSWORD: ${PASSWORD}
-
+  mongo-b4e-ministry:
+    image: mongo
+    container_name: mongo-b4e-ministry
+    restart: always
+    expose:
+      - 27017
+    ports:
+      - '27019:27017'
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${PASSWORD}
   mongo-student:
     image: mongo
     container_name: mongo-student
