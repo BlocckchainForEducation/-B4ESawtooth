@@ -20,7 +20,10 @@ def job_begin(state, public_key, transaction_id, payload):
     hash = payload.data.hash
 
     if company.role != actor_pb2.Actor.COMPANY:
-        raise InvalidTransaction("Just Institution can create job")
+        raise InvalidTransaction("Just company can create job")
+
+    if public_key != company_public_key:
+        raise InvalidTransaction("Invalid permission for company_public_key")
 
     if state.get_job(job_id, company_public_key, candidate_public_key):
         raise InvalidTransaction("Job has been existed")
