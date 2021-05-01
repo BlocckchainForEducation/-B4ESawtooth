@@ -9,4 +9,4 @@ def create_company(state, public_key, transaction_id, payload):
                   manager_public_key=public_key,
                   status=actor_pb2.Actor.ACTIVE,
                   payload=payload,
-                  role=actor_pb2.Actor.INSTITUTION)
+                  role=actor_pb2.Actor.COMPANY)
