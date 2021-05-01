@@ -1,6 +1,6 @@
 import asyncio
 import logging
-import sys
+import json
 import nest_asyncio
 
 from aiohttp import web
@@ -32,7 +32,7 @@ class StudentAPI(object):
 
         app.router.add_get('/student/data/{student_public_key}', self.student_data)
         app.router.add_get('/record/{address}', self.record_address)
-        app.router.add_get('/', self.hello_student)
+        app.router.add_get('/{publicKey}', self.cv)
 
         web.run_app(
             app,
@@ -44,6 +44,12 @@ class StudentAPI(object):
 
     def student_data(self, request):
         public_key = request.match_info.get('student_public_key', '')
+
+        student_data = self._student_data_dict(public_key)
+
+        return json_response(student_data)
+
+    def _student_data_dict(self, public_key):
         records = self._database.get_student_data(public_key)
         # records = list(records)
         edu_programs = {}
@@ -55,9 +61,10 @@ class StudentAPI(object):
             record_data = {"address": address,
                            "versions": self.standard_versions(record.get("versions"))}
             edu_id = record.get("versions")[-1].get("portfolio_id")
-            if not edu_programs.get(edu_id):
-                edu_programs[edu_id] = {}
-            edu_program = edu_programs[edu_id]
+            edu_address = addresser.get_portfolio_address(edu_id, owner_public_key, manager_public_key)
+            if not edu_programs.get(edu_address):
+                edu_programs[edu_address] = {}
+            edu_program = edu_programs[edu_address]
             if record.get("record_type") == "SUBJECT":
                 if not edu_program.get("subjects"):
                     edu_program["subjects"] = []
@@ -69,10 +76,33 @@ class StudentAPI(object):
                 edu_program["certificate"] = record_data
 
         student_data = []
-        for key in edu_programs:
-            student_data.append(edu_programs[key])
+        for edu_address in edu_programs:
+            edu_program = self._database.get_portfolio(edu_address)
+            edu_programs[edu_address]["eduProgram"] = json.loads(edu_program.get('portfolio_data'))
+            student_data.append(edu_programs[edu_address])
 
-        return json_response(student_data)
+        return student_data
+
+    def _get_job_data(self, public_key):
+        jobs_db = self._database.get_job_by_candidate(public_key)
+        jobs = []
+        for job in jobs_db:
+            jobs.append({
+                "companyPublicKeyHex": job.get('company_public_key'),
+                "jobId": job.get('job_id'),
+                "start": job.get('start'),
+                "end": job.get('end')
+            })
+
+    def cv(self, request):
+        public_key = request.match_info.get('publicKey', '')
+        student_data = self._student_data_dict(public_key)
+        jobs_data = self._get_job_data(public_key)
+
+        return json_response({
+            "jobs": jobs_data,
+            "eduPrograms": student_data
+        })
 
     def record_address(self, request):
         address = request.match_info.get('address', '')

@@ -37,6 +37,7 @@ class Database(object):
         self.b4e_record_collection = None
         self.b4e_class_collection = None
         self.b4e_voting_collection = None
+        self.b4e_job_collection = None
 
     def connect(self, host=MongoDBConfig.HOST, port=MongoDBConfig.PORT, user_name=MongoDBConfig.USER_NAME,
                 password=MongoDBConfig.PASSWORD):
@@ -55,6 +56,7 @@ class Database(object):
         self.b4e_portfolio_collection = self.b4e_db[MongoDBConfig.PORTFOLIO_COLLECTION]
         self.b4e_record_collection = self.b4e_db[MongoDBConfig.RECORD_COLLECTION]
         self.b4e_voting_collection = self.b4e_db[MongoDBConfig.VOTING_COLLECTION]
+        self.b4e_job_collection = self.b4e_db[MongoDBConfig.JOB_COLLECTION]
 
     def disconnect(self):
         self.mongo.close()
@@ -171,6 +173,21 @@ class Database(object):
             print(e)
             return None
 
+    def insert_job(self, job_dict):
+        try:
+            job_id = job_dict['job_id']
+            company_public_key = job_dict['company_public_key']
+            candidate_public_key = job_dict['candidate_public_key']
+
+            address = addresser.get_job_address(job_id, company_public_key, candidate_public_key)
+            key = {"address": address}
+            data = {"$set": job_dict}
+            self.b4e_job_collection.update_one(key, data, upsert=True)
+
+        except Exception as e:
+            print(e)
+            return None
+
     def insert_vote(self, vote_dict):
         try:
             return
@@ -200,9 +217,9 @@ class Database(object):
 
     def insert_portfolio(self, portfolio_dict):
         try:
-            key = {'owner_public_key': portfolio_dict['owner_public_key'],
-                   'manager_public_key': portfolio_dict['manager_public_key'],
-                   'id': portfolio_dict['id']}
+            address = addresser.get_portfolio_address(portfolio_dict['id'], portfolio_dict['owner_public_key'],
+                                                      portfolio_dict['manager_public_key'])
+            key = {'address': address}
 
             data = {"$set": portfolio_dict}
             res = self.b4e_portfolio_collection.update_one(key, data, upsert=True)
@@ -217,11 +234,39 @@ class Database(object):
         res = self.b4e_record_collection.find(key)
         return res
 
+    def get_portfolio(self, address):
+        key = {'address': address}
+        res = self.b4e_portfolio_collection.find_one(key)
+        return res
+
+    def get_portfolio_owner(self, owner_public_key):
+        key = {'owner_public_key': owner_public_key}
+        res = self.b4e_portfolio_collection.find(key)
+        return res
+
     def get_record_by_address(self, address):
         try:
             key = {"address": address}
 
             return self.b4e_record_collection.find_one(key)
+        except Exception as e:
+            LOGGER.error(e)
+            return
+
+    def get_job_by_address(self, address):
+        try:
+            key = {"address": address}
+
+            return self.b4e_job_collection.find_one(key)
+        except Exception as e:
+            LOGGER.error(e)
+            return
+
+    def get_job_by_candidate(self, candidate_public_key):
+        try:
+            key = {"candidate_public_key": candidate_public_key}
+
+            return self.b4e_job_collection.find(key)
         except Exception as e:
             LOGGER.error(e)
             return

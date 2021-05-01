@@ -54,6 +54,7 @@ class MongoDBConfig:
     BLOCK_COLLECTION = "b4e_blocks"
     MANAGER_COLLECTION = 'b4e_managers'
     REGISTRATION_COLLECTION = 'b4e_registrations'
+    JOB_COLLECTION = 'b4e_job'
 
 
 class Status:

@@ -92,6 +92,9 @@ def _apply_state_changes(database, events, block_num, block_id):
             _apply_class_change(database, block_num, resources)
         elif data_type == AddressSpace.PORTFOLIO:
             _apply_portfolio_change(database, block_num, resources)
+        elif data_type == AddressSpace.JOB:
+            _apply_job_change(database, block_num, resources)
+
         else:
             LOGGER.warning('Unsupported data type: %s', data_type)
 
@@ -149,3 +152,10 @@ def _apply_portfolio_change(database, block_num, portfolios):
         portfolio['block_num'] = block_num
         portfolio['end_block_num'] = MAX_BLOCK_NUMBER
         database.insert_portfolio(portfolio)
+
+
+def _apply_job_change(database, block_num, jobs):
+    for job in jobs:
+        job['block_num'] = block_num
+        job['end_block_num'] = MAX_BLOCK_NUMBER
+        database.insert_job(job)
