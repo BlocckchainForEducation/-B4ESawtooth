@@ -5,6 +5,8 @@ message B4EPayload{
 
   enum Action {
     CREATE_ACTOR = 0;
+
+    //EDUCATION
     CREATE_INSTITUTION = 1;
     CREATE_TEACHER = 2;
     CREATE_EDU_PROGRAM = 3;
@@ -22,6 +24,13 @@ message B4EPayload{
     UPDATE_ACTOR_PROFILE = 15;
     REJECT_INSTITUTION = 16;
     ACTIVE_INSTITUTION = 17;
+
+    //COMPANY ACTION
+    CREATE_COMPANY = 19;
+
+    //JOB
+    JOB_BEGIN = 20;
+    JOB_END = 21;
 
     SET_B4E_ENVIRONMENT = 18;
   }
@@ -47,6 +56,13 @@ message B4EPayload{
   RejectInstitutionAction reject_institution = 18;
   ActiveInstitutionAction active_institution = 19;
   SetB4EEnvironmentAction set_b4e_environment = 20;
+
+  //company
+  CreateActorAction create_company = 22;
+
+  //job
+  JobBegin job_begin = 23;
+  JobEnd job_end = 24;
 
   uint64 timestamp = 21;
 }
@@ -151,4 +167,16 @@ message SetB4EEnvironmentAction{
   uint64 timestamp = 1;
 }
 
+message JobBegin{
+  string company_public_key = 1;
+  string candidate_public_key = 2;
+  string job_id = 3;
+  string cipher = 4;
+  string hash = 5;
+}
 
+message JobEnd{
+  string company_public_key = 1;
+  string candidate_public_key = 2;
+  string job_id = 3;
+}

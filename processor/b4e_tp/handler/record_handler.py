@@ -6,8 +6,6 @@ from processor.b4e_tp.handler.actor_handler import _check_is_valid_actor
 from protobuf.b4e_protobuf import actor_pb2
 from protobuf.b4e_protobuf import record_pb2
 from protobuf.b4e_protobuf import payload_pb2
-from protobuf.b4e_protobuf import voting_pb2
-from protobuf.b4e_protobuf import class_pb2
 from protobuf.b4e_protobuf import portfolio_pb2
 
 from processor.b4e_tp.handler import time_handler
@@ -65,7 +63,7 @@ def create_cert(state, public_key, transaction_id, payload):
         raise InvalidTransaction("Record has been existed")
 
     if actor.role != actor_pb2.Actor.INSTITUTION:
-        raise InvalidTransaction("Just Institution can't create certificate")
+        raise InvalidTransaction("Just Institution can create certificate")
 
     portfolio = state.get_portfolio(id=payload.data.portfolio_id,
                                     owner_public_key=owner_public_key,

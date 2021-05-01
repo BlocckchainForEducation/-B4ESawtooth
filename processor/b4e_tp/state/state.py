@@ -13,17 +13,11 @@
 # limitations under the License.
 # -----------------------------------------------------------------------------
 
-from addressing.b4e_addressing import addresser
-
-from protobuf.b4e_protobuf import actor_pb2
-from protobuf.b4e_protobuf import record_pb2
-from protobuf.b4e_protobuf import b4e_environment_pb2
-from protobuf.b4e_protobuf import class_pb2
-from protobuf.b4e_protobuf import voting_pb2
 
 from processor.b4e_tp.state import b4e_environment_state, \
     actor_state, class_state, record_state, voting_state, \
-    portfolio_state
+    portfolio_state, \
+    job_state
 
 import logging
 
@@ -111,3 +105,12 @@ class B4EState(object):
 
     def update_portfolio_data(self, id, owner_public_key, manager_public_key, data):
         portfolio_state.update_data(self, id, owner_public_key, manager_public_key, data)
+
+    def get_job(self, job_id, company_public_key, candidate_public_key):
+        job_state.get_jobget_job(self, job_id, company_public_key, candidate_public_key)
+
+    def create_job_begin(self, job):
+        job_state.set_job(self, job)
+
+    def update_job_end(self, job_id, company_public_key, candidate_public_key, end):
+        job_state.set_job_end(self, job_id, company_public_key, candidate_public_key, end)

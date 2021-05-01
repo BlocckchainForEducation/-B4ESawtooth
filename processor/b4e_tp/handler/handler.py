@@ -26,7 +26,8 @@ from processor.b4e_tp.state.state import B4EState
 
 from processor.b4e_tp.handler import actor_handler, \
     class_handler, portfolio_handler, record_handler, \
-    voting_handler, validator, b4e_environment_handler
+    voting_handler, validator, b4e_environment_handler, \
+    company_handler, job_handler
 
 import logging
 
@@ -165,6 +166,24 @@ class B4EHandler(TransactionHandler):
                 payload=payload)
         elif payload.action == payload_pb2.B4EPayload.SET_B4E_ENVIRONMENT:
             b4e_environment_handler.set_b4e_environment(
+                state=state,
+                public_key=header.signer_public_key,
+                transaction_id=transaction.signature,
+                payload=payload)
+        elif payload.action == payload_pb2.B4EPayload.CREATE_COMPANY:
+            company_handler.create_company(
+                state=state,
+                public_key=header.signer_public_key,
+                transaction_id=transaction.signature,
+                payload=payload)
+        elif payload.action == payload_pb2.B4EPayload.JOB_BEGIN:
+            job_handler.job_begin(
+                state=state,
+                public_key=header.signer_public_key,
+                transaction_id=transaction.signature,
+                payload=payload)
+        elif payload.action == payload_pb2.B4EPayload.JOB_END:
+            job_handler.job_end(
                 state=state,
                 public_key=header.signer_public_key,
                 transaction_id=transaction.signature,

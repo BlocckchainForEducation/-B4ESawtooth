@@ -36,7 +36,7 @@ RUN pip3 install \
     aiohttp \
     aiopg \
     bcrypt \
-    grpcio-tools \
+    grpcio-tools==1.22.0 \
     itsdangerous \
     nose2 \
     psycopg2-binary \

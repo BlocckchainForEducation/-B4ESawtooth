@@ -79,5 +79,4 @@ def fix_import(contents, pkg, sub_dir=False):
 
 
 if __name__ == '__main__':
-    pass
-    # make_protobuf('protobuf', 'b4e_protobuf')
+    make_protobuf('protobuf', 'b4e_protobuf')

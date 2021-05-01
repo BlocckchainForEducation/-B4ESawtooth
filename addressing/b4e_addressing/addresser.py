@@ -24,6 +24,7 @@ VOTING_PREFIX = '001'
 PORTFOLIO_PREFIX = '010'
 CLASS_PREFIX = '011'
 RECORD_PREFIX = '100'
+JOB_PREFIX = '101'
 
 ENVIRONMENT_ADDRESS = NAMESPACE + str(10 ** 64)[1:]
 
@@ -36,6 +37,9 @@ class AddressSpace(enum.IntEnum):
     CLASS = 3
     RECORD = 4
     ENVIRONMENT = 5
+
+    JOB = 6
+
     OTHER_FAMILY = 100
 
 
@@ -78,6 +82,15 @@ def get_portfolio_address(id, owner_public_key, manager_public_key):
            + hashlib.sha512(id.encode('utf-8')).hexdigest()[:31]
 
 
+def get_job_address(job_id, company_public_key, candidate_public_key):
+    company_prefix = hashlib.sha512(
+        company_public_key.encode('utf-8')).hexdigest()[-10:]
+    candidate_prefix = hashlib.sha512(
+        candidate_public_key.encode('utf-8')).hexdigest()[-10:]
+    return NAMESPACE + JOB_PREFIX + company_prefix + candidate_prefix \
+           + hashlib.sha512(job_id.encode('utf-8')).hexdigest()[:31]
+
+
 def get_address_type(address):
     if address[:len(NAMESPACE)] != NAMESPACE:
         return AddressSpace.OTHER_FAMILY
@@ -95,7 +108,8 @@ def get_address_type(address):
         return AddressSpace.RECORD
     if infix == PORTFOLIO_PREFIX:
         return AddressSpace.PORTFOLIO
-
+    if infix == JOB_PREFIX:
+        return AddressSpace.JOB
     return AddressSpace.OTHER_FAMILY
 
 

@@ -106,6 +106,18 @@ class B4EPayload(object):
                 self._transaction.action == \
                 payload_pb2.B4EPayload.SET_B4E_ENVIRONMENT:
             return self._transaction.set_b4e_environment
+        if self._transaction.HasField('create_company') and \
+                self._transaction.action == \
+                payload_pb2.B4EPayload.CREATE_COMPANY:
+            return self._transaction.create_company
+        if self._transaction.HasField('job_begin') and \
+                self._transaction.action == \
+                payload_pb2.B4EPayload.JOB_BEGIN:
+            return self._transaction.job_begin
+        if self._transaction.HasField('job_end') and \
+                self._transaction.action == \
+                payload_pb2.B4EPayload.JOB_END:
+            return self._transaction.job_end
 
         raise InvalidTransaction('Action does not match payload data')
 

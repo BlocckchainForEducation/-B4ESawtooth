@@ -4,7 +4,8 @@ message Actor {
   enum ActorRole{
     INSTITUTION = 0;
     TEACHER = 1;
-    OTHER = 2;
+    COMPANY = 2;
+    OTHER = 3;
   }
   enum ActorStatus{
     WAITING = 0;
