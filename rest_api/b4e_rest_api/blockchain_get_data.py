@@ -4,29 +4,14 @@ import logging
 
 import requests
 
+from decoder.b4e_decoder.decoding import deserialize_data
 from protobuf.b4e_protobuf import payload_pb2
 
 from config.config import SawtoothConfig
 from addressing.b4e_addressing import addresser
-from addressing.b4e_addressing.addresser import AddressSpace
-from protobuf.b4e_protobuf.actor_pb2 import ActorContainer
-from protobuf.b4e_protobuf.b4e_environment_pb2 import B4EEnvironmentContainer
-from protobuf.b4e_protobuf.voting_pb2 import VotingContainer
-from protobuf.b4e_protobuf.class_pb2 import ClassContainer
-from protobuf.b4e_protobuf.record_pb2 import RecordContainer
-from protobuf.b4e_protobuf.portfolio_pb2 import PortfolioContainer
-from google.protobuf.json_format import MessageToJson
 from google.protobuf.json_format import MessageToDict
 import google
 
-CONTAINERS = {
-    AddressSpace.ACTOR: ActorContainer,
-    AddressSpace.PORTFOLIO: PortfolioContainer,
-    AddressSpace.RECORD: RecordContainer,
-    AddressSpace.CLASS: ClassContainer,
-    AddressSpace.VOTING: VotingContainer,
-    AddressSpace.ENVIRONMENT: B4EEnvironmentContainer
-}
 
 LOGGER = logging.getLogger(__name__)
 
@@ -154,27 +139,6 @@ def get_state(sawtooth_address):
         except Exception as e:
             print("err:", e)
             return {'msg': "err"}
-
-
-def deserialize_data(address, data):
-    """Deserializes state data by type based on the address structure and
-    returns it as a dictionary with the associated data type
-
-    Args:
-        address (str): The state address of the container
-        data (str): String containing the serialized state data
-    """
-    data_type = addresser.get_address_type(address)
-
-    if data_type == addresser.AddressSpace.OTHER_FAMILY:
-        return []
-    try:
-        container = CONTAINERS[data_type]
-    except KeyError:
-        raise TypeError('Unknown data type: {}'.format(data_type))
-
-    entries = _parse_proto(container, data).entries
-    return [_convert_proto_to_dict(pb) for pb in entries]
 
 
 def _parse_proto(proto_class, data):

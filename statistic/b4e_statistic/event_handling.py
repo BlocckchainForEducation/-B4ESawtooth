@@ -22,7 +22,7 @@ from sawtooth_sdk.protobuf.transaction_receipt_pb2 import StateChangeList
 from addressing.b4e_addressing import addresser
 from addressing.b4e_addressing.addresser import AddressSpace
 from addressing.b4e_addressing.addresser import NAMESPACE
-from statistic.b4e_statistic.decoding import deserialize_data
+from decoder.b4e_decoder.decoding import deserialize_data
 
 MAX_BLOCK_NUMBER = int(math.pow(2, 63)) - 1
 NAMESPACE_REGEX = re.compile('^{}'.format(NAMESPACE))

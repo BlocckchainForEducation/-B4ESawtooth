@@ -9,7 +9,7 @@ import requests
 from addressing.b4e_addressing import addresser
 from config.config import SubscriberConfig, SawtoothConfig
 
-from subscriber_b4e.b4e_subscriber.decoding import deserialize_data
+from decoder.b4e_decoder.decoding import deserialize_data
 
 LOGGER = logging.getLogger(__name__)
 

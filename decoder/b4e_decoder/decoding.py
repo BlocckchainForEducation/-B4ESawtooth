@@ -24,6 +24,7 @@ from protobuf.b4e_protobuf.voting_pb2 import VotingContainer
 from protobuf.b4e_protobuf.class_pb2 import ClassContainer
 from protobuf.b4e_protobuf.record_pb2 import RecordContainer
 from protobuf.b4e_protobuf.portfolio_pb2 import PortfolioContainer
+from protobuf.b4e_protobuf.job_pb2 import JobContainer
 
 CONTAINERS = {
     AddressSpace.ACTOR: ActorContainer,
@@ -31,7 +32,8 @@ CONTAINERS = {
     AddressSpace.PORTFOLIO: PortfolioContainer,
     AddressSpace.CLASS: ClassContainer,
     AddressSpace.VOTING: VotingContainer,
-    AddressSpace.ENVIRONMENT: B4EEnvironmentContainer
+    AddressSpace.ENVIRONMENT: B4EEnvironmentContainer,
+    AddressSpace.JOB: JobContainer
 }
 
 LOGGER = logging.getLogger(__name__)
