@@ -61,8 +61,8 @@ message B4EPayload{
   CreateActorAction create_company = 22;
 
   //job
-  JobBegin job_begin = 23;
-  JobEnd job_end = 24;
+  JobBeginAction job_begin = 23;
+  JobEndAction job_end = 24;
 
   uint64 timestamp = 21;
 }
@@ -167,7 +167,7 @@ message SetB4EEnvironmentAction{
   uint64 timestamp = 1;
 }
 
-message JobBegin{
+message JobBeginAction{
   string company_public_key = 1;
   string candidate_public_key = 2;
   string job_id = 3;
@@ -175,7 +175,7 @@ message JobBegin{
   string hash = 5;
 }
 
-message JobEnd{
+message JobEndAction{
   string company_public_key = 1;
   string candidate_public_key = 2;
   string job_id = 3;

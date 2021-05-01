@@ -1,22 +1,6 @@
-import datetime
-from json.decoder import JSONDecodeError
 import logging
-import time
 
 from aiohttp.web import json_response
-import bcrypt
-from Crypto.Cipher import AES
-from itsdangerous import BadSignature
-from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
-
-from rest_api.b4e_rest_api.errors import ApiBadRequest
-from rest_api.b4e_rest_api.errors import ApiNotFound
-from rest_api.b4e_rest_api.errors import ApiUnauthorized
-
-from rest_api.b4e_rest_api.blockchain_get_data import get_data_from_transaction
-from rest_api.b4e_rest_api.blockchain_get_data import get_state
-from rest_api.b4e_rest_api.blockchain_get_data import get_student_data
-from rest_api.b4e_rest_api.blockchain_get_data import get_record_transaction
 
 from config.config import SawtoothConfig
 from rest_api.b4e_rest_api.route_handler.route_handler import decode_request, validate_fields, tolist, slice_per, \
@@ -97,7 +81,28 @@ class ActorRouteHandler(object):
 
             })
 
+    async def create_company(self, request):
+        body = await decode_request(request)
+        required_fields = ['privateKeyHex', 'profile']
+        validate_fields(required_fields, body)
+
+        profile = body.get('profile')
+        required_fields = ['publicKey']
+        validate_fields(required_fields, profile)
+
+        transaction_id = await self._messenger.send_create_company(private_key=body.get('privateKeyHex'),
+                                                                   profile=profile,
+                                                                   timestamp=get_time())
+
+        return json_response(
+            {
+                'ok': True,
+                'msg': 'Transfer record transaction submitted',
+                'transactionId': transaction_id
+            })
+
     def add_route(self, app):
         app.router.add_post('/staff/register', self.create_institution)
         app.router.add_post('/staff/create-teacher', self.create_teacher)
         app.router.add_post('/staff/create-teachers', self.create_teachers)
+        app.router.add_post('/company/register', self.create_company)

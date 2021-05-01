@@ -30,6 +30,7 @@ from rest_api.b4e_rest_api.transaction_creation import class_transaction
 from rest_api.b4e_rest_api.transaction_creation import portfolio_transaction
 from rest_api.b4e_rest_api.transaction_creation import record_transaction
 from rest_api.b4e_rest_api.transaction_creation import voting_transaction
+from rest_api.b4e_rest_api.transaction_creation import job_transaction
 
 import logging
 import asyncio
@@ -533,6 +534,66 @@ class Messenger(object):
                                                             email,
                                                             address,
                                                             timestamp)
+        await self._send_and_wait_for_commit(batch)
+        transaction_id = batch.transactions[0].header_signature
+        return transaction_id
+
+    async def send_create_company(self, private_key,
+                                  profile,
+                                  timestamp):
+
+        transaction_signer = self._crypto_factory.new_signer(
+            secp256k1.Secp256k1PrivateKey.from_hex(private_key))
+        batch_signer = transaction_signer
+
+        batch = actor_transaction.make_create_company(transaction_signer,
+                                                      batch_signer,
+                                                      profile,
+                                                      timestamp)
+        await self._send_and_wait_for_commit(batch)
+        transaction_id = batch.transactions[0].header_signature
+        return transaction_id
+
+    async def send_create_job(self, private_key,
+                              company_public_key,
+                              candidate_public_key,
+                              job_id,
+                              cipher,
+                              record_hash,
+                              timestamp):
+
+        transaction_signer = self._crypto_factory.new_signer(
+            secp256k1.Secp256k1PrivateKey.from_hex(private_key))
+        batch_signer = transaction_signer
+
+        batch = job_transaction.make_create_job(transaction_signer,
+                                                batch_signer,
+                                                company_public_key,
+                                                candidate_public_key,
+                                                job_id,
+                                                cipher,
+                                                record_hash,
+                                                timestamp)
+        await self._send_and_wait_for_commit(batch)
+        transaction_id = batch.transactions[0].header_signature
+        return transaction_id
+
+    async def send_update_job_end(self, private_key,
+                                  company_public_key,
+                                  candidate_public_key,
+                                  job_id,
+                                  timestamp):
+
+        transaction_signer = self._crypto_factory.new_signer(
+            secp256k1.Secp256k1PrivateKey.from_hex(private_key))
+        batch_signer = transaction_signer
+
+        batch = job_transaction.make_update_job_end(transaction_signer,
+                                                    batch_signer,
+                                                    company_public_key,
+                                                    candidate_public_key,
+                                                    job_id,
+                                                    timestamp)
         await self._send_and_wait_for_commit(batch)
         transaction_id = batch.transactions[0].header_signature
         return transaction_id

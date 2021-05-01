@@ -21,7 +21,34 @@ def make_create_actor(transaction_signer,
 
     payload = payload_pb2.B4EPayload(
         action=payload_pb2.B4EPayload.CREATE_ACTOR,
-        create_institution=action,
+        create_actor=action,
+        timestamp=timestamp)
+
+    payload_bytes = payload.SerializeToString()
+
+    return _make_batch(
+        payload_bytes=payload_bytes,
+        inputs=inputs,
+        outputs=outputs,
+        transaction_signer=transaction_signer,
+        batch_signer=batch_signer)
+
+
+def make_create_company(transaction_signer,
+                        batch_signer,
+                        profile,
+                        timestamp):
+    actor_address = addresser.get_actor_address(transaction_signer.get_public_key().as_hex())
+
+    inputs = [actor_address]
+
+    outputs = [actor_address]
+
+    action = payload_pb2.CreateActorAction(data=json.dumps(profile), id=profile.get('publicKey'))
+
+    payload = payload_pb2.B4EPayload(
+        action=payload_pb2.B4EPayload.CREATE_COMPANY,
+        create_company=action,
         timestamp=timestamp)
 
     payload_bytes = payload.SerializeToString()
