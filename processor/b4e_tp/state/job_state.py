@@ -1,6 +1,10 @@
+import logging
+
 from addressing.b4e_addressing import addresser
 
 from protobuf.b4e_protobuf import job_pb2
+
+LOGGER = logging.getLogger(__name__)
 
 
 def get_job(self, job_id, company_public_key, candidate_public_key):
@@ -48,7 +52,8 @@ def set_job_end(self, job_id, company_public_key, candidate_public_key, end):
         container.ParseFromString(state_entries[0].data)
         for job in container.entries:
             if job.job_id == job_id and job.candidate_public_key == candidate_public_key and job.company_public_key == company_public_key:
-                job.end = end
+                LOGGER.info("update end job")
+                job.end.CopyFrom(end)
 
     data = container.SerializeToString()
     updated_state = {}

@@ -78,7 +78,7 @@ class StudentAPI(object):
         student_data = []
         for edu_address in edu_programs:
             edu_program = self._database.get_portfolio(edu_address)
-            edu_programs[edu_address]["eduProgram"] = json.loads(edu_program.get('portfolio_data'))
+            edu_programs[edu_address]["eduProgram"] = json.loads(edu_program.get('portfolio_data')[-1].get('data'))
             student_data.append(edu_programs[edu_address])
 
         return student_data
@@ -93,6 +93,8 @@ class StudentAPI(object):
                 "start": job.get('start'),
                 "end": job.get('end')
             })
+
+        return jobs
 
     def cv(self, request):
         public_key = request.match_info.get('publicKey', '')

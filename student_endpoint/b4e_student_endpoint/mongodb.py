@@ -175,6 +175,9 @@ class Database(object):
 
     def insert_job(self, job_dict):
         try:
+            LOGGER.info('insert_job')
+            LOGGER.info(job_dict)
+
             job_id = job_dict['job_id']
             company_public_key = job_dict['company_public_key']
             candidate_public_key = job_dict['candidate_public_key']
@@ -265,7 +268,8 @@ class Database(object):
     def get_job_by_candidate(self, candidate_public_key):
         try:
             key = {"candidate_public_key": candidate_public_key}
-
+            LOGGER.info("get_job_by_candidate")
+            LOGGER.info(key)
             return self.b4e_job_collection.find(key)
         except Exception as e:
             LOGGER.error(e)

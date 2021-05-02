@@ -86,7 +86,7 @@ def get_job_address(job_id, company_public_key, candidate_public_key):
     company_prefix = hashlib.sha512(
         company_public_key.encode('utf-8')).hexdigest()[-10:]
     candidate_prefix = hashlib.sha512(
-        candidate_public_key.encode('utf-8')).hexdigest()[-10:]
+        candidate_public_key.encode('utf-8')).hexdigest()[-20:]
     return NAMESPACE + JOB_PREFIX + company_prefix + candidate_prefix \
            + hashlib.sha512(job_id.encode('utf-8')).hexdigest()[:31]
 

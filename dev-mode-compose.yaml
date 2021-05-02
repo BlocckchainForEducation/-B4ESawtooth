@@ -69,8 +69,6 @@ services:
       "
     stop_signal: SIGKILL
 
-
-
   # -------------=== settings tp ===-------------
 
   settings-tp-0:
@@ -262,6 +260,7 @@ services:
         -C tcp://validator-0:4004 \
         -vv
       "
+
 
   mongo-b4e:
     image: mongo

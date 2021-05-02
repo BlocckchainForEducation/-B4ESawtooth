@@ -107,7 +107,7 @@ class B4EState(object):
         portfolio_state.update_data(self, id, owner_public_key, manager_public_key, data)
 
     def get_job(self, job_id, company_public_key, candidate_public_key):
-        job_state.get_jobget_job(self, job_id, company_public_key, candidate_public_key)
+        return job_state.get_job(self, job_id, company_public_key, candidate_public_key)
 
     def create_job_begin(self, job):
         job_state.set_job(self, job)

@@ -21,7 +21,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='',
   syntax='proto3',
   serialized_options=None,
-  serialized_pb=_b('\n\x1a\x62\x34\x65_protobuf/payload.proto\"\xcb\x0b\n\nB4EPayload\x12\"\n\x06\x61\x63tion\x18\x01 \x01(\x0e\x32\x12.B4EPayload.Action\x12(\n\x0c\x63reate_actor\x18\x02 \x01(\x0b\x32\x12.CreateActorAction\x12.\n\x12\x63reate_institution\x18\x03 \x01(\x0b\x32\x12.CreateActorAction\x12,\n\x0e\x63reate_teacher\x18\x04 \x01(\x0b\x32\x14.CreateTeacherAction\x12\x32\n\x12\x63reate_edu_program\x18\x05 \x01(\x0b\x32\x16.CreatePortfolioAction\x12(\n\x0c\x63reate_class\x18\x06 \x01(\x0b\x32\x12.CreateClassAction\x12*\n\rcreate_voting\x18\x07 \x01(\x0b\x32\x13.CreateVotingAction\x12\x19\n\x04vote\x18\x08 \x01(\x0b\x32\x0b.VoteAction\x12*\n\rcreate_record\x18\t \x01(\x0b\x32\x13.CreateRecordAction\x12(\n\x0b\x63reate_cert\x18\n \x01(\x0b\x32\x13.CreateRecordAction\x12+\n\x0e\x63reate_subject\x18\x0b \x01(\x0b\x32\x13.CreateRecordAction\x12*\n\rupdate_record\x18\x0c \x01(\x0b\x32\x13.UpdateRecordAction\x12+\n\x0emodify_subject\x18\r \x01(\x0b\x32\x13.ModifyRecordAction\x12(\n\x0bmodify_cert\x18\x0e \x01(\x0b\x32\x13.ModifyRecordAction\x12,\n\x0brevoke_cert\x18\x0f \x01(\x0b\x32\x17.ChangeStatusCertAction\x12.\n\rreactive_cert\x18\x10 \x01(\x0b\x32\x17.ChangeStatusCertAction\x12\x37\n\x14update_actor_profile\x18\x11 \x01(\x0b\x32\x19.UpdateActorProfileAction\x12\x34\n\x12reject_institution\x18\x12 \x01(\x0b\x32\x18.RejectInstitutionAction\x12\x34\n\x12\x61\x63tive_institution\x18\x13 \x01(\x0b\x32\x18.ActiveInstitutionAction\x12\x35\n\x13set_b4e_environment\x18\x14 \x01(\x0b\x32\x18.SetB4EEnvironmentAction\x12*\n\x0e\x63reate_company\x18\x16 \x01(\x0b\x32\x12.CreateActorAction\x12\x1c\n\tjob_begin\x18\x17 \x01(\x0b\x32\t.JobBegin\x12\x18\n\x07job_end\x18\x18 \x01(\x0b\x32\x07.JobEnd\x12\x11\n\ttimestamp\x18\x15 \x01(\x04\"\xb4\x03\n\x06\x41\x63tion\x12\x10\n\x0c\x43REATE_ACTOR\x10\x00\x12\x16\n\x12\x43REATE_INSTITUTION\x10\x01\x12\x12\n\x0e\x43REATE_TEACHER\x10\x02\x12\x16\n\x12\x43REATE_EDU_PROGRAM\x10\x03\x12\x10\n\x0c\x43REATE_CLASS\x10\x04\x12\x11\n\rCREATE_VOTING\x10\x05\x12\x08\n\x04VOTE\x10\x06\x12\x11\n\rCREATE_RECORD\x10\x07\x12\x0f\n\x0b\x43REATE_CERT\x10\x08\x12\x12\n\x0e\x43REATE_SUBJECT\x10\t\x12\x11\n\rUPDATE_RECORD\x10\n\x12\x12\n\x0eMODIFY_SUBJECT\x10\x0b\x12\x0f\n\x0bMODIFY_CERT\x10\x0c\x12\x0f\n\x0bREVOKE_CERT\x10\r\x12\x11\n\rREACTIVE_CERT\x10\x0e\x12\x18\n\x14UPDATE_ACTOR_PROFILE\x10\x0f\x12\x16\n\x12REJECT_INSTITUTION\x10\x10\x12\x16\n\x12\x41\x43TIVE_INSTITUTION\x10\x11\x12\x12\n\x0e\x43REATE_COMPANY\x10\x13\x12\r\n\tJOB_BEGIN\x10\x14\x12\x0b\n\x07JOB_END\x10\x15\x12\x17\n\x13SET_B4E_ENVIRONMENT\x10\x12\"-\n\x11\x43reateActorAction\x12\n\n\x02id\x18\x01 \x01(\t\x12\x0c\n\x04\x64\x61ta\x18\x02 \x01(\t\"K\n\x13\x43reateTeacherAction\x12\n\n\x02id\x18\x01 \x01(\t\x12\x1a\n\x12teacher_public_key\x18\x02 \x01(\t\x12\x0c\n\x04\x64\x61ta\x18\x03 \x01(\t\"s\n\x15\x43reatePortfolioAction\x12\n\n\x02id\x18\x01 \x01(\t\x12\x18\n\x10owner_public_key\x18\x02 \x01(\t\x12&\n\x0eportfolio_type\x18\x03 \x01(\x0e\x32\x0e.PortfolioType\x12\x0c\n\x04\x64\x61ta\x18\x04 \x01(\t\"\x82\x01\n\x11\x43reateClassAction\x12\x10\n\x08\x63lass_id\x18\x01 \x01(\t\x12\x12\n\nsubject_id\x18\x02 \x01(\t\x12\x0e\n\x06\x63redit\x18\x03 \x01(\x05\x12\x1a\n\x12teacher_public_key\x18\x04 \x01(\t\x12\x1b\n\x13student_public_keys\x18\x05 \x03(\t\"N\n\x12\x43reateVotingAction\x12\x1a\n\x12\x65lector_public_key\x18\x01 \x01(\t\x12\x1c\n\tvote_type\x18\x02 \x01(\x0e\x32\t.VoteType\"8\n\nVoteAction\x12\x1a\n\x12\x65lector_public_key\x18\x01 \x01(\t\x12\x0e\n\x06\x61\x63\x63\x65pt\x18\x02 \x01(\x08\"\xb3\x01\n\x12\x43reateRecordAction\x12\x18\n\x10owner_public_key\x18\x01 \x01(\t\x12\x1a\n\x12manager_public_key\x18\x02 \x01(\t\x12\x11\n\trecord_id\x18\x03 \x01(\t\x12 \n\x0brecord_type\x18\x04 \x01(\x0e\x32\x0b.RecordType\x12\x14\n\x0cportfolio_id\x18\x05 \x01(\t\x12\x0e\n\x06\x63ipher\x18\x06 \x01(\t\x12\x0c\n\x04hash\x18\x07 \x01(\t\"\x85\x01\n\x12UpdateRecordAction\x12\x18\n\x10owner_public_key\x18\x01 \x01(\t\x12\x11\n\trecord_id\x18\x03 \x01(\t\x12\x0e\n\x06\x63ipher\x18\x04 \x01(\t\x12\x0c\n\x04hash\x18\x05 \x01(\t\x12$\n\rrecord_status\x18\x06 \x01(\x0e\x32\r.RecordStatus\"{\n\x12ModifyRecordAction\x12\x18\n\x10owner_public_key\x18\x01 \x01(\t\x12\x1a\n\x12manager_public_key\x18\x02 \x01(\t\x12\x11\n\trecord_id\x18\x03 \x01(\t\x12\x0e\n\x06\x63ipher\x18\x04 \x01(\t\x12\x0c\n\x04hash\x18\x05 \x01(\t\"E\n\x16\x43hangeStatusCertAction\x12\x18\n\x10owner_public_key\x18\x01 \x01(\t\x12\x11\n\trecord_id\x18\x02 \x01(\t\"(\n\x18UpdateActorProfileAction\x12\x0c\n\x04\x64\x61ta\x18\x01 \x01(\t\"9\n\x17RejectInstitutionAction\x12\x1e\n\x16institution_public_key\x18\x01 \x01(\t\"9\n\x17\x41\x63tiveInstitutionAction\x12\x1e\n\x16institution_public_key\x18\x01 \x01(\t\",\n\x17SetB4EEnvironmentAction\x12\x11\n\ttimestamp\x18\x01 \x01(\x04\"r\n\x08JobBegin\x12\x1a\n\x12\x63ompany_public_key\x18\x01 \x01(\t\x12\x1c\n\x14\x63\x61ndidate_public_key\x18\x02 \x01(\t\x12\x0e\n\x06job_id\x18\x03 \x01(\t\x12\x0e\n\x06\x63ypher\x18\x04 \x01(\t\x12\x0c\n\x04hash\x18\x05 \x01(\t\"\x18\n\x06JobEnd\x12\x0e\n\x06job_id\x18\x01 \x01(\t* \n\rPortfolioType\x12\x0f\n\x0b\x45\x44U_PROGRAM\x10\x00*\"\n\x08VoteType\x12\n\n\x06\x41\x43TIVE\x10\x00\x12\n\n\x06REJECT\x10\x01*5\n\nRecordType\x12\x0b\n\x07SUBJECT\x10\x00\x12\x0f\n\x0b\x43\x45RTIFICATE\x10\x01\x12\t\n\x05OTHER\x10\x02*9\n\x0cRecordStatus\x12\x0b\n\x07\x43REATED\x10\x00\x12\x0b\n\x07REVOKED\x10\x01\x12\x0f\n\x0bREACTIVATED\x10\x02\x62\x06proto3')
+  serialized_pb=_b('\n\x1a\x62\x34\x65_protobuf/payload.proto\"\xd7\x0b\n\nB4EPayload\x12\"\n\x06\x61\x63tion\x18\x01 \x01(\x0e\x32\x12.B4EPayload.Action\x12(\n\x0c\x63reate_actor\x18\x02 \x01(\x0b\x32\x12.CreateActorAction\x12.\n\x12\x63reate_institution\x18\x03 \x01(\x0b\x32\x12.CreateActorAction\x12,\n\x0e\x63reate_teacher\x18\x04 \x01(\x0b\x32\x14.CreateTeacherAction\x12\x32\n\x12\x63reate_edu_program\x18\x05 \x01(\x0b\x32\x16.CreatePortfolioAction\x12(\n\x0c\x63reate_class\x18\x06 \x01(\x0b\x32\x12.CreateClassAction\x12*\n\rcreate_voting\x18\x07 \x01(\x0b\x32\x13.CreateVotingAction\x12\x19\n\x04vote\x18\x08 \x01(\x0b\x32\x0b.VoteAction\x12*\n\rcreate_record\x18\t \x01(\x0b\x32\x13.CreateRecordAction\x12(\n\x0b\x63reate_cert\x18\n \x01(\x0b\x32\x13.CreateRecordAction\x12+\n\x0e\x63reate_subject\x18\x0b \x01(\x0b\x32\x13.CreateRecordAction\x12*\n\rupdate_record\x18\x0c \x01(\x0b\x32\x13.UpdateRecordAction\x12+\n\x0emodify_subject\x18\r \x01(\x0b\x32\x13.ModifyRecordAction\x12(\n\x0bmodify_cert\x18\x0e \x01(\x0b\x32\x13.ModifyRecordAction\x12,\n\x0brevoke_cert\x18\x0f \x01(\x0b\x32\x17.ChangeStatusCertAction\x12.\n\rreactive_cert\x18\x10 \x01(\x0b\x32\x17.ChangeStatusCertAction\x12\x37\n\x14update_actor_profile\x18\x11 \x01(\x0b\x32\x19.UpdateActorProfileAction\x12\x34\n\x12reject_institution\x18\x12 \x01(\x0b\x32\x18.RejectInstitutionAction\x12\x34\n\x12\x61\x63tive_institution\x18\x13 \x01(\x0b\x32\x18.ActiveInstitutionAction\x12\x35\n\x13set_b4e_environment\x18\x14 \x01(\x0b\x32\x18.SetB4EEnvironmentAction\x12*\n\x0e\x63reate_company\x18\x16 \x01(\x0b\x32\x12.CreateActorAction\x12\"\n\tjob_begin\x18\x17 \x01(\x0b\x32\x0f.JobBeginAction\x12\x1e\n\x07job_end\x18\x18 \x01(\x0b\x32\r.JobEndAction\x12\x11\n\ttimestamp\x18\x15 \x01(\x04\"\xb4\x03\n\x06\x41\x63tion\x12\x10\n\x0c\x43REATE_ACTOR\x10\x00\x12\x16\n\x12\x43REATE_INSTITUTION\x10\x01\x12\x12\n\x0e\x43REATE_TEACHER\x10\x02\x12\x16\n\x12\x43REATE_EDU_PROGRAM\x10\x03\x12\x10\n\x0c\x43REATE_CLASS\x10\x04\x12\x11\n\rCREATE_VOTING\x10\x05\x12\x08\n\x04VOTE\x10\x06\x12\x11\n\rCREATE_RECORD\x10\x07\x12\x0f\n\x0b\x43REATE_CERT\x10\x08\x12\x12\n\x0e\x43REATE_SUBJECT\x10\t\x12\x11\n\rUPDATE_RECORD\x10\n\x12\x12\n\x0eMODIFY_SUBJECT\x10\x0b\x12\x0f\n\x0bMODIFY_CERT\x10\x0c\x12\x0f\n\x0bREVOKE_CERT\x10\r\x12\x11\n\rREACTIVE_CERT\x10\x0e\x12\x18\n\x14UPDATE_ACTOR_PROFILE\x10\x0f\x12\x16\n\x12REJECT_INSTITUTION\x10\x10\x12\x16\n\x12\x41\x43TIVE_INSTITUTION\x10\x11\x12\x12\n\x0e\x43REATE_COMPANY\x10\x13\x12\r\n\tJOB_BEGIN\x10\x14\x12\x0b\n\x07JOB_END\x10\x15\x12\x17\n\x13SET_B4E_ENVIRONMENT\x10\x12\"-\n\x11\x43reateActorAction\x12\n\n\x02id\x18\x01 \x01(\t\x12\x0c\n\x04\x64\x61ta\x18\x02 \x01(\t\"K\n\x13\x43reateTeacherAction\x12\n\n\x02id\x18\x01 \x01(\t\x12\x1a\n\x12teacher_public_key\x18\x02 \x01(\t\x12\x0c\n\x04\x64\x61ta\x18\x03 \x01(\t\"s\n\x15\x43reatePortfolioAction\x12\n\n\x02id\x18\x01 \x01(\t\x12\x18\n\x10owner_public_key\x18\x02 \x01(\t\x12&\n\x0eportfolio_type\x18\x03 \x01(\x0e\x32\x0e.PortfolioType\x12\x0c\n\x04\x64\x61ta\x18\x04 \x01(\t\"\x82\x01\n\x11\x43reateClassAction\x12\x10\n\x08\x63lass_id\x18\x01 \x01(\t\x12\x12\n\nsubject_id\x18\x02 \x01(\t\x12\x0e\n\x06\x63redit\x18\x03 \x01(\x05\x12\x1a\n\x12teacher_public_key\x18\x04 \x01(\t\x12\x1b\n\x13student_public_keys\x18\x05 \x03(\t\"N\n\x12\x43reateVotingAction\x12\x1a\n\x12\x65lector_public_key\x18\x01 \x01(\t\x12\x1c\n\tvote_type\x18\x02 \x01(\x0e\x32\t.VoteType\"8\n\nVoteAction\x12\x1a\n\x12\x65lector_public_key\x18\x01 \x01(\t\x12\x0e\n\x06\x61\x63\x63\x65pt\x18\x02 \x01(\x08\"\xb3\x01\n\x12\x43reateRecordAction\x12\x18\n\x10owner_public_key\x18\x01 \x01(\t\x12\x1a\n\x12manager_public_key\x18\x02 \x01(\t\x12\x11\n\trecord_id\x18\x03 \x01(\t\x12 \n\x0brecord_type\x18\x04 \x01(\x0e\x32\x0b.RecordType\x12\x14\n\x0cportfolio_id\x18\x05 \x01(\t\x12\x0e\n\x06\x63ipher\x18\x06 \x01(\t\x12\x0c\n\x04hash\x18\x07 \x01(\t\"\x85\x01\n\x12UpdateRecordAction\x12\x18\n\x10owner_public_key\x18\x01 \x01(\t\x12\x11\n\trecord_id\x18\x03 \x01(\t\x12\x0e\n\x06\x63ipher\x18\x04 \x01(\t\x12\x0c\n\x04hash\x18\x05 \x01(\t\x12$\n\rrecord_status\x18\x06 \x01(\x0e\x32\r.RecordStatus\"{\n\x12ModifyRecordAction\x12\x18\n\x10owner_public_key\x18\x01 \x01(\t\x12\x1a\n\x12manager_public_key\x18\x02 \x01(\t\x12\x11\n\trecord_id\x18\x03 \x01(\t\x12\x0e\n\x06\x63ipher\x18\x04 \x01(\t\x12\x0c\n\x04hash\x18\x05 \x01(\t\"E\n\x16\x43hangeStatusCertAction\x12\x18\n\x10owner_public_key\x18\x01 \x01(\t\x12\x11\n\trecord_id\x18\x02 \x01(\t\"(\n\x18UpdateActorProfileAction\x12\x0c\n\x04\x64\x61ta\x18\x01 \x01(\t\"9\n\x17RejectInstitutionAction\x12\x1e\n\x16institution_public_key\x18\x01 \x01(\t\"9\n\x17\x41\x63tiveInstitutionAction\x12\x1e\n\x16institution_public_key\x18\x01 \x01(\t\",\n\x17SetB4EEnvironmentAction\x12\x11\n\ttimestamp\x18\x01 \x01(\x04\"x\n\x0eJobBeginAction\x12\x1a\n\x12\x63ompany_public_key\x18\x01 \x01(\t\x12\x1c\n\x14\x63\x61ndidate_public_key\x18\x02 \x01(\t\x12\x0e\n\x06job_id\x18\x03 \x01(\t\x12\x0e\n\x06\x63ipher\x18\x04 \x01(\t\x12\x0c\n\x04hash\x18\x05 \x01(\t\"X\n\x0cJobEndAction\x12\x1a\n\x12\x63ompany_public_key\x18\x01 \x01(\t\x12\x1c\n\x14\x63\x61ndidate_public_key\x18\x02 \x01(\t\x12\x0e\n\x06job_id\x18\x03 \x01(\t* \n\rPortfolioType\x12\x0f\n\x0b\x45\x44U_PROGRAM\x10\x00*\"\n\x08VoteType\x12\n\n\x06\x41\x43TIVE\x10\x00\x12\n\n\x06REJECT\x10\x01*5\n\nRecordType\x12\x0b\n\x07SUBJECT\x10\x00\x12\x0f\n\x0b\x43\x45RTIFICATE\x10\x01\x12\t\n\x05OTHER\x10\x02*9\n\x0cRecordStatus\x12\x0b\n\x07\x43REATED\x10\x00\x12\x0b\n\x07REVOKED\x10\x01\x12\x0f\n\x0bREACTIVATED\x10\x02\x62\x06proto3')
 )
 
 _PORTFOLIOTYPE = _descriptor.EnumDescriptor(
@@ -37,8 +37,8 @@ _PORTFOLIOTYPE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=2890,
-  serialized_end=2922,
+  serialized_start=2972,
+  serialized_end=3004,
 )
 _sym_db.RegisterEnumDescriptor(_PORTFOLIOTYPE)
 
@@ -60,8 +60,8 @@ _VOTETYPE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=2924,
-  serialized_end=2958,
+  serialized_start=3006,
+  serialized_end=3040,
 )
 _sym_db.RegisterEnumDescriptor(_VOTETYPE)
 
@@ -87,8 +87,8 @@ _RECORDTYPE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=2960,
-  serialized_end=3013,
+  serialized_start=3042,
+  serialized_end=3095,
 )
 _sym_db.RegisterEnumDescriptor(_RECORDTYPE)
 
@@ -114,8 +114,8 @@ _RECORDSTATUS = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=3015,
-  serialized_end=3072,
+  serialized_start=3097,
+  serialized_end=3154,
 )
 _sym_db.RegisterEnumDescriptor(_RECORDSTATUS)
 
@@ -228,8 +228,8 @@ _B4EPAYLOAD_ACTION = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=1078,
-  serialized_end=1514,
+  serialized_start=1090,
+  serialized_end=1526,
 )
 _sym_db.RegisterEnumDescriptor(_B4EPAYLOAD_ACTION)
 
@@ -423,7 +423,7 @@ _B4EPAYLOAD = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=31,
-  serialized_end=1514,
+  serialized_end=1526,
 )
 
 
@@ -460,8 +460,8 @@ _CREATEACTORACTION = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1516,
-  serialized_end=1561,
+  serialized_start=1528,
+  serialized_end=1573,
 )
 
 
@@ -505,8 +505,8 @@ _CREATETEACHERACTION = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1563,
-  serialized_end=1638,
+  serialized_start=1575,
+  serialized_end=1650,
 )
 
 
@@ -557,8 +557,8 @@ _CREATEPORTFOLIOACTION = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1640,
-  serialized_end=1755,
+  serialized_start=1652,
+  serialized_end=1767,
 )
 
 
@@ -616,8 +616,8 @@ _CREATECLASSACTION = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1758,
-  serialized_end=1888,
+  serialized_start=1770,
+  serialized_end=1900,
 )
 
 
@@ -654,8 +654,8 @@ _CREATEVOTINGACTION = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1890,
-  serialized_end=1968,
+  serialized_start=1902,
+  serialized_end=1980,
 )
 
 
@@ -692,8 +692,8 @@ _VOTEACTION = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1970,
-  serialized_end=2026,
+  serialized_start=1982,
+  serialized_end=2038,
 )
 
 
@@ -765,8 +765,8 @@ _CREATERECORDACTION = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2029,
-  serialized_end=2208,
+  serialized_start=2041,
+  serialized_end=2220,
 )
 
 
@@ -824,8 +824,8 @@ _UPDATERECORDACTION = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2211,
-  serialized_end=2344,
+  serialized_start=2223,
+  serialized_end=2356,
 )
 
 
@@ -883,8 +883,8 @@ _MODIFYRECORDACTION = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2346,
-  serialized_end=2469,
+  serialized_start=2358,
+  serialized_end=2481,
 )
 
 
@@ -921,8 +921,8 @@ _CHANGESTATUSCERTACTION = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2471,
-  serialized_end=2540,
+  serialized_start=2483,
+  serialized_end=2552,
 )
 
 
@@ -952,8 +952,8 @@ _UPDATEACTORPROFILEACTION = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2542,
-  serialized_end=2582,
+  serialized_start=2554,
+  serialized_end=2594,
 )
 
 
@@ -983,8 +983,8 @@ _REJECTINSTITUTIONACTION = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2584,
-  serialized_end=2641,
+  serialized_start=2596,
+  serialized_end=2653,
 )
 
 
@@ -1014,8 +1014,8 @@ _ACTIVEINSTITUTIONACTION = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2643,
-  serialized_end=2700,
+  serialized_start=2655,
+  serialized_end=2712,
 )
 
 
@@ -1045,48 +1045,48 @@ _SETB4EENVIRONMENTACTION = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2702,
-  serialized_end=2746,
+  serialized_start=2714,
+  serialized_end=2758,
 )
 
 
-_JOBBEGIN = _descriptor.Descriptor(
-  name='JobBegin',
-  full_name='JobBegin',
+_JOBBEGINACTION = _descriptor.Descriptor(
+  name='JobBeginAction',
+  full_name='JobBeginAction',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='company_public_key', full_name='JobBegin.company_public_key', index=0,
+      name='company_public_key', full_name='JobBeginAction.company_public_key', index=0,
       number=1, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='candidate_public_key', full_name='JobBegin.candidate_public_key', index=1,
+      name='candidate_public_key', full_name='JobBeginAction.candidate_public_key', index=1,
       number=2, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='job_id', full_name='JobBegin.job_id', index=2,
+      name='job_id', full_name='JobBeginAction.job_id', index=2,
       number=3, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='cypher', full_name='JobBegin.cypher', index=3,
+      name='cipher', full_name='JobBeginAction.cipher', index=3,
       number=4, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='hash', full_name='JobBegin.hash', index=4,
+      name='hash', full_name='JobBeginAction.hash', index=4,
       number=5, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
@@ -1104,21 +1104,35 @@ _JOBBEGIN = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2748,
-  serialized_end=2862,
+  serialized_start=2760,
+  serialized_end=2880,
 )
 
 
-_JOBEND = _descriptor.Descriptor(
-  name='JobEnd',
-  full_name='JobEnd',
+_JOBENDACTION = _descriptor.Descriptor(
+  name='JobEndAction',
+  full_name='JobEndAction',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='job_id', full_name='JobEnd.job_id', index=0,
+      name='company_public_key', full_name='JobEndAction.company_public_key', index=0,
       number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='candidate_public_key', full_name='JobEndAction.candidate_public_key', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='job_id', full_name='JobEndAction.job_id', index=2,
+      number=3, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
@@ -1135,8 +1149,8 @@ _JOBEND = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2864,
-  serialized_end=2888,
+  serialized_start=2882,
+  serialized_end=2970,
 )
 
 _B4EPAYLOAD.fields_by_name['action'].enum_type = _B4EPAYLOAD_ACTION
@@ -1160,8 +1174,8 @@ _B4EPAYLOAD.fields_by_name['reject_institution'].message_type = _REJECTINSTITUTI
 _B4EPAYLOAD.fields_by_name['active_institution'].message_type = _ACTIVEINSTITUTIONACTION
 _B4EPAYLOAD.fields_by_name['set_b4e_environment'].message_type = _SETB4EENVIRONMENTACTION
 _B4EPAYLOAD.fields_by_name['create_company'].message_type = _CREATEACTORACTION
-_B4EPAYLOAD.fields_by_name['job_begin'].message_type = _JOBBEGIN
-_B4EPAYLOAD.fields_by_name['job_end'].message_type = _JOBEND
+_B4EPAYLOAD.fields_by_name['job_begin'].message_type = _JOBBEGINACTION
+_B4EPAYLOAD.fields_by_name['job_end'].message_type = _JOBENDACTION
 _B4EPAYLOAD_ACTION.containing_type = _B4EPAYLOAD
 _CREATEPORTFOLIOACTION.fields_by_name['portfolio_type'].enum_type = _PORTFOLIOTYPE
 _CREATEVOTINGACTION.fields_by_name['vote_type'].enum_type = _VOTETYPE
@@ -1182,8 +1196,8 @@ DESCRIPTOR.message_types_by_name['UpdateActorProfileAction'] = _UPDATEACTORPROFI
 DESCRIPTOR.message_types_by_name['RejectInstitutionAction'] = _REJECTINSTITUTIONACTION
 DESCRIPTOR.message_types_by_name['ActiveInstitutionAction'] = _ACTIVEINSTITUTIONACTION
 DESCRIPTOR.message_types_by_name['SetB4EEnvironmentAction'] = _SETB4EENVIRONMENTACTION
-DESCRIPTOR.message_types_by_name['JobBegin'] = _JOBBEGIN
-DESCRIPTOR.message_types_by_name['JobEnd'] = _JOBEND
+DESCRIPTOR.message_types_by_name['JobBeginAction'] = _JOBBEGINACTION
+DESCRIPTOR.message_types_by_name['JobEndAction'] = _JOBENDACTION
 DESCRIPTOR.enum_types_by_name['PortfolioType'] = _PORTFOLIOTYPE
 DESCRIPTOR.enum_types_by_name['VoteType'] = _VOTETYPE
 DESCRIPTOR.enum_types_by_name['RecordType'] = _RECORDTYPE
@@ -1295,19 +1309,19 @@ SetB4EEnvironmentAction = _reflection.GeneratedProtocolMessageType('SetB4EEnviro
   })
 _sym_db.RegisterMessage(SetB4EEnvironmentAction)
 
-JobBegin = _reflection.GeneratedProtocolMessageType('JobBegin', (_message.Message,), {
-  'DESCRIPTOR' : _JOBBEGIN,
+JobBeginAction = _reflection.GeneratedProtocolMessageType('JobBeginAction', (_message.Message,), {
+  'DESCRIPTOR' : _JOBBEGINACTION,
   '__module__' : 'b4e_protobuf.payload_pb2'
-  # @@protoc_insertion_point(class_scope:JobBegin)
+  # @@protoc_insertion_point(class_scope:JobBeginAction)
   })
-_sym_db.RegisterMessage(JobBegin)
+_sym_db.RegisterMessage(JobBeginAction)
 
-JobEnd = _reflection.GeneratedProtocolMessageType('JobEnd', (_message.Message,), {
-  'DESCRIPTOR' : _JOBEND,
+JobEndAction = _reflection.GeneratedProtocolMessageType('JobEndAction', (_message.Message,), {
+  'DESCRIPTOR' : _JOBENDACTION,
   '__module__' : 'b4e_protobuf.payload_pb2'
-  # @@protoc_insertion_point(class_scope:JobEnd)
+  # @@protoc_insertion_point(class_scope:JobEndAction)
   })
-_sym_db.RegisterMessage(JobEnd)
+_sym_db.RegisterMessage(JobEndAction)
 
 
 # @@protoc_insertion_point(module_scope)

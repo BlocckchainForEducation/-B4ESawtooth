@@ -25,6 +25,7 @@ from sawtooth_sdk.processor.log import init_console_logging
 
 from aiohttp import web
 
+from rest_api.b4e_rest_api.route_handler.job_route_handler import JobRouteHandler
 from rest_api.b4e_rest_api.route_handler.route_handler import RouteHandler
 from rest_api.b4e_rest_api.route_handler.actor_route_handler import ActorRouteHandler
 from rest_api.b4e_rest_api.route_handler.blockchain_route_handler import BlockchainRouteHandler
@@ -110,6 +111,8 @@ def start_rest_api(host, port, messenger, database):
     record_handler = RecordRouteHandler(loop, messenger, database)
     student_handler = StudentRouteHandler(loop, messenger, database)
     voting_handler = VotingRouteHandler(loop, messenger, database)
+    job_handler = JobRouteHandler(loop, messenger, database)
+
     handler.add_route(app)
     actor_handler.add_route(app)
     blockchain_handler.add_route(app)
@@ -117,6 +120,8 @@ def start_rest_api(host, port, messenger, database):
     record_handler.add_route(app)
     student_handler.add_route(app)
     voting_handler.add_route(app)
+    job_handler.add_route(app)
+
     LOGGER.info('Starting B4E REST API on %s:%s', host, port)
     web.run_app(
         app,

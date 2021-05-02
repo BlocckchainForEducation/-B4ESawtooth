@@ -20,7 +20,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='',
   syntax='proto3',
   serialized_options=None,
-  serialized_pb=_b('\n\x16\x62\x34\x65_protobuf/job.proto\"\x82\x02\n\x03Job\x12\x1a\n\x12\x63ompany_public_key\x18\x01 \x01(\t\x12\x1a\n\x12student_public_key\x18\x02 \x01(\t\x12\r\n\x05jobId\x18\x03 \x01(\t\x12\x19\n\x05start\x18\x04 \x01(\x0b\x32\n.Job.Start\x12\x15\n\x03\x65nd\x18\x05 \x01(\x0b\x32\x08.Job.End\x1aP\n\x05Start\x12\x11\n\ttimestamp\x18\x01 \x01(\x04\x12\x0e\n\x06\x63ypher\x18\x02 \x01(\t\x12\x0c\n\x04hash\x18\x03 \x01(\t\x12\x16\n\x0etransaction_id\x18\x04 \x01(\t\x1a\x30\n\x03\x45nd\x12\x11\n\ttimestamp\x18\x01 \x01(\x04\x12\x16\n\x0etransaction_id\x18\x02 \x01(\t\"%\n\x0cJobContainer\x12\x15\n\x07\x65ntries\x18\x01 \x03(\x0b\x32\x04.Jobb\x06proto3')
+  serialized_pb=_b('\n\x16\x62\x34\x65_protobuf/job.proto\"\x85\x02\n\x03Job\x12\x1a\n\x12\x63ompany_public_key\x18\x01 \x01(\t\x12\x1c\n\x14\x63\x61ndidate_public_key\x18\x02 \x01(\t\x12\x0e\n\x06job_id\x18\x03 \x01(\t\x12\x19\n\x05start\x18\x04 \x01(\x0b\x32\n.Job.Start\x12\x15\n\x03\x65nd\x18\x05 \x01(\x0b\x32\x08.Job.End\x1aP\n\x05Start\x12\x11\n\ttimestamp\x18\x01 \x01(\x04\x12\x0e\n\x06\x63ipher\x18\x02 \x01(\t\x12\x0c\n\x04hash\x18\x03 \x01(\t\x12\x16\n\x0etransaction_id\x18\x04 \x01(\t\x1a\x30\n\x03\x45nd\x12\x11\n\ttimestamp\x18\x01 \x01(\x04\x12\x16\n\x0etransaction_id\x18\x02 \x01(\t\"%\n\x0cJobContainer\x12\x15\n\x07\x65ntries\x18\x01 \x03(\x0b\x32\x04.Jobb\x06proto3')
 )
 
 
@@ -41,7 +41,7 @@ _JOB_START = _descriptor.Descriptor(
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='cypher', full_name='Job.Start.cypher', index=1,
+      name='cipher', full_name='Job.Start.cipher', index=1,
       number=2, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
@@ -73,8 +73,8 @@ _JOB_START = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=155,
-  serialized_end=235,
+  serialized_start=158,
+  serialized_end=238,
 )
 
 _JOB_END = _descriptor.Descriptor(
@@ -110,8 +110,8 @@ _JOB_END = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=237,
-  serialized_end=285,
+  serialized_start=240,
+  serialized_end=288,
 )
 
 _JOB = _descriptor.Descriptor(
@@ -129,14 +129,14 @@ _JOB = _descriptor.Descriptor(
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='student_public_key', full_name='Job.student_public_key', index=1,
+      name='candidate_public_key', full_name='Job.candidate_public_key', index=1,
       number=2, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='jobId', full_name='Job.jobId', index=2,
+      name='job_id', full_name='Job.job_id', index=2,
       number=3, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
@@ -169,7 +169,7 @@ _JOB = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=27,
-  serialized_end=285,
+  serialized_end=288,
 )
 
 
@@ -199,8 +199,8 @@ _JOBCONTAINER = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=287,
-  serialized_end=324,
+  serialized_start=290,
+  serialized_end=327,
 )
 
 _JOB_START.containing_type = _JOB
