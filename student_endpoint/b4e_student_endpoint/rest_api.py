@@ -1,6 +1,8 @@
 import asyncio
 import logging
 import json
+
+import aiohttp_cors
 import nest_asyncio
 
 from aiohttp import web
@@ -33,6 +35,18 @@ class StudentAPI(object):
         app.router.add_get('/student/data/{student_public_key}', self.student_data)
         app.router.add_get('/record/{address}', self.record_address)
         app.router.add_get('/{publicKey}', self.cv)
+
+        cors = aiohttp_cors.setup(app, defaults={
+            "*": aiohttp_cors.ResourceOptions(
+                allow_credentials=True,
+                expose_headers="*",
+                allow_headers="*",
+            )
+        })
+
+        # Configure CORS on all routes.
+        for route in list(app.router.routes()):
+            cors.add(route)
 
         web.run_app(
             app,

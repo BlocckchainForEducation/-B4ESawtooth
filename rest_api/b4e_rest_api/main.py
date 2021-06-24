@@ -17,6 +17,8 @@ import argparse
 import asyncio
 import logging
 import sys
+
+import aiohttp_cors
 import nest_asyncio
 
 from zmq.asyncio import ZMQEventLoop
@@ -121,6 +123,18 @@ def start_rest_api(host, port, messenger, database):
     student_handler.add_route(app)
     voting_handler.add_route(app)
     job_handler.add_route(app)
+
+    cors = aiohttp_cors.setup(app, defaults={
+        "*": aiohttp_cors.ResourceOptions(
+            allow_credentials=True,
+            expose_headers="*",
+            allow_headers="*",
+        )
+    })
+
+    # Configure CORS on all routes.
+    for route in list(app.router.routes()):
+        cors.add(route)
 
     LOGGER.info('Starting B4E REST API on %s:%s', host, port)
     web.run_app(
