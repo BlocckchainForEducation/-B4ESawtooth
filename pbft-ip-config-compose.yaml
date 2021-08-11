@@ -22,8 +22,8 @@ services:
   b4e-shell:
     build:
       context: .
-      dockerfile: ./shell/Dockerfile
-    image: sawtooth-b4e-shell
+      dockerfile: ./Dockerfile
+    image: b4e-image
     container_name: b4e-shell
     volumes:
       - .:/project/sawtooth-b4e
@@ -38,8 +38,8 @@ services:
   b4e-tp-0:
     build:
       context: .
-      dockerfile: ./processor/Dockerfile
-    image: sawtooth-b4e-tp
+      dockerfile: ./Dockerfile
+    image: b4e-image
     container_name: b4e-tp-0
     volumes:
       - '.:/project/sawtooth-b4e'
@@ -56,8 +56,8 @@ services:
   b4e-tp-1:
     build:
       context: .
-      dockerfile: ./processor/Dockerfile
-    image: sawtooth-b4e-tp
+      dockerfile: ./Dockerfile
+    image: b4e-image
     container_name: b4e-tp-1
     volumes:
       - '.:/project/sawtooth-b4e'
@@ -72,8 +72,8 @@ services:
   b4e-tp-2:
     build:
       context: .
-      dockerfile: ./processor/Dockerfile
-    image: sawtooth-b4e-tp
+      dockerfile: ./Dockerfile
+    image: b4e-image
     container_name: b4e-tp-2
     volumes:
       - '.:/project/sawtooth-b4e'
@@ -89,8 +89,8 @@ services:
   b4e-tp-3:
     build:
       context: .
-      dockerfile: ./processor/Dockerfile
-    image: sawtooth-b4e-tp
+      dockerfile: ./Dockerfile
+    image: b4e-image
     container_name: b4e-tp-3
     volumes:
       - '.:/project/sawtooth-b4e'
@@ -106,8 +106,8 @@ services:
   b4e-tp-4:
     build:
       context: .
-      dockerfile: ./processor/Dockerfile
-    image: sawtooth-b4e-tp
+      dockerfile: ./Dockerfile
+    image: b4e-image
     container_name: b4e-tp-4
     volumes:
       - '.:/project/sawtooth-b4e'
@@ -521,8 +521,8 @@ services:
   b4e-subscriber:
     build:
       context: .
-      dockerfile: subscriber_b4e/Dockerfile
-    image: sawtooth-b4e-subscriber
+      dockerfile: ./Dockerfile
+    image: b4e-image
     container_name: b4e-subscriber
     volumes:
       - '.:/project/sawtooth-b4e'
@@ -544,8 +544,8 @@ services:
   b4e-subscriber-ministry:
     build:
       context: .
-      dockerfile: subscriber_b4e/Dockerfile
-    image: sawtooth-b4e-subscriber
+      dockerfile: ./Dockerfile
+    image: b4e-image
     container_name: b4e-subscriber-ministry
     volumes:
       - '.:/project/sawtooth-b4e'
@@ -568,8 +568,8 @@ services:
   b4e-student-endpoint:
     build:
       context: .
-      dockerfile: ./student_endpoint/Dockerfile
-    image: sawtooth-b4e-student-endpoint
+      dockerfile: ./Dockerfile
+    image: b4e-image
     container_name: b4e-student-endpoint
     volumes:
       - '.:/project/sawtooth-b4e'
@@ -591,8 +591,8 @@ services:
   b4e-statistic:
     build:
       context: .
-      dockerfile: ./student_endpoint/Dockerfile
-    image: sawtooth-b4e-statistic
+      dockerfile: ./Dockerfile
+    image: b4e-image
     container_name: b4e-statistic
     volumes:
       - '.:/project/sawtooth-b4e'
