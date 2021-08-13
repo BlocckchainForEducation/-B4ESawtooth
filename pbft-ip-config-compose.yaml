@@ -298,7 +298,7 @@ services:
           sawtooth keygen my_key
         fi &&
         sawtooth-validator -vv \
-          --endpoint tcp://139.59.125.235:8800 \
+          --endpoint tcp://${HOST_IP}:8800 \
           --bind component:tcp://eth0:4004 \
           --bind consensus:tcp://eth0:5050 \
           --bind network:tcp://eth0:8800 \
@@ -335,14 +335,14 @@ services:
         fi &&
         sawtooth keygen my_key &&
         sawtooth-validator -vv \
-          --endpoint tcp://139.59.125.235:8801 \
+          --endpoint tcp://${HOST_IP}:8801 \
           --bind component:tcp://eth0:4004 \
           --bind consensus:tcp://eth0:5050 \
           --bind network:tcp://eth0:8800 \
           --scheduler parallel \
           --peering static \
           --maximum-peer-connectivity 10000 \
-          --peers tcp://139.59.125.235:8800
+          --peers tcp://${HOST_IP}:8800
       "
 
   validator-2:
@@ -371,15 +371,15 @@ services:
         fi &&
         sawtooth keygen my_key &&
         sawtooth-validator -vv \
-          --endpoint tcp://139.59.125.235:8802 \
+          --endpoint tcp://${HOST_IP}:8802 \
           --bind component:tcp://eth0:4004 \
           --bind consensus:tcp://eth0:5050 \
           --bind network:tcp://eth0:8800 \
           --scheduler parallel \
           --peering static \
           --maximum-peer-connectivity 10000 \
-          --peers tcp://139.59.125.235:8800 \
-          --peers tcp://139.59.125.235:8801
+          --peers tcp://${HOST_IP}:8800 \
+          --peers tcp://${HOST_IP}:8801
       "
 
   validator-3:
@@ -408,16 +408,16 @@ services:
         fi &&
         sawtooth keygen my_key &&
         sawtooth-validator -vv \
-          --endpoint tcp://139.59.125.235:8803 \
+          --endpoint tcp://${HOST_IP}:8803 \
           --bind component:tcp://eth0:4004 \
           --bind consensus:tcp://eth0:5050 \
           --bind network:tcp://eth0:8800 \
           --scheduler parallel \
           --peering static \
           --maximum-peer-connectivity 10000 \
-          --peers tcp://139.59.125.235:8800 \
-          --peers tcp://139.59.125.235:8801 \
-          --peers tcp://139.59.125.235:8802
+          --peers tcp://${HOST_IP}:8800 \
+          --peers tcp://${HOST_IP}:8801 \
+          --peers tcp://${HOST_IP}:8802
       "
 
   validator-4:
@@ -446,17 +446,17 @@ services:
         fi &&
         sawtooth keygen my_key &&
         sawtooth-validator -vv \
-          --endpoint tcp://139.59.125.235:8804 \
+          --endpoint tcp://${HOST_IP}:8804 \
           --bind component:tcp://eth0:4004 \
           --bind consensus:tcp://eth0:5050 \
           --bind network:tcp://eth0:8800 \
           --scheduler parallel \
           --peering static \
           --maximum-peer-connectivity 10000 \
-          --peers tcp://139.59.125.235:8800 \
-          --peers tcp://139.59.125.235:8801 \
-          --peers tcp://139.59.125.235:8802 \
-          --peers tcp://139.59.125.235:8803
+          --peers tcp://${HOST_IP}:8800 \
+          --peers tcp://${HOST_IP}:8801 \
+          --peers tcp://${HOST_IP}:8802 \
+          --peers tcp://${HOST_IP}:8803
       "
 
   # -------------=== pbft engines ===-------------
@@ -494,8 +494,8 @@ services:
   b4e-rest-api:
     build:
       context: .
-      dockerfile: ./rest_api/Dockerfile
-    image: sawtooth-b4e-rest-api
+      dockerfile: ./Dockerfile
+    image: b4e-image
     container_name: b4e-rest-api
     volumes:
       - .:/project/sawtooth-b4e
