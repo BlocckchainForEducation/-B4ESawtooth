@@ -65,6 +65,7 @@ def submit_subjects(data):
 def test_transcript(expose=21, step=250):
     f = open('./result.csv', 'w')
     f.write(f"number_transaction,cert_duration,subject_duration\n")
+    print(f"number_transaction,cert_duration,subject_duration")
     for i in range(1, expose):
         num_tran = i * step
         certs_data = data_create_certs(num_tran)
@@ -80,8 +81,9 @@ def test_transcript(expose=21, step=250):
                 break
             time.sleep(i)
         f.write(f"{num_tran},{duration1},{duration2}\n")
+        print(f"{num_tran},{duration1},{duration2}")
 
     print("done !")
 
 
-test_transcript(21,250)
+test_transcript(21, 250)

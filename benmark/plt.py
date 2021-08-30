@@ -6,7 +6,7 @@ num = []
 cert = []
 subs = []
 with open("./data.csv") as file:
-    lines = file.readlines()
+    lines = file.readlines()[1:]
     for line in lines:
         arr = line.split(",")
         num.append(int(arr[0]))

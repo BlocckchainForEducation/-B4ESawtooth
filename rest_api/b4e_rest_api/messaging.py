@@ -676,9 +676,9 @@ class Messenger(object):
         loop = asyncio.get_event_loop()
         # futures = []
         list_transaction_id = []
-
+        await self._send_and_wait_for_commit_multi_batches(list_batches)
         for batch in list_batches:
-            await self._send_and_wait_for_commit(batch)
+            # await self._send_and_wait_for_commit(batch)
             # futures.append(self._send_and_wait_for_commit(batch))
             for transaction in batch.transactions:
                 list_transaction_id.append(transaction.header_signature)
