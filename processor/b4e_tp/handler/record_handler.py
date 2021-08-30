@@ -1,14 +1,14 @@
 import json
+import random
 
 from sawtooth_sdk.processor.exceptions import InvalidTransaction
 
+from processor.b4e_tp.handler import time_handler
 from processor.b4e_tp.handler.actor_handler import _check_is_valid_actor
-from protobuf.b4e_protobuf import actor_pb2
-from protobuf.b4e_protobuf import record_pb2
+from protobuf.b4e_protobuf import actor_pb2, class_pb2
 from protobuf.b4e_protobuf import payload_pb2
 from protobuf.b4e_protobuf import portfolio_pb2
-
-from processor.b4e_tp.handler import time_handler
+from protobuf.b4e_protobuf import record_pb2
 
 
 def create_record(state, public_key, transaction_id, payload):
@@ -54,12 +54,15 @@ def _get_record_type(i):
 
 def create_cert(state, public_key, transaction_id, payload):
     actor = state.get_actor(public_key)
+    ### fake actor
+    actor = _fake_actor(public_key, payload.data.manager_public_key)
+
     _check_is_valid_actor(actor)
     record_id = payload.data.record_id
     owner_public_key = payload.data.owner_public_key
     manager_public_key = payload.data.manager_public_key
 
-    if state.get_record(record_id, owner_public_key, manager_public_key):
+    if state.get_record(record_id, owner_public_key, manager_public_key) and False:
         raise InvalidTransaction("Record has been existed")
 
     if actor.role != actor_pb2.Actor.INSTITUTION:
@@ -68,6 +71,9 @@ def create_cert(state, public_key, transaction_id, payload):
     portfolio = state.get_portfolio(id=payload.data.portfolio_id,
                                     owner_public_key=owner_public_key,
                                     manager_public_key=manager_public_key)
+    ### fake portfolio
+    portfolio = _get_fake_portfolio(payload, transaction_id, manager_public_key, public_key)
+
     if not portfolio or not portfolio.portfolio_data[-1]:
         raise InvalidTransaction("Invalid edu program")
     portfolio_data = portfolio.portfolio_data[-1]
@@ -99,15 +105,23 @@ def create_cert(state, public_key, transaction_id, payload):
 
 def create_subject(state, public_key, transaction_id, payload):
     actor = state.get_actor(public_key)
+    ## fake actor
+    actor = _fake_actor(public_key, payload.data.manager_public_key)
     _check_is_valid_actor(actor)
     record_id = payload.data.record_id
     owner_public_key = payload.data.owner_public_key
     manager_public_key = payload.data.manager_public_key
 
-    if state.get_record(record_id, owner_public_key, manager_public_key):
+    if state.get_record(record_id, owner_public_key, manager_public_key) and False:
         raise InvalidTransaction("Record has been existed")
 
     class_ = state.get_class(payload.data.record_id, manager_public_key)
+
+    ### fake class
+    teacher_public_key = public_key
+    institution_public_key = manager_public_key
+    student_public_keys = [owner_public_key]
+    class_ = _fake_class(teacher_public_key, institution_public_key, student_public_keys, transaction_id)
     if not class_:
         raise InvalidTransaction("Class doesn't exist!")
 
@@ -120,6 +134,10 @@ def create_subject(state, public_key, transaction_id, payload):
     portfolio = state.get_portfolio(id=payload.data.portfolio_id,
                                     owner_public_key=owner_public_key,
                                     manager_public_key=manager_public_key)
+
+    ### fake portfolio
+    portfolio = _get_fake_portfolio(payload, transaction_id, manager_public_key, owner_public_key)
+
     if not portfolio or not portfolio.portfolio_data[-1]:
         raise InvalidTransaction("Invalid edu program")
     portfolio_data = portfolio.portfolio_data[-1]
@@ -223,3 +241,56 @@ def revoke_cert(state, public_key, transaction_id, payload):
 
 def reactive_cert(state, public_key, transaction_id, payload):
     update_status(state, public_key, transaction_id, payload, record_pb2.Record.REACTIVATED)
+
+
+def _get_fake_portfolio(payload, transaction_id, manager_public_key, owner_public_key):
+    portfolio_type = portfolio_pb2.Portfolio.EDU_PROGRAM
+    edu_id = str(random.random())
+    edu_program = {
+        "currentCredit": 158,
+        "startTimestamp": 1535646194,
+        "totalCredit": 158,
+        "latestTimestamp": 1630340594,
+        "minYear": 1,
+        "maxYear": 10
+    }
+    data = json.dumps(edu_program)
+    portfolio_data = portfolio_pb2.Portfolio.PortfolioData(portfolio_type=portfolio_type,
+                                                           data=data,
+                                                           timestamp=payload.timestamp,
+                                                           transaction_id=transaction_id)
+    portfolio = portfolio_pb2.Portfolio(owner_public_key=owner_public_key, manager_public_key=manager_public_key,
+                                        id=edu_id,
+                                        portfolio_data=[portfolio_data],
+                                        timestamp=payload.timestamp,
+                                        transaction_id=transaction_id)
+    return portfolio
+
+
+def _fake_class(teacher_public_key, institution_public_key, student_public_keys, transaction_id):
+    class_ = class_pb2.Class(class_id="class_id",
+                             subject_id="subject_id",
+                             credit=3,
+                             teacher_public_key=teacher_public_key,
+                             institution_public_key=institution_public_key,
+                             student_public_keys=student_public_keys,
+                             timestamp=1630340594,
+                             transaction_id=transaction_id)
+    return class_
+
+
+def _fake_actor(actor_public_key, manager_public_key, role=actor_pb2.Actor.INSTITUTION):
+    status = actor_pb2.Actor.ACTIVE
+    profile = actor_pb2.Actor.Profile(data="payload.data.data",
+                                      status=status,
+                                      transaction_id="transaction_id",
+                                      timestamp=1630340594
+                                      )
+    actor = actor_pb2.Actor(actor_public_key=actor_public_key,
+                            manager_public_key=manager_public_key,
+                            id="actor_id",
+                            role=role,
+                            profile=[profile],
+                            transaction_id="transaction_id",
+                            timestamp=1630340594)
+    return actor

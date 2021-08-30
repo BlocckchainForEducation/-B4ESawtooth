@@ -9,7 +9,7 @@ class Config:
 class SawtoothConfig:
     REST_API = 'http://localhost:8008'
     VALIDATOR_TCP = 'tcp://localhost:4004'
-    MAX_BATCH_SIZE = 1000
+    MAX_BATCH_SIZE = 500
 
 
 class ElasticSearchConfig:
