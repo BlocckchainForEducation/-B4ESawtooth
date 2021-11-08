@@ -32,7 +32,7 @@ RUN apt-get install -y --allow-unauthenticated -q python3-grpcio-tools \
 RUN apt install libpq-dev python3-dev -y
 
 RUN pip3 install \
-    aiohttp \
+    aiohttp==3.6.1 \
     aiopg \
     bcrypt \
     itsdangerous \

@@ -1,6 +1,6 @@
 sawtooth_sdk
 requests
-aiohttp
+aiohttp==3.6.1
 elasticsearch
 pymongo
 eciespy
