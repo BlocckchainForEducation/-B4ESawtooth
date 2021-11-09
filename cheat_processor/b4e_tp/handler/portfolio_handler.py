@@ -2,7 +2,7 @@ import logging
 
 from sawtooth_sdk.processor.exceptions import InvalidTransaction
 
-from processor.b4e_tp.handler.actor_handler import _check_is_valid_actor
+from cheat_processor.b4e_tp.handler.actor_handler import _check_is_valid_actor
 from protobuf.b4e_protobuf import actor_pb2
 from protobuf.b4e_protobuf import record_pb2
 from protobuf.b4e_protobuf import payload_pb2
@@ -26,8 +26,7 @@ def create_edu_program(state, public_key, transaction_id, payload):
     data = payload.data.data
 
     institution = state.get_actor(public_key)
-    if _check_is_valid_actor(institution):
-        raise InvalidTransaction("Invalid institution")
+    _check_is_valid_actor(institution)
 
     if institution.role != actor_pb2.Actor.INSTITUTION:
         raise InvalidTransaction("Invalid signer!")

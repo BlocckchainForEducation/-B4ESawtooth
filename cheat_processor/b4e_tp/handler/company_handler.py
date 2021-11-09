@@ -1,4 +1,4 @@
-from processor.b4e_tp.handler.actor_handler import _create_actor
+from cheat_processor.b4e_tp.handler.actor_handler import _create_actor
 from protobuf.b4e_protobuf import actor_pb2
 
 

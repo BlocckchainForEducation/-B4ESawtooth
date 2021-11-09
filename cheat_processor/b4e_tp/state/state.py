@@ -14,7 +14,7 @@
 # -----------------------------------------------------------------------------
 
 
-from processor.b4e_tp.state import b4e_environment_state, \
+from cheat_processor.b4e_tp.state import b4e_environment_state, \
     actor_state, class_state, record_state, voting_state, \
     portfolio_state, \
     job_state

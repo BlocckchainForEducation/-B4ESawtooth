@@ -71,7 +71,7 @@ class RouteHandler(object):
         return json_response(
             {
                 'ok': True,
-                'msg': 'Transfer record transaction submitted'
+                'msg': 'Set environment submitted'
             })
 
     async def create_institution(self, request):
@@ -91,7 +91,7 @@ class RouteHandler(object):
         return json_response(
             {
                 'ok': True,
-                'msg': 'Transfer record transaction submitted',
+                'msg': 'Create institution transaction submitted',
                 'transactionId': transaction_id
             })
 
@@ -137,7 +137,7 @@ class RouteHandler(object):
         return json_response(
             {
                 'ok': True,
-                'msg': 'Transfer record transaction submitted',
+                'msg': 'Create record transaction submitted',
                 'transactions': transactions
 
             })
@@ -161,7 +161,7 @@ class RouteHandler(object):
         return json_response(
             {
                 'ok': True,
-                'msg': 'Transfer record transaction submitted',
+                'msg': 'Create transaction submitted',
                 'transactionId': transaction_id
             })
 
@@ -186,7 +186,7 @@ class RouteHandler(object):
         return json_response(
             {
                 'ok': True,
-                'msg': 'Transfer record transaction submitted',
+                'msg': 'Create transaction submitted',
                 'transactions': transactions
 
             })
@@ -209,7 +209,7 @@ class RouteHandler(object):
         return json_response(
             {
                 'ok': True,
-                'msg': 'Transfer record transaction submitted',
+                'msg': 'Create vote transaction submitted',
                 'transactionId': transaction_id
             })
 
@@ -227,7 +227,7 @@ class RouteHandler(object):
         return json_response(
             {
                 'ok': True,
-                'msg': 'Transfer record transaction submitted',
+                'msg': 'Create class transaction submitted',
                 'transactionId': transaction_id
             })
 
@@ -251,7 +251,7 @@ class RouteHandler(object):
         return json_response(
             {
                 'ok': True,
-                'msg': 'Transfer record transaction submitted',
+                'msg': 'Create classes transaction submitted',
                 'transactions': transactions
 
             })
@@ -272,7 +272,7 @@ class RouteHandler(object):
         return json_response(
             {
                 'ok': True,
-                'msg': 'Transfer record transaction submitted',
+                'msg': 'Create Subject transaction submitted',
                 'transactionId': transaction_id
             })
 
@@ -301,7 +301,7 @@ class RouteHandler(object):
         return json_response(
             {
                 'ok': True,
-                'msg': 'Transfer record transaction submitted',
+                'msg': 'Create subjects transaction submitted',
                 'transactions': transactions
 
             })
@@ -321,7 +321,7 @@ class RouteHandler(object):
         return json_response(
             {
                 'ok': True,
-                'msg': 'Transfer record transaction submitted',
+                'msg': 'Create certificate transaction submitted',
                 'transactionId': transaction_id
             })
 
@@ -346,7 +346,7 @@ class RouteHandler(object):
         return json_response(
             {
                 'ok': True,
-                'msg': 'Transfer record transaction submitted',
+                'msg': 'Create certificates transaction submitted',
                 'transactions': transactions
 
             })
@@ -368,7 +368,7 @@ class RouteHandler(object):
         return json_response(
             {
                 'ok': True,
-                'msg': 'Transfer record transaction submitted',
+                'msg': 'Update record transaction submitted',
                 'transactionId': transaction_id
             })
 
@@ -387,7 +387,7 @@ class RouteHandler(object):
         return json_response(
             {
                 'ok': True,
-                'msg': 'Transfer record transaction submitted',
+                'msg': 'Update actor transaction submitted',
                 'transactionId': transaction_id
             })
 
@@ -404,7 +404,7 @@ class RouteHandler(object):
         return json_response(
             {
                 'ok': True,
-                'msg': 'Transfer record transaction submitted',
+                'msg': 'Reject institution transaction submitted',
                 'transactionId': transaction_id
             })
 

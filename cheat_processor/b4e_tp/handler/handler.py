@@ -21,10 +21,10 @@ from addressing.b4e_addressing import addresser
 
 from protobuf.b4e_protobuf import payload_pb2
 
-from processor.b4e_tp.payload import B4EPayload
-from processor.b4e_tp.state.state import B4EState
+from cheat_processor.b4e_tp.payload import B4EPayload
+from cheat_processor.b4e_tp.state.state import B4EState
 
-from processor.b4e_tp.handler import actor_handler, \
+from cheat_processor.b4e_tp.handler import actor_handler, \
     class_handler, portfolio_handler, record_handler, \
     voting_handler, validator, b4e_environment_handler, \
     company_handler, job_handler

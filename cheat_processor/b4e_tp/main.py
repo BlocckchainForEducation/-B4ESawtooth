@@ -19,7 +19,7 @@ import sys
 from sawtooth_sdk.processor.core import TransactionProcessor
 from sawtooth_sdk.processor.log import init_console_logging
 
-from processor.b4e_tp.handler.handler import B4EHandler
+from cheat_processor.b4e_tp.handler.handler import B4EHandler
 
 
 def parse_args(args):

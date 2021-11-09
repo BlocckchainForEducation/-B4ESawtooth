@@ -1,6 +1,6 @@
 from sawtooth_sdk.processor.exceptions import InvalidTransaction
 
-from processor.b4e_tp.handler.actor_handler import _check_is_valid_actor
+from cheat_processor.b4e_tp.handler.actor_handler import _check_is_valid_actor
 from protobuf.b4e_protobuf import actor_pb2
 from protobuf.b4e_protobuf import record_pb2
 from protobuf.b4e_protobuf import payload_pb2
