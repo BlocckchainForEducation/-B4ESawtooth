@@ -122,8 +122,8 @@ services:
     command: |
       bash -c "
         sleep 1
-        b4e-tp -v -C tcp://validator-cheater:4004
-        echo b4e-tp-cheater connect
+        b4e-cheat-tp -v -C tcp://validator-cheater:4004
+        echo b4e-cheat-tp connect
       "
 
   # -------------=== rest api ===-------------

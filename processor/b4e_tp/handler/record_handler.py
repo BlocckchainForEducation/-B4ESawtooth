@@ -179,6 +179,8 @@ def _check_modify_permission(state, record, payload, manager_public_key, public_
     if class_:
         if class_.teacher_public_key != public_key:
             raise InvalidTransaction("Invalid permission")
+    else:
+        raise InvalidTransaction("Class doesn't exit ")
 
 
 def modify_record(state, public_key, transaction_id, payload):

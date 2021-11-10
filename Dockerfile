@@ -44,6 +44,9 @@ RUN pip3 install \
     aiohttp_cors \
     requests
 
+
+COPY . /project/sawtooth-b4e
+
 WORKDIR /project/sawtooth-b4e
 
 ENV PATH $PATH:/project/sawtooth-b4e/bin

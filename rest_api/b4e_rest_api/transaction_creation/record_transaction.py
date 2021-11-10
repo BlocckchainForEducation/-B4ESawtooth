@@ -308,9 +308,10 @@ def _modify_record(transaction_signer,
     modifier_public_key = transaction_signer.get_public_key().as_hex()
     modifier_address = addresser.get_actor_address(modifier_public_key)
     manager_address = addresser.get_actor_address(manager_public_key)
+    class_address = addresser.get_class_address(record_id,manager_public_key)
     record_address = addresser.get_record_address(record_id, owner_public_key, manager_public_key, )
 
-    inputs = [modifier_address, manager_address, record_address]
+    inputs = [modifier_address, manager_address,class_address, record_address]
 
     outputs = [record_address]
     action = payload_pb2.ModifyRecordAction(record_id=record_id,
