@@ -41,8 +41,8 @@ Current grade
     msg, status = get_grade_in_script()
     pretty_msg = json.dumps(msg, indent=4, sort_keys=True)
     print(f"""
-    Grade after edit
-    {pretty_msg}
+Grade after edit
+{pretty_msg}
     """)
     # 3. Invalid edit grades
     msg, status = invalid_edit_grade(base_url_cheater)
