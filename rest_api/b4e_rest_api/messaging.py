@@ -752,7 +752,7 @@ class Messenger(object):
             elif status == client_batch_submit_pb2.ClientBatchStatus.PENDING:
                 raise ApiInternalError('Transaction submitted but timed out')
             elif status == client_batch_submit_pb2.ClientBatchStatus.UNKNOWN:
-                # raise ApiInternalError('Something went wrong. Try again later')
-                continue
+                raise ApiInternalError('Something went wrong. Try again later')
+                # continue
             elif status == client_batch_submit_pb2.ClientBatchStatus.COMMITTED:
                 break

@@ -31,7 +31,7 @@ class RecordRouteHandler(object):
         return json_response(
             {
                 'ok': True,
-                'msg': 'Transfer record transaction submitted',
+                'msg': 'Create record transaction submitted',
                 'transactionId': transaction_id
             })
 
@@ -52,7 +52,7 @@ class RecordRouteHandler(object):
         return json_response(
             {
                 'ok': True,
-                'msg': 'Transfer record transaction submitted',
+                'msg': 'Create record transaction submitted',
                 'transactionId': transaction_id
             })
 
@@ -86,7 +86,7 @@ class RecordRouteHandler(object):
         return json_response(
             {
                 'ok': True,
-                'msg': 'Transfer record transaction submitted',
+                'msg': 'Create records transaction submitted',
                 'transactions': transactions
 
             })
@@ -107,7 +107,7 @@ class RecordRouteHandler(object):
         return json_response(
             {
                 'ok': True,
-                'msg': 'Transfer record transaction submitted',
+                'msg': 'Create record transaction submitted',
                 'transactionId': transaction_id
             })
 
@@ -136,7 +136,7 @@ class RecordRouteHandler(object):
         return json_response(
             {
                 'ok': True,
-                'msg': 'Transfer record transaction submitted',
+                'msg': 'Create record transaction submitted',
                 'transactions': transactions
 
             })
@@ -157,7 +157,7 @@ class RecordRouteHandler(object):
         return json_response(
             {
                 'ok': True,
-                'msg': 'Transfer record transaction submitted',
+                'msg': 'Edit record transaction submitted',
                 'transactionId': transaction_id
             })
 
@@ -176,7 +176,7 @@ class RecordRouteHandler(object):
         return json_response(
             {
                 'ok': True,
-                'msg': 'Transfer record transaction submitted',
+                'msg': 'Edit record transaction submitted',
                 'transactionId': transaction_id
             })
 
@@ -194,7 +194,7 @@ class RecordRouteHandler(object):
         return json_response(
             {
                 'ok': True,
-                'msg': 'Transfer record transaction submitted',
+                'msg': 'Edit record transaction submitted',
                 'transactionId': transaction_id
             })
 
@@ -210,7 +210,7 @@ class RecordRouteHandler(object):
         return json_response(
             {
                 'ok': True,
-                'msg': 'Transfer record transaction submitted',
+                'msg': 'Revoke cert transaction submitted',
                 'transactionId': transaction_id
             })
 
@@ -226,7 +226,7 @@ class RecordRouteHandler(object):
         return json_response(
             {
                 'ok': True,
-                'msg': 'Transfer record transaction submitted',
+                'msg': 'Reactive cert transaction submitted',
                 'transactionId': transaction_id
             })
 

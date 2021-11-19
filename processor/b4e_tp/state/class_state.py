@@ -9,7 +9,7 @@ from protobuf.b4e_protobuf import voting_pb2
 
 def get_class(self, class_id, institution_public_key):
     try:
-        print(f"Get class {class_id}")
+        # print(f"Get class {class_id}")
         address = addresser.get_class_address(class_id, institution_public_key)
         state_entries = self._context.get_state(
             addresses=[address], timeout=self._timeout)
@@ -29,7 +29,7 @@ def get_class(self, class_id, institution_public_key):
 def set_class(self, class_):
     class_address = addresser.get_class_address(class_.class_id, class_.institution_public_key)
     container = class_pb2.ClassContainer()
-    print(f"Create class {class_.class_id}")
+    # print(f"Create class {class_.class_id}")
     state_entries = self._context.get_state(
         addresses=[class_address], timeout=self._timeout)
     if state_entries:
