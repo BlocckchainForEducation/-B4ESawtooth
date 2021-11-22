@@ -1,0 +1,735 @@
+version: '3.6'
+
+volumes:
+  pbft-shared-test-net:
+  mongodb_data_ministry:
+
+services:
+    # -------------=== b4e tp   ===-------------
+  b4e-tp-01:
+    restart: always
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    image: b4e-image
+    container_name: b4e-tp-01
+    volumes:
+      - '.:/project/sawtooth-b4e'
+    depends_on:
+      - validator-0
+    command: |
+      bash -c "
+        sleep 1
+        echo start
+        b4e-tp -v -C tcp://validator-0:4004
+        echo b4e-tp-01 connect
+      "
+
+  b4e-tp-02:
+    restart: always
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    image: b4e-image
+    container_name: b4e-tp-02
+    volumes:
+      - '.:/project/sawtooth-b4e'
+    depends_on:
+      - validator-0
+    command: |
+      bash -c "
+        sleep 1
+        echo start
+        b4e-tp -v -C tcp://validator-0:4004
+        echo b4e-tp-0 connect
+      "
+
+  b4e-tp-03:
+    restart: always
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    image: b4e-image
+    container_name: b4e-tp-03
+    volumes:
+      - '.:/project/sawtooth-b4e'
+    depends_on:
+      - validator-0
+    command: |
+      bash -c "
+        sleep 1
+        echo start
+        b4e-tp -v -C tcp://validator-0:4004
+        echo b4e-tp-0 connect
+      "
+
+  b4e-tp-04:
+    restart: always
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    image: b4e-image
+    container_name: b4e-tp-04
+    volumes:
+      - '.:/project/sawtooth-b4e'
+    depends_on:
+      - validator-0
+    command: |
+      bash -c "
+        sleep 1
+        echo start
+        b4e-tp -v -C tcp://validator-0:4004
+        echo b4e-tp-0 connect
+      "
+
+  b4e-tp-05:
+    restart: always
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    image: b4e-image
+    container_name: b4e-tp-05
+    volumes:
+      - '.:/project/sawtooth-b4e'
+    depends_on:
+      - validator-0
+    command: |
+      bash -c "
+        sleep 1
+        echo start
+        b4e-tp -v -C tcp://validator-0:4004
+        echo b4e-tp-0 connect
+      "
+
+  b4e-tp-11:
+    restart: always
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    image: b4e-image
+    container_name: b4e-tp-11
+    volumes:
+      - '.:/project/sawtooth-b4e'
+    depends_on:
+      - validator-1
+    command: |
+      bash -c "
+        sleep 1
+        b4e-tp -v -C tcp://validator-1:4004
+        echo b4e-tp-1 connect
+      "
+  b4e-tp-12:
+    restart: always
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    image: b4e-image
+    container_name: b4e-tp-12
+    volumes:
+      - '.:/project/sawtooth-b4e'
+    depends_on:
+      - validator-1
+    command: |
+      bash -c "
+        sleep 1
+        b4e-tp -v -C tcp://validator-1:4004
+        echo b4e-tp-1 connect
+      "
+  b4e-tp-13:
+    restart: always
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    image: b4e-image
+    container_name: b4e-tp-13
+    volumes:
+      - '.:/project/sawtooth-b4e'
+    depends_on:
+      - validator-1
+    command: |
+      bash -c "
+        sleep 1
+        b4e-tp -v -C tcp://validator-1:4004
+        echo b4e-tp-1 connect
+      "
+  b4e-tp-14:
+    restart: always
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    image: b4e-image
+    container_name: b4e-tp-14
+    volumes:
+      - '.:/project/sawtooth-b4e'
+    depends_on:
+      - validator-1
+    command: |
+      bash -c "
+        sleep 1
+        b4e-tp -v -C tcp://validator-1:4004
+        echo b4e-tp-1 connect
+      "
+  b4e-tp-15:
+    restart: always
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    image: b4e-image
+    container_name: b4e-tp-15
+    volumes:
+      - '.:/project/sawtooth-b4e'
+    depends_on:
+      - validator-1
+    command: |
+      bash -c "
+        sleep 1
+        b4e-tp -v -C tcp://validator-1:4004
+        echo b4e-tp-1 connect
+      "
+  b4e-tp-21:
+    restart: always
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    image: b4e-image
+    container_name: b4e-tp-21
+    volumes:
+      - '.:/project/sawtooth-b4e'
+    depends_on:
+      - validator-2
+    command: |
+      bash -c "
+        sleep 1
+        b4e-tp -v -C tcp://validator-2:4004
+        echo b4e-tp-2 connect
+      "
+
+  b4e-tp-22:
+    restart: always
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    image: b4e-image
+    container_name: b4e-tp-22
+    volumes:
+      - '.:/project/sawtooth-b4e'
+    depends_on:
+      - validator-2
+    command: |
+      bash -c "
+        sleep 1
+        b4e-tp -v -C tcp://validator-2:4004
+        echo b4e-tp-2 connect
+      "
+
+  b4e-tp-23:
+    restart: always
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    image: b4e-image
+    container_name: b4e-tp-23
+    volumes:
+      - '.:/project/sawtooth-b4e'
+    depends_on:
+      - validator-2
+    command: |
+      bash -c "
+        sleep 1
+        b4e-tp -v -C tcp://validator-2:4004
+        echo b4e-tp-2 connect
+      "
+
+  b4e-tp-24:
+    restart: always
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    image: b4e-image
+    container_name: b4e-tp-24
+    volumes:
+      - '.:/project/sawtooth-b4e'
+    depends_on:
+      - validator-2
+    command: |
+      bash -c "
+        sleep 1
+        b4e-tp -v -C tcp://validator-2:4004
+        echo b4e-tp-2 connect
+      "
+
+  b4e-tp-25:
+    restart: always
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    image: b4e-image
+    container_name: b4e-tp-25
+    volumes:
+      - '.:/project/sawtooth-b4e'
+    depends_on:
+      - validator-2
+    command: |
+      bash -c "
+        sleep 1
+        b4e-tp -v -C tcp://validator-2:4004
+        echo b4e-tp-2 connect
+      "
+
+  b4e-tp-31:
+    restart: always
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    image: b4e-image
+    container_name: b4e-tp-31
+    volumes:
+      - '.:/project/sawtooth-b4e'
+    depends_on:
+      - validator-3
+    command: |
+      bash -c "
+        sleep 1
+        b4e-tp -v -C tcp://validator-3:4004
+        echo b4e-tp-3 connect
+      "
+
+
+  b4e-tp-32:
+    restart: always
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    image: b4e-image
+    container_name: b4e-tp-32
+    volumes:
+      - '.:/project/sawtooth-b4e'
+    depends_on:
+      - validator-3
+    command: |
+      bash -c "
+        sleep 1
+        b4e-tp -v -C tcp://validator-3:4004
+        echo b4e-tp-3 connect
+      "
+
+
+  b4e-tp-33:
+    restart: always
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    image: b4e-image
+    container_name: b4e-tp-33
+    volumes:
+      - '.:/project/sawtooth-b4e'
+    depends_on:
+      - validator-3
+    command: |
+      bash -c "
+        sleep 1
+        b4e-tp -v -C tcp://validator-3:4004
+        echo b4e-tp-3 connect
+      "
+
+
+  b4e-tp-34:
+    restart: always
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    image: b4e-image
+    container_name: b4e-tp-34
+    volumes:
+      - '.:/project/sawtooth-b4e'
+    depends_on:
+      - validator-3
+    command: |
+      bash -c "
+        sleep 1
+        b4e-tp -v -C tcp://validator-3:4004
+        echo b4e-tp-3 connect
+      "
+
+
+  b4e-tp-35:
+    restart: always
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    image: b4e-image
+    container_name: b4e-tp-35
+    volumes:
+      - '.:/project/sawtooth-b4e'
+    depends_on:
+      - validator-3
+    command: |
+      bash -c "
+        sleep 1
+        b4e-tp -v -C tcp://validator-3:4004
+        echo b4e-tp-3 connect
+      "
+  # -------------=== rest api ===-------------
+
+  rest-api-0:
+    restart: always
+    image: hyperledger/sawtooth-rest-api:chime
+    container_name: sawtooth-rest-api-default-0
+    expose:
+      - 8008
+    ports:
+      - '8008:8008'
+    depends_on:
+      - validator-0
+    command: |
+      bash -c "
+        sawtooth-rest-api \
+          --connect tcp://validator-0:4004 \
+          --bind rest-api-0:8008
+      "
+    stop_signal: SIGKILL
+
+  # -------------=== settings tp ===-------------
+
+  settings-tp-0:
+    restart: always
+    image: hyperledger/sawtooth-settings-tp:chime
+    container_name: sawtooth-settings-tp-default-0
+    expose:
+      - 4004
+    command: settings-tp -C tcp://validator-0:4004
+    stop_signal: SIGKILL
+
+  settings-tp-1:
+    restart: always
+    image: hyperledger/sawtooth-settings-tp:chime
+    container_name: sawtooth-settings-tp-default-1
+    expose:
+      - 4004
+    command: settings-tp -C tcp://validator-1:4004
+    stop_signal: SIGKILL
+
+  settings-tp-2:
+    restart: always
+    image: hyperledger/sawtooth-settings-tp:chime
+    container_name: sawtooth-settings-tp-default-2
+    expose:
+      - 4004
+    command: settings-tp -C tcp://validator-2:4004
+    stop_signal: SIGKILL
+
+  settings-tp-3:
+    restart: always
+    image: hyperledger/sawtooth-settings-tp:chime
+    container_name: sawtooth-settings-tp-default-3
+    expose:
+      - 4004
+    command: settings-tp -C tcp://validator-3:4004
+    stop_signal: SIGKILL
+
+  settings-tp-4:
+    restart: always
+    image: hyperledger/sawtooth-settings-tp:chime
+    container_name: sawtooth-settings-tp-default-4
+    expose:
+      - 4004
+    command: settings-tp -C tcp://validator-4:4004
+    stop_signal: SIGKILL
+
+  # -------------=== shell ===-------------
+
+  shell:
+    restart: always
+    image: hyperledger/sawtooth-shell:chime
+    container_name: sawtooth-shell-default
+    volumes:
+      - pbft-shared-test-net:/pbft-shared-test-net
+    command: |
+      bash -c "
+        sawtooth keygen
+        tail -f /dev/null
+      "
+    stop_signal: SIGKILL
+
+  # -------------=== validators ===-------------
+
+  validator-0:
+    restart: always
+    image: hyperledger/sawtooth-validator:chime
+    container_name: sawtooth-validator-default-0
+    expose:
+      - 4004
+      - 5050
+      - 8800
+    ports:
+      - '4004:4004'
+      - '8800:8800'
+    volumes:
+      - pbft-shared-test-net:/pbft-shared-test-net
+    command: |
+      bash -c "
+        if [ -e /pbft-shared-test-net/validators/validator-0.priv ]; then
+          cp /pbft-shared-test-net/validators/validator-0.pub /etc/sawtooth/keys/validator.pub
+          cp /pbft-shared-test-net/validators/validator-0.priv /etc/sawtooth/keys/validator.priv
+        fi &&
+        if [ ! -e /etc/sawtooth/keys/validator.priv ]; then
+          sawadm keygen
+          mkdir -p /pbft-shared-test-net/validators || true
+          cp /etc/sawtooth/keys/validator.pub /pbft-shared-test-net/validators/validator-0.pub
+          cp /etc/sawtooth/keys/validator.priv /pbft-shared-test-net/validators/validator-0.priv
+        fi &&
+        if [ ! -e config-genesis.batch ]; then
+
+          sawset genesis -k /etc/sawtooth/keys/validator.priv -o config-genesis.batch
+        fi &&
+        while [[ ! -f /pbft-shared-test-net/validators/validator-1.pub || \
+                 ! -f /pbft-shared-test-net/validators/validator-2.pub || \
+                 ! -f /pbft-shared-test-net/validators/validator-3.pub || \
+                 ! -f /pbft-shared-test-net/validators/validator-4.pub ]];
+        do sleep 1; done
+        echo sawtooth.consensus.pbft.members=\\['\"'$$(cat /pbft-shared-test-net/validators/validator-0.pub)'\"','\"'$$(cat /pbft-shared-test-net/validators/validator-1.pub)'\"','\"'$$(cat /pbft-shared-test-net/validators/validator-2.pub)'\"','\"'$$(cat /pbft-shared-test-net/validators/validator-3.pub)'\"','\"'$$(cat /pbft-shared-test-net/validators/validator-4.pub)'\"'\\] &&
+        if [ ! -e config.batch ]; then
+         sawset proposal create \
+            -k /etc/sawtooth/keys/validator.priv \
+            sawtooth.consensus.algorithm.name=pbft \
+            sawtooth.consensus.algorithm.version=1.0 \
+            sawtooth.consensus.pbft.members=\\['\"'$$(cat /pbft-shared-test-net/validators/validator-0.pub)'\"','\"'$$(cat /pbft-shared-test-net/validators/validator-1.pub)'\"','\"'$$(cat /pbft-shared-test-net/validators/validator-2.pub)'\"','\"'$$(cat /pbft-shared-test-net/validators/validator-3.pub)'\"','\"'$$(cat /pbft-shared-test-net/validators/validator-4.pub)'\"'\\] \
+            sawtooth.publisher.max_batches_per_block=1200 \
+            -o config.batch
+        fi &&
+        if [ ! -e /var/lib/sawtooth/genesis.batch ]; then
+          sawadm genesis config-genesis.batch config.batch
+        fi &&
+        if [ ! -e /root/.sawtooth/keys/my_key.priv ]; then
+          sawtooth keygen my_key
+        fi &&
+        sawtooth-validator -vv \
+          --endpoint tcp://validator-0:8800 \
+          --bind component:tcp://eth0:4004 \
+          --bind consensus:tcp://eth0:5050 \
+          --bind network:tcp://eth0:8800 \
+          --scheduler parallel \
+          --peering static \
+          --maximum-peer-connectivity 10000
+      "
+
+  validator-1:
+    restart: always
+    image: hyperledger/sawtooth-validator:chime
+    container_name: sawtooth-validator-default-1
+    expose:
+      - 4004
+      - 5050
+      - 8800
+    ports:
+      - '4005:4004'
+      - '8801:8800'
+    volumes:
+      - pbft-shared-test-net:/pbft-shared-test-net
+    command: |
+      bash -c "
+        if [ -e /pbft-shared-test-net/validators/validator-1.priv ]; then
+          echo wait a moment
+          cp /pbft-shared-test-net/validators/validator-1.pub   /etc/sawtooth/keys/validator.pub
+          cp /pbft-shared-test-net/validators/validator-1.priv   /etc/sawtooth/keys/validator.priv
+        fi &&
+        if [ ! -e /etc/sawtooth/keys/validator.priv ]; then
+          sawadm keygen
+          mkdir -p /pbft-shared-test-net/validators || true
+          echo wait a moment
+          cp /etc/sawtooth/keys/validator.pub   /pbft-shared-test-net/validators/validator-1.pub
+          cp /etc/sawtooth/keys/validator.priv   /pbft-shared-test-net/validators/validator-1.priv
+        fi &&
+        sawtooth keygen my_key &&
+        sawtooth-validator -vv \
+          --endpoint tcp://validator-1:8800 \
+          --bind component:tcp://eth0:4004 \
+          --bind consensus:tcp://eth0:5050 \
+          --bind network:tcp://eth0:8800 \
+          --scheduler parallel \
+          --peering static \
+          --maximum-peer-connectivity 10000 \
+          --peers tcp://validator-0:8800
+      "
+
+  validator-2:
+    restart: always
+    image: hyperledger/sawtooth-validator:chime
+    container_name: sawtooth-validator-default-2
+    expose:
+      - 4004
+      - 5050
+      - 8800
+    volumes:
+      - pbft-shared-test-net:/pbft-shared-test-net
+    ports:
+      - '4006:4004'
+      - '8802:8800'
+    command: |
+      bash -c "
+        if [ -e /pbft-shared-test-net/validators/validator-2.priv ]; then
+          cp /pbft-shared-test-net/validators/validator-2.pub   /etc/sawtooth/keys/validator.pub
+          cp /pbft-shared-test-net/validators/validator-2.priv   /etc/sawtooth/keys/validator.priv
+        fi &&
+        if [ ! -e /etc/sawtooth/keys/validator.priv ]; then
+          sawadm keygen
+          mkdir -p /pbft-shared-test-net/validators || true
+          cp /etc/sawtooth/keys/validator.pub   /pbft-shared-test-net/validators/validator-2.pub
+          cp /etc/sawtooth/keys/validator.priv   /pbft-shared-test-net/validators/validator-2.priv
+        fi &&
+        sawtooth keygen my_key &&
+        sawtooth-validator -vv \
+          --endpoint tcp://validator-2:8800 \
+          --bind component:tcp://eth0:4004 \
+          --bind consensus:tcp://eth0:5050 \
+          --bind network:tcp://eth0:8800 \
+          --scheduler parallel \
+          --peering static \
+          --maximum-peer-connectivity 10000 \
+          --peers tcp://validator-0:8800 \
+          --peers tcp://validator-1:8800
+      "
+
+  validator-3:
+    restart: always
+    image: hyperledger/sawtooth-validator:chime
+    container_name: sawtooth-validator-default-3
+    expose:
+      - 4004
+      - 5050
+      - 8800
+    ports:
+      - '4007:4004'
+      - '8803:8800'
+    volumes:
+      - pbft-shared-test-net:/pbft-shared-test-net
+    command: |
+      bash -c "
+        if [ -e /pbft-shared-test-net/validators/validator-3.priv ]; then
+         cp /pbft-shared-test-net/validators/validator-3.pub   /etc/sawtooth/keys/validator.pub
+         cp /pbft-shared-test-net/validators/validator-3.priv   /etc/sawtooth/keys/validator.priv
+        fi &&
+        if [ ! -e /etc/sawtooth/keys/validator.priv ]; then
+         sawadm keygen
+         mkdir -p /pbft-shared-test-net/validators || true
+         cp /etc/sawtooth/keys/validator.pub   /pbft-shared-test-net/validators/validator-3.pub
+         cp /etc/sawtooth/keys/validator.priv   /pbft-shared-test-net/validators/validator-3.priv
+        fi &&
+        sawtooth keygen my_key &&
+        sawtooth-validator -vv \
+          --endpoint tcp://validator-3:8800 \
+          --bind component:tcp://eth0:4004 \
+          --bind consensus:tcp://eth0:5050 \
+          --bind network:tcp://eth0:8800 \
+          --scheduler parallel \
+          --peering static \
+          --maximum-peer-connectivity 10000 \
+          --peers tcp://validator-0:8800 \
+          --peers tcp://validator-1:8800 \
+          --peers tcp://validator-2:8800
+      "
+
+
+  validator-4:
+    restart: always
+    image: hyperledger/sawtooth-validator:chime
+    container_name: sawtooth-validator-default-4
+    expose:
+      - 4004
+      - 5050
+      - 8800
+    ports:
+      - '4008:4004'
+      - '8804:8800'
+    volumes:
+      - pbft-shared-test-net:/pbft-shared-test-net
+    command: |
+      bash -c "
+        if [ -e /pbft-shared-test-net/validators/validator-4.priv ]; then
+          cp /pbft-shared-test-net/validators/validator-4.pub   /etc/sawtooth/keys/validator.pub
+          cp /pbft-shared-test-net/validators/validator-4.priv   /etc/sawtooth/keys/validator.priv
+        fi &&
+        if [ ! -e /etc/sawtooth/keys/validator.priv ]; then
+          sawadm keygen
+          mkdir -p /pbft-shared-test-net/validators || true
+          cp /etc/sawtooth/keys/validator.pub   /pbft-shared-test-net/validators/validator-4.pub
+          cp /etc/sawtooth/keys/validator.priv   /pbft-shared-test-net/validators/validator-4.priv
+        fi &&
+        sawtooth keygen my_key &&
+        sawtooth-validator -vv \
+          --endpoint tcp://validator-4:8800 \
+          --bind component:tcp://eth0:4004 \
+          --bind consensus:tcp://eth0:5050 \
+          --bind network:tcp://eth0:8800 \
+          --scheduler parallel \
+          --peering static \
+          --maximum-peer-connectivity 10000 \
+          --peers tcp://validator-0:8800 \
+          --peers tcp://validator-1:8800 \
+          --peers tcp://validator-2:8800 \
+          --peers tcp://validator-3:8800
+      "
+
+  # -------------=== pbft engines ===-------------
+
+  pbft-0:
+    restart: always
+    image: hyperledger/sawtooth-pbft-engine:chime
+    container_name: sawtooth-pbft-engine-default-0
+    command: pbft-engine -vv --connect tcp://validator-0:5050
+    stop_signal: SIGKILL
+
+  pbft-1:
+    restart: always
+    image: hyperledger/sawtooth-pbft-engine:chime
+    container_name: sawtooth-pbft-engine-default-1
+    command: pbft-engine -vv --connect tcp://validator-1:5050
+    stop_signal: SIGKILL
+
+  pbft-2:
+    restart: always
+    image: hyperledger/sawtooth-pbft-engine:chime
+    container_name: sawtooth-pbft-engine-default-2
+    command: pbft-engine -vv --connect tcp://validator-2:5050
+    stop_signal: SIGKILL
+
+  pbft-3:
+    restart: always
+    image: hyperledger/sawtooth-pbft-engine:chime
+    container_name: sawtooth-pbft-engine-default-3
+    command: pbft-engine -vv --connect tcp://validator-3:5050
+    stop_signal: SIGKILL
+
+  pbft-4:
+    restart: always
+    image: hyperledger/sawtooth-pbft-engine:chime
+    container_name: sawtooth-pbft-engine-default-4
+    command: pbft-engine -vv --connect tcp://validator-4:5050
+    stop_signal: SIGKILL
+
+  b4e-rest-api:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    image: b4e-image
+    container_name: b4e-rest-api
+    volumes:
+      - .:/project/sawtooth-b4e
+    expose:
+      - 8000
+    ports:
+      - '8005:8000'
+    depends_on:
+      - rest-api-0
+      - validator-1
+    command: |
+      bash -c "
+        b4e-rest-api \
+          -B b4e-rest-api:8000 \
+          -C validator-1:4004 \
+          -R rest-api-0:8008 \
+          --db-host mongo-b4e \
+          --db-user ${USERNAME} \
+          --db-password ${PASSWORD} \
+          -vv
+      "
