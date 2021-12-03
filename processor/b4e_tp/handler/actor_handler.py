@@ -1,9 +1,10 @@
+import logging
+
 from sawtooth_sdk.processor.exceptions import InvalidTransaction
 from protobuf.b4e_protobuf import actor_pb2
-from protobuf.b4e_protobuf import record_pb2
-from protobuf.b4e_protobuf import payload_pb2
 from protobuf.b4e_protobuf import voting_pb2
-from protobuf.b4e_protobuf import class_pb2
+
+logger = logging.getLogger("Actor handler")
 
 list_ministry_public_key = []
 with open("list_ministry_public_key") as fp:
@@ -13,12 +14,13 @@ with open("list_ministry_public_key") as fp:
 
 def _check_is_valid_actor(actor):
     if not actor:
-        raise InvalidTransaction("Actor doesn't exist")
+        raise InvalidTransaction(f"Actor doesn't exist : {actor}")
     if actor.profile[-1].status != actor_pb2.Actor.ACTIVE:
-        raise InvalidTransaction("Actor is not active")
+        raise InvalidTransaction(f"Actor is not active {actor}")
 
 
 def _create_actor(state, public_key, transaction_id, manager_public_key, status, payload, role):
+    logger.info(f"Create actor with: {public_key}")
     if state.get_actor(public_key):
         raise InvalidTransaction("Actor existed!")
     actor_public_key = public_key
@@ -36,8 +38,9 @@ def _create_actor(state, public_key, transaction_id, manager_public_key, status,
                             profile=[profile],
                             transaction_id=transaction_id,
                             timestamp=payload.timestamp)
-
+    logger.info(f"Set actor state")
     state.set_actor(actor, public_key)
+    logger.info(f"Created actor")
 
 
 def create_actor(state, public_key, transaction_id, payload):
@@ -47,6 +50,7 @@ def create_actor(state, public_key, transaction_id, payload):
 
 
 def create_institution(state, public_key, transaction_id, payload):
+    logger.info(f"Create institution {public_key} with voting")
     _create_actor(state=state,
                   public_key=public_key,
                   transaction_id=transaction_id,
@@ -63,11 +67,13 @@ def create_institution(state, public_key, transaction_id, payload):
                                close_vote_timestamp=0,
                                timestamp=payload.timestamp,
                                transaction_id=transaction_id)
-
+    logger.info("Create voting")
     state.set_voting(voting, public_key)
+    logger.info("Voting created")
 
 
 def create_teacher(state, public_key, transaction_id, payload):
+    logger.info(f"Create teacher by {public_key}")
     institution = state.get_actor(public_key)
     _check_is_valid_actor(institution)
 
@@ -84,6 +90,7 @@ def create_teacher(state, public_key, transaction_id, payload):
 
 
 def update_actor_profile(state, public_key, transaction_id, payload):
+    logger.info(f"Update actor {public_key}")
     actor = state.get_actor(public_key)
     _check_is_valid_actor(actor)
 
@@ -94,6 +101,7 @@ def update_actor_profile(state, public_key, transaction_id, payload):
 
 
 def reject_institution(state, public_key, transaction_id, payload):
+    logger.info(f"Reject institution {public_key}")
     if public_key in list_ministry_public_key:
         institution = state.get_actor(public_key)
         _check_is_valid_actor(institution)
@@ -104,6 +112,7 @@ def reject_institution(state, public_key, transaction_id, payload):
 
 
 def active_institution(state, public_key, transaction_id, payload):
+    logger.info(f"Active institution {public_key}")
     if public_key in list_ministry_public_key:
         institution = state.get_actor(public_key)
         _check_is_valid_actor(institution)

@@ -34,9 +34,9 @@ def set_b4e_environment(state, public_key, transaction_id, payload):
 
 def _check_is_valid_actor(actor):
     if not actor:
-        raise InvalidTransaction("Actor doesn't exist")
+        raise InvalidTransaction(f"Actor doesn't exist {actor}")
     if actor.status != actor_pb2.ACTIVE:
-        raise InvalidTransaction("Actor is not active")
+        raise InvalidTransaction(f"Actor is not active {actor}")
 
 
 def _create_actor(state, transaction_id, public_key, manager_public_key, status, payload, role):

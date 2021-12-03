@@ -4,15 +4,11 @@ from sawtooth_sdk.processor.exceptions import InvalidTransaction
 
 from processor.b4e_tp.handler.actor_handler import _check_is_valid_actor
 from protobuf.b4e_protobuf import actor_pb2
-from protobuf.b4e_protobuf import record_pb2
-from protobuf.b4e_protobuf import payload_pb2
-from protobuf.b4e_protobuf import voting_pb2
-from protobuf.b4e_protobuf import class_pb2
 from protobuf.b4e_protobuf import portfolio_pb2
 
 import json
 
-LOGGER = logging.getLogger(__name__)
+LOGGER = logging.getLogger("Portfolio Handler")
 
 
 def create_portfolio(state, public_key, transaction_id, payload):
@@ -24,6 +20,8 @@ def create_edu_program(state, public_key, transaction_id, payload):
     edu_id = payload.data.id
     portfolio_type = portfolio_pb2.Portfolio.EDU_PROGRAM
     data = payload.data.data
+
+    LOGGER.info(f"Create educational program {edu_id}")
 
     institution = state.get_actor(public_key)
     if _check_is_valid_actor(institution):
@@ -50,6 +48,7 @@ def create_edu_program(state, public_key, transaction_id, payload):
                                         timestamp=payload.timestamp,
                                         transaction_id=transaction_id)
     state.create_portfolio(portfolio)
+    LOGGER.info(f"Educational program created")
 
 
 def _check_data_edu_program(data):

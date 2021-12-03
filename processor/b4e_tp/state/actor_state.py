@@ -1,14 +1,15 @@
+import logging
+
 from addressing.b4e_addressing import addresser
 
 from protobuf.b4e_protobuf import actor_pb2
-from protobuf.b4e_protobuf import record_pb2
-from protobuf.b4e_protobuf import b4e_environment_pb2
-from protobuf.b4e_protobuf import class_pb2
-from protobuf.b4e_protobuf import voting_pb2
+
+logger = logging.getLogger("Actor state")
 
 
 def get_actor(self, public_key):
     try:
+        logger.info(f"Get actor info with pubkey:{public_key}")
         address = addresser.get_actor_address(public_key)
         state_entries = self._context.get_state(
             addresses=[address], timeout=self._timeout)

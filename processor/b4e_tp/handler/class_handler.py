@@ -1,15 +1,17 @@
+import logging
+
 from sawtooth_sdk.processor.exceptions import InvalidTransaction
 
 from processor.b4e_tp.handler.actor_handler import _check_is_valid_actor
 
 from protobuf.b4e_protobuf import actor_pb2
-from protobuf.b4e_protobuf import record_pb2
-from protobuf.b4e_protobuf import payload_pb2
-from protobuf.b4e_protobuf import voting_pb2
 from protobuf.b4e_protobuf import class_pb2
+
+logger = logging.getLogger("Class Handler")
 
 
 def create_class(state, public_key, transaction_id, payload):
+    logger.info(f" create class by {public_key}")
     institution = state.get_actor(public_key)
     _check_is_valid_actor(institution)
 
@@ -29,3 +31,4 @@ def create_class(state, public_key, transaction_id, payload):
                              transaction_id=transaction_id)
 
     state.set_class(class_)
+    logger.info("Class created")

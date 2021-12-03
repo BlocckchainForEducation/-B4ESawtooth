@@ -22,6 +22,7 @@ class ActorRouteHandler(object):
         profile = body.get('profile')
         required_fields = ['email', 'universityName']
         validate_fields(required_fields, profile)
+        LOGGER.info(f"Create institution {body.get('profile')}")
         transaction_id = await self._messenger.send_create_institution(private_key=body.get('privateKeyHex'),
                                                                        profile=body.get('profile'),
                                                                        timestamp=get_time())

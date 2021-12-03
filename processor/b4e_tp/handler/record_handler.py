@@ -1,4 +1,5 @@
 import json
+import logging
 
 from sawtooth_sdk.processor.exceptions import InvalidTransaction
 
@@ -10,11 +11,16 @@ from protobuf.b4e_protobuf import portfolio_pb2
 
 from processor.b4e_tp.handler import time_handler
 
+logger = logging.getLogger("Record Handler")
+
 
 def create_record(state, public_key, transaction_id, payload):
     actor = state.get_actor(public_key)
     _check_is_valid_actor(actor)
     record_id = payload.data.record_id
+
+    logger.info(f"Create record {record_id}")
+
     owner_public_key = payload.data.owner_public_key
     manager_public_key = payload.data.manager_public_key
 
@@ -28,6 +34,7 @@ def create_record(state, public_key, transaction_id, payload):
 
 
 def _create_record_with_type(state, transaction_id, payload, record_type):
+    logger.info(f'Creating record {record_type}')
     record_data = record_pb2.Record.RecordData(portfolio_id=payload.data.portfolio_id,
                                                cipher=payload.data.cipher,
                                                hash=payload.data.hash,
@@ -53,6 +60,7 @@ def _get_record_type(i):
 
 
 def create_cert(state, public_key, transaction_id, payload):
+    logger.info(f"Create cert")
     actor = state.get_actor(public_key)
     _check_is_valid_actor(actor)
     record_id = payload.data.record_id
@@ -77,6 +85,9 @@ def create_cert(state, public_key, transaction_id, payload):
     data = portfolio_data.data
 
     edu_program_data = json.loads(data)
+
+    logger.info(f"Checking educational program data ... ")
+
     if (not edu_program_data.get("currentCredit")) or (
             not edu_program_data.get("startTimestamp")) or (not edu_program_data.get("latestTimestamp")):
         raise InvalidTransaction("Not enough condition ")
@@ -104,6 +115,8 @@ def create_subject(state, public_key, transaction_id, payload):
     owner_public_key = payload.data.owner_public_key
     manager_public_key = payload.data.manager_public_key
 
+    logger.info(f"Create subject {record_id}")
+
     if state.get_record(record_id, owner_public_key, manager_public_key):
         raise InvalidTransaction("Record has been existed")
 
@@ -126,6 +139,8 @@ def create_subject(state, public_key, transaction_id, payload):
     if portfolio_data.portfolio_type != portfolio_pb2.Portfolio.EDU_PROGRAM:
         raise InvalidTransaction("Invalid portfolio type")
     edu_program_data = json.loads(portfolio_data.data)
+
+    logger.info(f"Checking educational program data")
 
     if not edu_program_data.get('currentCredit'):
         edu_program_data['currentCredit'] = class_.credit
@@ -159,6 +174,9 @@ def update_record(state, public_key, transaction_id, payload):
     actor = state.get_actor(public_key)
     _check_is_valid_actor(actor)
     record_id = payload.data.record_id
+
+    logger.info(f"Updating record {record_id}")
+
     owner_public_key = payload.data.owner_public_key
     manager_public_key = payload.data.manager_public_key
     record = state.get_record(record_id, owner_public_key, manager_public_key)

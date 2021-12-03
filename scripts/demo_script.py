@@ -1,8 +1,6 @@
 """
 """
-# 1
 import json
-import pprint
 import time
 
 from scripts.set_up_enviroment import *
@@ -11,9 +9,11 @@ from scripts.set_up_enviroment import *
 def run_script():
     base_url_valid_validator = "http://localhost:8005"
     base_url_cheater = "http://localhost:8006"
+    print("Setting up environment ....")
+    ###setup environment prepare for submit grades
 
     setup_environment(base_url_valid_validator)
-
+    print("Run script demo for invalid editing grades")
     # 1. Submit grades
     msg, status = submit_grate(base_url_valid_validator)
     pretty_msg = json.dumps(msg, indent=4, sort_keys=True)
@@ -57,5 +57,6 @@ Grade after edit
 Grade after invalid edit
 {pretty_msg}
     """)
+
 
 run_script()
