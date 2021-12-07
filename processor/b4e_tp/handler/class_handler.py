@@ -15,11 +15,11 @@ def create_class(state, public_key, transaction_id, payload):
     institution = state.get_actor(public_key)
     _check_is_valid_actor(institution)
 
-    if institution.role != actor_pb2.Actor.INSTITUTION:
-        raise InvalidTransaction("Just institution can create class")
-
-    if state.get_class(payload.data.class_id, public_key):
-        raise InvalidTransaction("Class existed!")
+    # if institution.role != actor_pb2.Actor.INSTITUTION:
+    #     raise InvalidTransaction("Just institution can create class")
+    #
+    # if state.get_class(payload.data.class_id, public_key):
+    #     raise InvalidTransaction("Class existed!")
 
     class_ = class_pb2.Class(class_id=payload.data.class_id,
                              subject_id=payload.data.subject_id,

@@ -24,17 +24,17 @@ def create_edu_program(state, public_key, transaction_id, payload):
     LOGGER.info(f"Create educational program {edu_id}")
 
     institution = state.get_actor(public_key)
-    if _check_is_valid_actor(institution):
-        raise InvalidTransaction("Invalid institution")
-
-    if institution.role != actor_pb2.Actor.INSTITUTION:
-        raise InvalidTransaction("Invalid signer!")
-
-    if state.get_portfolio(edu_id, owner_public_key, public_key):
-        raise InvalidTransaction("Edu program has been existed")
-
-    if not _check_data_edu_program(data):
-        raise InvalidTransaction("Invalid fields on edu program")
+    # if _check_is_valid_actor(institution):
+    #     raise InvalidTransaction("Invalid institution")
+    #
+    # if institution.role != actor_pb2.Actor.INSTITUTION:
+    #     raise InvalidTransaction("Invalid signer!")
+    #
+    # if state.get_portfolio(edu_id, owner_public_key, public_key):
+    #     raise InvalidTransaction("Edu program has been existed")
+    #
+    # if not _check_data_edu_program(data):
+    #     raise InvalidTransaction("Invalid fields on edu program")
 
     _check_type_edu_program_field(data)
 

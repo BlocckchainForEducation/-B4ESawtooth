@@ -13,6 +13,7 @@ with open("list_ministry_public_key") as fp:
 
 
 def _check_is_valid_actor(actor):
+    return True
     if not actor:
         raise InvalidTransaction(f"Actor doesn't exist : {actor}")
     if actor.profile[-1].status != actor_pb2.Actor.ACTIVE:
