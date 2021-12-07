@@ -93,6 +93,7 @@ def parse_args(args):
 
 
 def start_rest_api(host, port, messenger, database):
+    LOGGER.info("Start rest api server v1.2.1")
     nest_asyncio.apply()
     loop = asyncio.get_event_loop()
     asyncio.ensure_future(database.connect())

@@ -18,6 +18,7 @@ class RecordRouteHandler(object):
         body = await decode_request(request)
         required_fields = ['privateKeyHex', 'ownerPublicKey', 'managerPublicKey', 'id', 'programId', 'cipher', 'hash']
         validate_fields(required_fields, body)
+        LOGGER.info(f"Create record {body}")
 
         transaction_id = await self._messenger.send_create_subject(private_key=body.get('privateKeyHex'),
                                                                    owner_public_key=body.get('ownerPublicKey'),
@@ -40,6 +41,8 @@ class RecordRouteHandler(object):
         required_fields = ['privateKeyHex', 'classId', 'grades', 'studentPublicKey', 'eduProgramId', 'cipher', 'hash']
         validate_fields(required_fields, body)
 
+        LOGGER.info(f"Create subject {body}")
+
         transaction_id = await self._messenger.send_create_subject(private_key=body.get('privateKeyHex'),
                                                                    owner_public_key=body.get('studentPublicKey'),
                                                                    manager_public_key=body.get('universityPublicKey'),
@@ -61,6 +64,7 @@ class RecordRouteHandler(object):
         required_fields = ['privateKeyHex', 'universityPublicKey', 'classId', 'grades']
         validate_fields(required_fields, body)
 
+        LOGGER.info(f"Create subjects {body}")
         required_fields = ['studentPublicKey', 'eduProgramId', 'cipher', 'hash']
         grades = body.get('grades')
         for grade in grades:
@@ -96,6 +100,7 @@ class RecordRouteHandler(object):
         required_fields = ['privateKeyHex', 'eduProgramId', 'studentPublicKey', 'cipher', 'hashData']
         validate_fields(required_fields, body)
 
+        LOGGER.info(f"Create cert {body}")
         transaction_id = await self._messenger.send_create_cert(private_key=body.get('privateKeyHex'),
                                                                 owner_public_key=body.get('studentPublicKey'),
                                                                 record_id=body.get('eduProgramId'),
@@ -115,6 +120,8 @@ class RecordRouteHandler(object):
         body = await decode_request(request)
         required_fields = ['privateKeyHex', 'certificates']
         validate_fields(required_fields, body)
+        LOGGER.info(f"Create certs {body}")
+
         required_fields = ['school', 'eduProgramId', 'studentPublicKey', 'cipher', 'hash']
         certs = body.get('certificates')
         for cert in certs:
@@ -146,6 +153,7 @@ class RecordRouteHandler(object):
         required_fields = ['privateKeyHex', 'OwnerPublicKey', 'recordId', 'cipher', 'hash', 'status',
                            'manager_public_key']
         validate_fields(required_fields, body)
+        LOGGER.info(f"Update record {body}")
 
         transaction_id = await self._messenger.send_update_record(private_key=body.get('privateKeyHex'),
                                                                   owner_public_key=body.get('OwnerPublicKey'),
@@ -165,6 +173,8 @@ class RecordRouteHandler(object):
         body = await decode_request(request)
         required_fields = ['privateKeyHex', 'studentPublicKey', 'universityPublicKey', 'classId', 'cipher', 'hash']
         validate_fields(required_fields, body)
+
+        LOGGER.info(f"Modify subjects {body}")
 
         transaction_id = await self._messenger.send_modify_subject(private_key=body.get('privateKeyHex'),
                                                                    owner_public_key=body.get('studentPublicKey'),
