@@ -240,7 +240,7 @@ services:
       - '.:/project/sawtooth-b4e'
     depends_on:
       - postgres-statistic
-      - validator-2
+      - validator-3
     ports:
       - '${STATISTIC_PORT}:8000'
     command: |
