@@ -366,34 +366,6 @@ services:
         -C tcp://validator-2:4004 \
         -vv
       "
-  b4e-statistic:
-    image: thanhnv2303/b4e:fast
-    container_name: b4e-statistic
-    volumes:
-      - '.:/project/sawtooth-b4e'
-    depends_on:
-      - postgres-statistic
-      - validator-3
-    ports:
-      - '${STATISTIC_PORT}:8000'
-    command: |
-      bash -c "
-        b4e-statistic.py init \
-        --db-name b4e-statistic\
-        --db-host postgres-statistic \
-        --db-user ${USERNAME} \
-        --db-password ${PASSWORD} \
-        -vv
-        sleep 3
-        b4e-statistic.py subscribe \
-        -B b4e-statistic:8000 \
-        --db-name b4e-statistic\
-        --db-host postgres-statistic \
-        --db-user ${USERNAME} \
-        --db-password ${PASSWORD} \
-        -C tcp://validator-3:4004 \
-        -vv
-      "
 
   mongo-b4e:
     image: mongo
@@ -429,16 +401,5 @@ services:
       MONGO_INITDB_ROOT_USERNAME: ${USERNAME}
       MONGO_INITDB_ROOT_PASSWORD: ${PASSWORD}
 
-  postgres-statistic:
-    image: postgres:alpine
-    container_name: postgres-statistic
-    restart: always
-    environment:
-      POSTGRES_USER: ${USERNAME}
-      POSTGRES_PASSWORD: ${PASSWORD}
-      POSTGRES_DB: b4e-statistic
-    expose:
-      - 5432
-    ports:
-      - '5432:5432'
+
 
