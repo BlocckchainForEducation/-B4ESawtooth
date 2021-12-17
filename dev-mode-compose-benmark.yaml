@@ -1,0 +1,130 @@
+# Copyright 2019 Cargill Incorporated
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+version: '3.6'
+
+
+services:
+
+    # -------------=== b4e tp   ===-------------
+  b4e-tp-0:
+    image: thanhnv2303/b4e:benmark
+    container_name: b4e-tp-0
+    command: |
+      bash -c "
+        sleep 1
+        b4e-tp -v -C tcp://validator-0:4004
+        echo b4e-tp-0 connect
+      "
+
+  # -------------=== rest api ===-------------
+
+  rest-api-0:
+    image: hyperledger/sawtooth-rest-api:chime
+    container_name: sawtooth-rest-api-default-0
+    expose:
+      - 8008
+    ports:
+      - '8008:8008'
+    command: |
+      bash -c "
+        sawtooth-rest-api \
+          --connect tcp://validator-0:4004 \
+          --bind rest-api-0:8008
+      "
+    stop_signal: SIGKILL
+
+  # -------------=== settings tp ===-------------
+
+  settings-tp-0:
+    image: hyperledger/sawtooth-settings-tp:chime
+    container_name: sawtooth-settings-tp-default-0
+    expose:
+      - 4004
+    command: settings-tp -C tcp://validator-0:4004
+    stop_signal: SIGKILL
+
+
+  # -------------=== validators ===-------------
+
+  validator-0:
+    image: hyperledger/sawtooth-validator:1.2
+    container_name: sawtooth-validator-0
+    expose:
+      - 4004
+    ports:
+      - '4004:4004'
+    command: |
+      bash -c "
+        if [ ! -f /etc/sawtooth/keys/validator.priv ]; then
+          sawadm keygen
+          sawtooth keygen my_key
+          sawset genesis -k /root/.sawtooth/keys/my_key.priv
+          sawset proposal create -k /root/.sawtooth/keys/my_key.priv \
+            sawtooth.consensus.algorithm.name=Devmode \
+            sawtooth.consensus.algorithm.version=0.1 \
+            -o config.batch
+          sawadm genesis config-genesis.batch config.batch
+        fi;
+        sawtooth-validator -vv \
+          --endpoint tcp://validator-0:8800 \
+          --bind component:tcp://eth0:4004 \
+          --bind network:tcp://eth0:8800 \
+          --bind consensus:tcp://eth0:5050
+      "
+
+  devmode-engine:
+    image: hyperledger/sawtooth-devmode-engine-rust:1.2
+    expose:
+      - 5050
+    ports:
+      - '5050:5050'
+    container_name: sawtooth-devmode-engine-rust-default
+    depends_on:
+      - validator-0
+    entrypoint: devmode-engine-rust --connect tcp://validator-0:5050
+
+  b4e-rest-api:
+    image: thanhnv2303/b4e:benmark
+    container_name: b4e-rest-api
+    expose:
+      - 8000
+    ports:
+      - '8005:8000'
+    depends_on:
+      - rest-api-0
+      - validator-0
+    command: |
+      bash -c "
+        b4e-rest-api \
+          -B b4e-rest-api:8000 \
+          -C validator-0:4004 \
+          -R rest-api-0:8008 \
+          --db-host mongo-b4e \
+          --db-user ${USERNAME} \
+          --db-password ${PASSWORD} \
+          -vv
+      "
+
+  mongo-b4e:
+    image: mongo
+    container_name: mongo-b4e
+    restart: always
+    expose:
+      - 27017
+    ports:
+      - '27018:27017'
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${PASSWORD}

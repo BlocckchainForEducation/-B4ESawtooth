@@ -19,14 +19,77 @@ volumes:
 
 services:
   # -------------=== b4e tp   ===-------------
-  b4e-tp-5:
-    image: thanhnv2303/b4e:fast
-    container_name: b4e-tp-5
+  b4e-tp-51:
+    image: thanhnv2303/b4e:benmark
+    container_name: b4e-tp-51
     command: |
       bash -c "
         sleep 1
         b4e-tp -v -C tcp://validator-5:4004
-        echo b4e-tp-5 connect
+        echo b4e-tp-51 connect
+      "
+  b4e-tp-52:
+    image: thanhnv2303/b4e:benmark
+    container_name: b4e-tp-52
+    command: |
+      bash -c "
+        sleep 1
+        b4e-tp -v -C tcp://validator-5:4004
+        echo b4e-tp-52 connect
+      "
+  b4e-tp-53:
+    image: thanhnv2303/b4e:benmark
+    container_name: b4e-tp-53
+    command: |
+      bash -c "
+        sleep 1
+        b4e-tp -v -C tcp://validator-5:4004
+        echo b4e-tp-53 connect
+      "
+  b4e-tp-54:
+    image: thanhnv2303/b4e:benmark
+    container_name: b4e-tp-54
+    command: |
+      bash -c "
+        sleep 1
+        b4e-tp -v -C tcp://validator-5:4004
+        echo b4e-tp-54 connect
+      "
+  b4e-tp-55:
+    image: thanhnv2303/b4e:benmark
+    container_name: b4e-tp-55
+    command: |
+      bash -c "
+        sleep 1
+        b4e-tp -v -C tcp://validator-5:4004
+        echo b4e-tp-55 connect
+      "
+  b4e-tp-56:
+    image: thanhnv2303/b4e:benmark
+    container_name: b4e-tp-56
+    command: |
+      bash -c "
+        sleep 1
+        b4e-tp -v -C tcp://validator-5:4004
+        echo b4e-tp-56 connect
+      "
+  b4e-tp-57:
+    image: thanhnv2303/b4e:benmark
+    container_name: b4e-tp-57
+    command: |
+      bash -c "
+        sleep 1
+        b4e-tp -v -C tcp://validator-5:4004
+        echo b4e-tp-57 connect
+      "
+  b4e-tp-58:
+    image: thanhnv2303/b4e:benmark
+    container_name: b4e-tp-58
+    command: |
+      bash -c "
+        sleep 1
+        b4e-tp -v -C tcp://validator-5:4004
+        echo b4e-tp-58 connect
       "
 
   # -------------=== rest api ===-------------
@@ -111,7 +174,7 @@ services:
     build:
       context: .
       dockerfile: ./Dockerfile
-    image: thanhnv2303/b4e:fast
+    image: thanhnv2303/b4e:benmark
     container_name: b4e-rest-api-5
     expose:
       - 8000

@@ -19,14 +19,77 @@ volumes:
 
 services:
   # -------------=== b4e tp   ===-------------
-  b4e-tp-1:
-    image: thanhnv2303/b4e:fast
-    container_name: b4e-tp-1
+  b4e-tp-11:
+    image: thanhnv2303/b4e:benmark
+    container_name: b4e-tp-11
     command: |
       bash -c "
         sleep 1
         b4e-tp -v -C tcp://validator-1:4004
-        echo b4e-tp-1 connect
+        echo b4e-tp-11 connect
+      "
+  b4e-tp-12:
+    image: thanhnv2303/b4e:benmark
+    container_name: b4e-tp-12
+    command: |
+      bash -c "
+        sleep 1
+        b4e-tp -v -C tcp://validator-1:4004
+        echo b4e-tp-12 connect
+      "
+  b4e-tp-13:
+    image: thanhnv2303/b4e:benmark
+    container_name: b4e-tp-13
+    command: |
+      bash -c "
+        sleep 1
+        b4e-tp -v -C tcp://validator-1:4004
+        echo b4e-tp-13 connect
+      "
+  b4e-tp-14:
+    image: thanhnv2303/b4e:benmark
+    container_name: b4e-tp-14
+    command: |
+      bash -c "
+        sleep 1
+        b4e-tp -v -C tcp://validator-1:4004
+        echo b4e-tp-14 connect
+      "
+  b4e-tp-15:
+    image: thanhnv2303/b4e:benmark
+    container_name: b4e-tp-15
+    command: |
+      bash -c "
+        sleep 1
+        b4e-tp -v -C tcp://validator-1:4004
+        echo b4e-tp-15 connect
+      "
+  b4e-tp-16:
+    image: thanhnv2303/b4e:benmark
+    container_name: b4e-tp-16
+    command: |
+      bash -c "
+        sleep 1
+        b4e-tp -v -C tcp://validator-1:4004
+        echo b4e-tp-16 connect
+      "
+  b4e-tp-17:
+    image: thanhnv2303/b4e:benmark
+    container_name: b4e-tp-17
+    command: |
+      bash -c "
+        sleep 1
+        b4e-tp -v -C tcp://validator-1:4004
+        echo b4e-tp-17 connect
+      "
+  b4e-tp-18:
+    image: thanhnv2303/b4e:benmark
+    container_name: b4e-tp-18
+    command: |
+      bash -c "
+        sleep 1
+        b4e-tp -v -C tcp://validator-1:4004
+        echo b4e-tp-18 connect
       "
 
   # -------------=== rest api ===-------------
@@ -107,7 +170,7 @@ services:
     stop_signal: SIGKILL
 
   b4e-student-endpoint:
-    image: thanhnv2303/b4e:fast
+    image: thanhnv2303/b4e:benmark
     container_name: b4e-student-endpoint
     depends_on:
       - mongo-student-1
@@ -128,7 +191,7 @@ services:
     build:
       context: .
       dockerfile: ./Dockerfile
-    image: thanhnv2303/b4e:fast
+    image: thanhnv2303/b4e:benmark
     container_name: b4e-rest-api-1
     expose:
       - 8000
