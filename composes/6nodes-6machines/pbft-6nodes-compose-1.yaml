@@ -169,24 +169,25 @@ services:
     command: pbft-engine -vv --connect tcp://validator-1:5050
     stop_signal: SIGKILL
 
-  b4e-student-endpoint:
-    image: thanhnv2303/b4e:benmark
-    container_name: b4e-student-endpoint
-    depends_on:
-      - mongo-student-1
-      - validator-1
-    ports:
-      - '${STUDENT_ENDPOINT_PORT}:8000'
-    command: |
-      bash -c "
-        b4e-student-api.py subscribe \
-        -B b4e-student-endpoint:8000 \
-        --db-host mongo-student \
-        --db-user ${USERNAME} \
-        --db-password ${PASSWORD} \
-        -C tcp://validator-1:4004 \
-        -vv
-      "
+#  b4e-student-endpoint:
+#    image: thanhnv2303/b4e:benmark
+#    container_name: b4e-student-endpoint
+#    depends_on:
+#      - mongo-student-1
+#      - validator-1
+#    ports:
+#      - '${STUDENT_ENDPOINT_PORT}:8000'
+#    command: |
+#      bash -c "
+#        b4e-student-api.py subscribe \
+#        -B b4e-student-endpoint:8000 \
+#        --db-host mongo-student \
+#        --db-user ${USERNAME} \
+#        --db-password ${PASSWORD} \
+#        -C tcp://validator-1:4004 \
+#        -vv
+#      "
+
   b4e-rest-api-1:
     build:
       context: .
@@ -223,17 +224,17 @@ services:
     environment:
       MONGO_INITDB_ROOT_USERNAME: ${USERNAME}
       MONGO_INITDB_ROOT_PASSWORD: ${PASSWORD}
-  mongo-student-1:
-    image: mongo
-    container_name: mongo-student-1
-    restart: always
-    expose:
-      - 27017
-    ports:
-      - '27127:27017'
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: ${USERNAME}
-      MONGO_INITDB_ROOT_PASSWORD: ${PASSWORD}
+#  mongo-student-1:
+#    image: mongo
+#    container_name: mongo-student-1
+#    restart: always
+#    expose:
+#      - 27017
+#    ports:
+#      - '27127:27017'
+#    environment:
+#      MONGO_INITDB_ROOT_USERNAME: ${USERNAME}
+#      MONGO_INITDB_ROOT_PASSWORD: ${PASSWORD}
 
 
 

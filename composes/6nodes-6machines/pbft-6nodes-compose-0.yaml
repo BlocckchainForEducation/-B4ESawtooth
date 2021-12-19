@@ -223,40 +223,40 @@ services:
           --db-password ${PASSWORD} \
           -vv
       "
-  b4e-subscriber:
-    image: thanhnv2303/b4e:benmark
-    container_name: b4e-subscriber
-    depends_on:
-      - mongo-b4e
-      - validator-0
-    command: |
-      bash -c "
-        b4e-subscriber subscribe \
-        --db-host mongo-b4e \
-        --db-user ${USERNAME} \
-        --db-password ${PASSWORD} \
-        --rest-api-default rest-api-0:8008  \
-        --subscriber-host-url ${BACKEND_LISTEN_SUSBSCRIBER_HOST_URL} \
-        -C tcp://validator-0:4004 \
-        -vv
-      "
-  b4e-subscriber-ministry:
-    image: thanhnv2303/b4e:benmark
-    container_name: b4e-subscriber-ministry
-    depends_on:
-      - mongo-b4e-ministry
-      - validator-0
-    command: |
-      bash -c "
-        b4e-subscriber subscribe \
-        --db-host mongo-b4e \
-        --db-user ${USERNAME} \
-        --db-password ${PASSWORD} \
-        --rest-api-default rest-api-0:8008  \
-        --subscriber-host-url ${BACKEND_MINISTRY_LISTEN_SUSBSCRIBER_HOST_URL} \
-        -C tcp://validator-0:4004 \
-        -vv
-      "
+#  b4e-subscriber:
+#    image: thanhnv2303/b4e:benmark
+#    container_name: b4e-subscriber
+#    depends_on:
+#      - mongo-b4e
+#      - validator-0
+#    command: |
+#      bash -c "
+#        b4e-subscriber subscribe \
+#        --db-host mongo-b4e \
+#        --db-user ${USERNAME} \
+#        --db-password ${PASSWORD} \
+#        --rest-api-default rest-api-0:8008  \
+#        --subscriber-host-url ${BACKEND_LISTEN_SUSBSCRIBER_HOST_URL} \
+#        -C tcp://validator-0:4004 \
+#        -vv
+#      "
+#  b4e-subscriber-ministry:
+#    image: thanhnv2303/b4e:benmark
+#    container_name: b4e-subscriber-ministry
+#    depends_on:
+#      - mongo-b4e-ministry
+#      - validator-0
+#    command: |
+#      bash -c "
+#        b4e-subscriber subscribe \
+#        --db-host mongo-b4e \
+#        --db-user ${USERNAME} \
+#        --db-password ${PASSWORD} \
+#        --rest-api-default rest-api-0:8008  \
+#        --subscriber-host-url ${BACKEND_MINISTRY_LISTEN_SUSBSCRIBER_HOST_URL} \
+#        -C tcp://validator-0:4004 \
+#        -vv
+#      "
 
   mongo-b4e:
     image: mongo
@@ -269,17 +269,17 @@ services:
     environment:
       MONGO_INITDB_ROOT_USERNAME: ${USERNAME}
       MONGO_INITDB_ROOT_PASSWORD: ${PASSWORD}
-  mongo-b4e-ministry:
-    image: mongo
-    container_name: mongo-b4e-ministry
-    restart: always
-    expose:
-      - 27017
-    ports:
-      - '27019:27017'
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: ${USERNAME}
-      MONGO_INITDB_ROOT_PASSWORD: ${PASSWORD}
+#  mongo-b4e-ministry:
+#    image: mongo
+#    container_name: mongo-b4e-ministry
+#    restart: always
+#    expose:
+#      - 27017
+#    ports:
+#      - '27019:27017'
+#    environment:
+#      MONGO_INITDB_ROOT_USERNAME: ${USERNAME}
+#      MONGO_INITDB_ROOT_PASSWORD: ${PASSWORD}
 
 
 
