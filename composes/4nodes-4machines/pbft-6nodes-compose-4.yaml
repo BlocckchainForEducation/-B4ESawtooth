@@ -172,7 +172,7 @@ services:
 
   b4e-rest-api-4:
     build:
-      context: pbft-shared
+      context: .
       dockerfile: ./Dockerfile
     image: thanhnv2303/b4e:benmark
     container_name: b4e-rest-api-4

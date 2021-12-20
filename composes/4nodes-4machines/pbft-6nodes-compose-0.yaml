@@ -162,8 +162,7 @@ services:
         fi &&
         while [[ ! -f /pbft-shared/validators/validator-1.pub || \
                  ! -f /pbft-shared/validators/validator-2.pub || \
-                 ! -f /pbft-shared/validators/validator-3.pub || \
-                 ! -f /pbft-shared/validators/validator-4.pub ]] ;
+                 ! -f /pbft-shared/validators/validator-3.pub ]] ;
         do sleep 1; done
         echo sawtooth.consensus.pbft.members=\\['\"'$$(cat /pbft-shared/validators/validator-0.pub)'\"','\"'$$(cat /pbft-shared/validators/validator-1.pub)'\"','\"'$$(cat /pbft-shared/validators/validator-2.pub)'\"','\"'$$(cat /pbft-shared/validators/validator-3.pub)'\"','\"'$$(cat /pbft-shared/validators/validator-4.pub)'\"'\\] &&
         if [ ! -e config.batch ]; then
@@ -171,7 +170,7 @@ services:
             -k /etc/sawtooth/keys/validator.priv \
             sawtooth.consensus.algorithm.name=pbft \
             sawtooth.consensus.algorithm.version=1.0 \
-            sawtooth.consensus.pbft.members=\\['\"'$$(cat /pbft-shared/validators/validator-0.pub)'\"','\"'$$(cat /pbft-shared/validators/validator-1.pub)'\"','\"'$$(cat /pbft-shared/validators/validator-2.pub)'\"','\"'$$(cat /pbft-shared/validators/validator-3.pub)'\"','\"'$$(cat /pbft-shared/validators/validator-4g.pub)'\"'\\] \
+            sawtooth.consensus.pbft.members=\\['\"'$$(cat /pbft-shared/validators/validator-0.pub)'\"','\"'$$(cat /pbft-shared/validators/validator-1.pub)'\"','\"'$$(cat /pbft-shared/validators/validator-2.pub)'\"','\"'$$(cat /pbft-shared/validators/validator-3.pub)'\"','\"'$$(cat /pbft-shared/validators/validator-4.pub)'\"'\\] \
             sawtooth.publisher.max_batches_per_block=1200 \
             -o config.batch
         fi &&
