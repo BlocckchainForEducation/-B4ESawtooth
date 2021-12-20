@@ -712,7 +712,7 @@ def _make_batch(payload_bytes,
         header=batch_header_bytes,
         header_signature=batch_signer.sign(batch_header_bytes),
         transactions=[transaction])
-    print(f"Create tx with tx_id : {transaction.header_signature}")
+    # print(f"Create tx with tx_id : {transaction.header_signature}")
     return batch
 
 
@@ -740,7 +740,7 @@ def _make_batch_multi_transactions(list_payload_bytes,
             header=transaction_header_bytes,
             header_signature=transaction_signer.sign(transaction_header_bytes),
             payload=list_payload_bytes[i])
-        print(f"Create tx with tx_id : {transaction.header_signature}")
+        # print(f"Create tx with tx_id : {transaction.header_signature}")
         list_transactions.append(transaction)
         list_transaction_ids.append(transaction.header_signature)
 

@@ -52,7 +52,7 @@ def set_job_end(self, job_id, company_public_key, candidate_public_key, end):
         container.ParseFromString(state_entries[0].data)
         for job in container.entries:
             if job.job_id == job_id and job.candidate_public_key == candidate_public_key and job.company_public_key == company_public_key:
-                LOGGER.info("update end job")
+                # LOGGER.info("update end job")
                 job.end.CopyFrom(end)
 
     data = container.SerializeToString()

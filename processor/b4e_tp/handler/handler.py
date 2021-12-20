@@ -55,7 +55,7 @@ class B4EHandler(TransactionHandler):
         payload = B4EPayload(transaction.payload)
         state = B4EState(context)
 
-        LOGGER.info(f"Handle for tx {header}")
+        # LOGGER.info(f"Handle for tx {header}")
         validator.validate_timestamp(payload.timestamp)
 
         if payload.action == payload_pb2.B4EPayload.CREATE_ACTOR:

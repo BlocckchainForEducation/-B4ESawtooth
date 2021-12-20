@@ -11,7 +11,7 @@ logger = logging.getLogger("Class Handler")
 
 
 def create_class(state, public_key, transaction_id, payload):
-    logger.info(f" create class by {public_key}")
+    # logger.info(f" create class by {public_key}")
     institution = state.get_actor(public_key)
     _check_is_valid_actor(institution)
 

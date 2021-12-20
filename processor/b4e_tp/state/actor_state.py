@@ -9,7 +9,7 @@ logger = logging.getLogger("Actor state")
 
 def get_actor(self, public_key):
     try:
-        logger.info(f"Get actor info with pubkey:{public_key}")
+        # logger.info(f"Get actor info with pubkey:{public_key}")
         address = addresser.get_actor_address(public_key)
         state_entries = self._context.get_state(
             addresses=[address], timeout=self._timeout)

@@ -53,7 +53,7 @@ def sent_tx(payload, private_key,
         header_signature=signature,
         payload=payload_bytes
     )
-    print(f"Create tx with tx_id :{signature}")
+    # print(f"Create tx with tx_id :{signature}")
 
     txn_list_bytes = TransactionList(
         transactions=[txn]
@@ -89,4 +89,4 @@ def sent_tx(payload, private_key,
 
     except HTTPError as e:
         response = e.file
-    print(response)
+    # print(response)

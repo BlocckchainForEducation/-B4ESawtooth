@@ -22,12 +22,12 @@ def make_create_job(transaction_signer,
     company_address = addresser.get_actor_address(issuer_public_key)
     job_address = addresser.get_job_address(job_id, company_public_key, candidate_public_key)
 
-    LOGGER.info("job_address")
-    LOGGER.info(job_id)
-    LOGGER.info(company_public_key)
-    LOGGER.info(issuer_public_key)
-    LOGGER.info(candidate_public_key)
-    LOGGER.info(job_address)
+    # LOGGER.info("job_address")
+    # LOGGER.info(job_id)
+    # LOGGER.info(company_public_key)
+    # LOGGER.info(issuer_public_key)
+    # LOGGER.info(candidate_public_key)
+    # LOGGER.info(job_address)
 
     inputs = [candidate_address, company_address, job_address]
 
