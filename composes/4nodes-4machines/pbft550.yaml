@@ -1,0 +1,251 @@
+# Copyright 2019 Cargill Incorporated
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+version: '3.6'
+
+volumes:
+  mongodb_data:
+
+services:
+  # -------------=== b4e tp   ===-------------
+  b4e-tp-01:
+    image: thanhnv2303/b4e:benmark
+    container_name: b4e-tp-01
+    command: |
+      bash -c "
+        sleep 1
+        ls
+        b4e-tp -v -C tcp://validator-0:4004
+        echo b4e-tp-01 connect
+      "
+  b4e-tp-02:
+    image: thanhnv2303/b4e:benmark
+    container_name: b4e-tp-02
+    command: |
+      bash -c "
+        sleep 1
+        ls
+        b4e-tp -v -C tcp://validator-0:4004
+        echo b4e-tp-02 connect
+      "
+  b4e-tp-03:
+    image: thanhnv2303/b4e:benmark
+    container_name: b4e-tp-03
+    command: |
+      bash -c "
+        sleep 1
+        ls
+        b4e-tp -v -C tcp://validator-0:4004
+        echo b4e-tp-03 connect
+      "
+  b4e-tp-04:
+    image: thanhnv2303/b4e:benmark
+    container_name: b4e-tp-04
+    command: |
+      bash -c "
+        sleep 1
+        ls
+        b4e-tp -v -C tcp://validator-0:4004
+        echo b4e-tp-04 connect
+      "
+  b4e-tp-05:
+    image: thanhnv2303/b4e:benmark
+    container_name: b4e-tp-05
+    command: |
+      bash -c "
+        sleep 1
+        ls
+        b4e-tp -v -C tcp://validator-0:4004
+        echo b4e-tp-05 connect
+      "
+  # -------------=== rest api ===-------------
+
+  rest-api-0:
+    image: hyperledger/sawtooth-rest-api:chime
+    container_name: sawtooth-rest-api-default-0
+    expose:
+      - 8008
+    ports:
+      - '8008:8008'
+    command: |
+      bash -c "
+        sawtooth-rest-api \
+          --connect tcp://validator-0:4004 \
+          --bind rest-api-0:8008
+      "
+    stop_signal: SIGKILL
+
+  # -------------=== settings tp ===-------------
+
+  settings-tp-0:
+    image: hyperledger/sawtooth-settings-tp:chime
+    container_name: settings-tp-0
+    expose:
+      - 4004
+    command: settings-tp -C tcp://validator-0:4004
+    stop_signal: SIGKILL
+
+  # -------------=== shell ===-------------
+
+  # -------------=== validators ===-------------
+
+  validator-0:
+    image: hyperledger/sawtooth-validator:chime
+    container_name: validator-0
+    expose:
+      - 4004
+      - 5050
+      - 8800
+    ports:
+      - '4004:4004'
+      - '8800:8800'
+    volumes:
+      - ./pbft-shared:/pbft-shared
+    command: |
+      bash -c "
+        if [ -e /pbft-shared/validators/validator-0.priv ]; then
+          cp /pbft-shared/validators/validator-0.pub /etc/sawtooth/keys/validator.pub
+          cp /pbft-shared/validators/validator-0.priv /etc/sawtooth/keys/validator.priv
+        fi &&
+        if [ ! -e /etc/sawtooth/keys/validator.priv ]; then
+          sawadm keygen
+          mkdir -p /pbft-shared/validators || true
+          cp /etc/sawtooth/keys/validator.pub /pbft-shared/validators/validator-0.pub
+          cp /etc/sawtooth/keys/validator.priv /pbft-shared/validators/validator-0.priv
+        fi &&
+        if [ ! -e config-genesis.batch ]; then
+          sawset genesis -k /etc/sawtooth/keys/validator.priv -o config-genesis.batch
+        fi &&
+        while [[ ! -f /pbft-shared/validators/validator-1.pub || \
+                 ! -f /pbft-shared/validators/validator-2.pub || \
+                 ! -f /pbft-shared/validators/validator-3.pub ]] ;
+        do sleep 1; done
+        echo sawtooth.consensus.pbft.members=\\['\"'$$(cat /pbft-shared/validators/validator-0.pub)'\"','\"'$$(cat /pbft-shared/validators/validator-1.pub)'\"','\"'$$(cat /pbft-shared/validators/validator-2.pub)'\"','\"'$$(cat /pbft-shared/validators/validator-3.pub)'\"','\"'$$(cat /pbft-shared/validators/validator-4.pub)'\"'\\] &&
+        if [ ! -e config.batch ]; then
+         sawset proposal create \
+            -k /etc/sawtooth/keys/validator.priv \
+            sawtooth.consensus.algorithm.name=pbft \
+            sawtooth.consensus.algorithm.version=1.0 \
+            sawtooth.consensus.pbft.members=\\['\"'$$(cat /pbft-shared/validators/validator-0.pub)'\"','\"'$$(cat /pbft-shared/validators/validator-1.pub)'\"','\"'$$(cat /pbft-shared/validators/validator-2.pub)'\"','\"'$$(cat /pbft-shared/validators/validator-3.pub)'\"','\"'$$(cat /pbft-shared/validators/validator-4.pub)'\"'\\] \
+            sawtooth.publisher.max_batches_per_block=1200 \
+            -o config.batch
+        fi &&
+        if [ ! -e /var/lib/sawtooth/genesis.batch ]; then
+          sawadm genesis config-genesis.batch config.batch
+        fi &&
+        if [ ! -e /root/.sawtooth/keys/my_key.priv ]; then
+          sawtooth keygen my_key
+        fi &&
+        sawtooth-validator -vv \
+          --endpoint tcp://${HOST_IP_0}:8800 \
+          --bind component:tcp://eth0:4004 \
+          --bind consensus:tcp://eth0:5050 \
+          --bind network:tcp://eth0:8800 \
+          --scheduler parallel \
+          --peering static \
+          --maximum-peer-connectivity 10000
+      "
+  # -------------=== pbft engines ===-------------
+
+  pbft-0:
+    image: hyperledger/sawtooth-pbft-engine:chime
+    container_name: pbft-engine-0
+    command: pbft-engine -vv --connect tcp://validator-0:5050
+    stop_signal: SIGKILL
+
+  b4e-rest-api:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    image: thanhnv2303/b4e:benmark
+    container_name: b4e-rest-api
+    expose:
+      - 8000
+    ports:
+      - '8005:8000'
+    depends_on:
+      - rest-api-0
+      - validator-0
+    command: |
+      bash -c "
+        b4e-rest-api \
+          -B b4e-rest-api:8000 \
+          -C validator-0:4004 \
+          -R rest-api-0:8008 \
+          --db-host mongo-b4e \
+          --db-user ${USERNAME} \
+          --db-password ${PASSWORD} \
+          -vv
+      "
+#  b4e-subscriber:
+#    image: thanhnv2303/b4e:benmark
+#    container_name: b4e-subscriber
+#    depends_on:
+#      - mongo-b4e
+#      - validator-0
+#    command: |
+#      bash -c "
+#        b4e-subscriber subscribe \
+#        --db-host mongo-b4e \
+#        --db-user ${USERNAME} \
+#        --db-password ${PASSWORD} \
+#        --rest-api-default rest-api-0:8008  \
+#        --subscriber-host-url ${BACKEND_LISTEN_SUSBSCRIBER_HOST_URL} \
+#        -C tcp://validator-0:4004 \
+#        -vv
+#      "
+#  b4e-subscriber-ministry:
+#    image: thanhnv2303/b4e:benmark
+#    container_name: b4e-subscriber-ministry
+#    depends_on:
+#      - mongo-b4e-ministry
+#      - validator-0
+#    command: |
+#      bash -c "
+#        b4e-subscriber subscribe \
+#        --db-host mongo-b4e \
+#        --db-user ${USERNAME} \
+#        --db-password ${PASSWORD} \
+#        --rest-api-default rest-api-0:8008  \
+#        --subscriber-host-url ${BACKEND_MINISTRY_LISTEN_SUSBSCRIBER_HOST_URL} \
+#        -C tcp://validator-0:4004 \
+#        -vv
+#      "
+
+  mongo-b4e:
+    image: mongo
+    container_name: mongo-b4e
+    restart: always
+    expose:
+      - 27017
+    ports:
+      - '27018:27017'
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${PASSWORD}
+#  mongo-b4e-ministry:
+#    image: mongo
+#    container_name: mongo-b4e-ministry
+#    restart: always
+#    expose:
+#      - 27017
+#    ports:
+#      - '27019:27017'
+#    environment:
+#      MONGO_INITDB_ROOT_USERNAME: ${USERNAME}
+#      MONGO_INITDB_ROOT_PASSWORD: ${PASSWORD}
+
+
+
+
