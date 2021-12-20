@@ -162,7 +162,7 @@ services:
         fi &&
         while [[ ! -f /pbft-shared/validators/validator-1.pub || \
                  ! -f /pbft-shared/validators/validator-2.pub || \
-                 ! -f /pbft-shared/validators/validator-3.pub || ;
+                 ! -f /pbft-shared/validators/validator-3.pub ]] ;
         do sleep 1; done
         echo sawtooth.consensus.pbft.members=\\['\"'$$(cat /pbft-shared/validators/validator-0.pub)'\"','\"'$$(cat /pbft-shared/validators/validator-1.pub)'\"','\"'$$(cat /pbft-shared/validators/validator-2.pub)'\"','\"'$$(cat /pbft-shared/validators/validator-3.pub)'\"'\\] &&
         if [ ! -e config.batch ]; then
