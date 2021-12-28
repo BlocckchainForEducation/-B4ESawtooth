@@ -757,7 +757,7 @@ class Messenger(object):
                 batch_ids=batch_ids, wait=True)
             validator_response = await self._connection.send(
                 validator_pb2.Message.CLIENT_BATCH_STATUS_REQUEST,
-                status_request.SerializeToString())
+                status_request.SerializeToString(),timeout =60)
 
             # Parse response
             status_response = client_batch_submit_pb2.ClientBatchStatusResponse()
