@@ -73,9 +73,9 @@ def create_cert(state, public_key, transaction_id, payload):
     # if actor.role != actor_pb2.Actor.INSTITUTION:
     #     raise InvalidTransaction("Just Institution can create certificate")
 
-    portfolio = state.get_portfolio(id=payload.data.portfolio_id,
-                                    owner_public_key=owner_public_key,
-                                    manager_public_key=manager_public_key)
+    # portfolio = state.get_portfolio(id=payload.data.portfolio_id,
+    #                                 owner_public_key=owner_public_key,
+    #                                 manager_public_key=manager_public_key)
     # if not portfolio or not portfolio.portfolio_data[-1]:
     #     raise InvalidTransaction("Invalid edu program")
     # portfolio_data = portfolio.portfolio_data[-1]
@@ -130,9 +130,9 @@ def create_subject(state, public_key, transaction_id, payload):
     # if owner_public_key not in class_.student_public_keys:
     #     raise InvalidTransaction("Invalid issuer for this student in the class")
 
-    portfolio = state.get_portfolio(id=payload.data.portfolio_id,
-                                    owner_public_key=owner_public_key,
-                                    manager_public_key=manager_public_key)
+    # portfolio = state.get_portfolio(id=payload.data.portfolio_id,
+    #                                 owner_public_key=owner_public_key,
+    #                                 manager_public_key=manager_public_key)
     # if not portfolio or not portfolio.portfolio_data[-1]:
     #     raise InvalidTransaction("Invalid edu program")
     # portfolio_data = portfolio.portfolio_data[-1]

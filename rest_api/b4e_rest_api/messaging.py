@@ -768,7 +768,7 @@ class Messenger(object):
                 error = status_response.batch_statuses[0].invalid_transactions[0]
                 raise ApiBadRequest(error.message)
             elif status == client_batch_submit_pb2.ClientBatchStatus.PENDING:
-                raise ApiInternalError('Transaction submitted but timed out')
+                raise ApiInternalError('Transaction error')
             elif status == client_batch_submit_pb2.ClientBatchStatus.UNKNOWN:
                 # raise ApiInternalError('Something went wrong. Try again later')
                 continue
