@@ -298,12 +298,12 @@ class Messenger(object):
                                   record_hash,
                                   timestamp):
 
-        manager_public_key, manager_private_key = self.get_new_key_pair()
-
-        transaction_signer = self._crypto_factory.new_signer(
-            secp256k1.Secp256k1PrivateKey.from_hex(manager_private_key))
+        # manager_public_key, manager_private_key = self.get_new_key_pair()
+        #
         # transaction_signer = self._crypto_factory.new_signer(
-        #     secp256k1.Secp256k1PrivateKey.from_hex(private_key))
+        #     secp256k1.Secp256k1PrivateKey.from_hex(manager_private_key))
+        transaction_signer = self._crypto_factory.new_signer(
+            secp256k1.Secp256k1PrivateKey.from_hex(private_key))
         batch_signer = transaction_signer
 
         batch = record_transaction.make_create_subject(transaction_signer,
@@ -324,12 +324,12 @@ class Messenger(object):
                                    class_id,
                                    list_subjects,
                                    timestamp):
-        manager_public_key, manager_private_key = self.get_new_key_pair()
-
-        transaction_signer = self._crypto_factory.new_signer(
-            secp256k1.Secp256k1PrivateKey.from_hex(manager_private_key))
+        # manager_public_key, manager_private_key = self.get_new_key_pair()
+        #
         # transaction_signer = self._crypto_factory.new_signer(
-        #     secp256k1.Secp256k1PrivateKey.from_hex(private_key))
+        #     secp256k1.Secp256k1PrivateKey.from_hex(manager_private_key))
+        transaction_signer = self._crypto_factory.new_signer(
+            secp256k1.Secp256k1PrivateKey.from_hex(private_key))
         batch_signer = transaction_signer
         list_batches = record_transaction.make_create_subjects(transaction_signer,
                                                                batch_signer,
@@ -348,13 +348,13 @@ class Messenger(object):
                                record_hash,
                                timestamp):
 
-        manager_public_key, manager_private_key = self.get_new_key_pair()
+        # manager_public_key, manager_private_key = self.get_new_key_pair()
+        #
+        # transaction_signer = self._crypto_factory.new_signer(
+        #     secp256k1.Secp256k1PrivateKey.from_hex(manager_private_key))
 
         transaction_signer = self._crypto_factory.new_signer(
-            secp256k1.Secp256k1PrivateKey.from_hex(manager_private_key))
-
-        # transaction_signer = self._crypto_factory.new_signer(
-        #     secp256k1.Secp256k1PrivateKey.from_hex(private_key))
+            secp256k1.Secp256k1PrivateKey.from_hex(private_key))
         batch_signer = transaction_signer
 
         batch = record_transaction.make_create_cert(transaction_signer,
@@ -373,13 +373,13 @@ class Messenger(object):
                                 certs,
                                 timestamp):
 
-        manager_public_key, manager_private_key = self.get_new_key_pair()
+        # manager_public_key, manager_private_key = self.get_new_key_pair()
+        #
+        # transaction_signer = self._crypto_factory.new_signer(
+        #     secp256k1.Secp256k1PrivateKey.from_hex(manager_private_key))
 
         transaction_signer = self._crypto_factory.new_signer(
-            secp256k1.Secp256k1PrivateKey.from_hex(manager_private_key))
-
-        # transaction_signer = self._crypto_factory.new_signer(
-        #     secp256k1.Secp256k1PrivateKey.from_hex(private_key))
+            secp256k1.Secp256k1PrivateKey.from_hex(private_key))
         batch_signer = transaction_signer
 
         list_batches = record_transaction.make_create_certs(transaction_signer,
