@@ -76,7 +76,7 @@ services:
     container_name: settings-tp-5
     expose:
       - 4004
-    command: settings-tp -C tcp://validator-4:4004
+    command: settings-tp -C tcp://validator-5:4004
     stop_signal: SIGKILL
 
   # -------------=== shell ===-------------
